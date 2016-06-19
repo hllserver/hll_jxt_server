@@ -1,0 +1,29 @@
+<meta charset="UTF-8">
+<!-- 对驾校增删改查操作页面 
+     @author heyi
+     2016/3/13
+-->
+<script type="text/javascript" src="driverSchool/driverSchoolMsg.js"></script>
+<div>
+<form width='90%' id='formId' >
+	账号:<input type="text" id="account" name="account"/>&nbsp&nbsp
+	 报价：<input type="text" id="price" name="price">
+	  规模：<input type="text" id="scale" name="scale"><br/><br>
+	 名称:<input type="text" id="schoolName" name='schoolName'/>&nbsp&nbsp
+	 地址：<input type="text"  id="possion" name='possion'>
+	 等级：<input type="text" id="remark" name="remark"><br><br>
+	<span style="display:block;text-align:center">
+	 <input  class="_but" type="button" value="搜索驾校"  onclick="search()" />
+	<input   class="_but" type="reset" value="重置数据"  >
+	</span>
+	</form>
+</div>
+
+</br>
+<div>
+<button class='_but' onclick="insertSchool()">新增</button>&nbsp 
+<button class='_but' onclick="markAsDelete()">删除</button>&nbsp
+<button class='_but' onclick="removeMarkAsDelete()">取消删除</button>
+<button class='_but' onclick="saveSchool()">保存</button>
+<div id="schoolGrid"></div>
+</div>

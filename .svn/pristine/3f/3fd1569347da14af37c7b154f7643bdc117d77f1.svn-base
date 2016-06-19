@@ -1,0 +1,61 @@
+function _page_ready() {
+	var permission = [ "123", "234" ];
+	var nav = [ {
+		name : "权限控制",
+		pe : "123",
+		href : "permission/privilege.html"
+	}, {
+		name : "标题一",
+		pe : "234",
+		href : "login.html"
+	}, {
+		name : "标题二",
+		pe : "345",
+		href : "ok.html"
+	} ];
+	var _navigator = document.getElementById("_navigator");
+	for (var i = 0; i < nav.length; i++) {
+		// 外框
+		var div1 = document.createElement("div");
+		var div2 = document.createElement("div");
+		var a = document.createElement("a");
+		div1.style.border = "1px solid #CCCCCC";
+		a.style.textDecoration = "none";
+		a.href = "#" + nav[i].href;
+		a.className = "_herf_to"
+		a.id = "_href_to_" + i;
+		div2.innerHTML = nav[i].name;
+		a.appendChild(div2);
+		div1.appendChild(a);
+		_navigator.appendChild(div1);
+		(function(i) {
+			$("#_href_to_" + i).on("click", function() {
+				// alert("555");
+				$.ajax({
+					url : nav[i].href,
+					type : 'GET',
+					success : function(data) {
+						$("#_rightDIV").html(data);
+					}
+				});
+			});
+		})(i);
+	}
+}
+
+//jquery 扩展 from 转 json
+$.fn.serializeObject=function(){
+	var o={};
+	var a=this.serializeArray();
+	$.each(a,function(){
+		if(o[this.name]){
+			if(!o[this.name].push){
+				o[this.name]=[o[this.name]];
+			}
+			o[this.name].push(this.value || '');
+		}else{
+			o[this.name]=this.value || '';
+		}
+	});
+	return JSON.stringify(o);
+}

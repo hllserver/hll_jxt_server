@@ -1,0 +1,142 @@
+/**
+ * 和表格相关的操作 , 增、删、改、查、取行数据、
+ */
+//创建表格
+function _Grid(option){
+	if(option.url===undefined || option.columns===undefined){
+		return;
+	}
+	//接收 请求到的数据
+	var data;
+	$.ajax({
+		url:option.url,
+		type:'POST',
+		contentType:'application/json',  
+		dataType : 'json',  
+		success : function(data,type) {
+			//创建表
+			var table = document.createElement("table");
+			table.className="_table";
+			table.style.border="solid 1px";
+			table.id=option.gridId;
+			var trh = document.createElement("tr");
+			var k=option.columns.length;
+			for(var i=0; i<k; i++){ //表头
+				//添加 一个序号行
+				if(i==0){
+					var squence = document.createElement("th");
+					squence.className="_table_th";
+					squence.innerHTML="序号";
+					trh.appendChild(squence);
+				}
+				var th = document.createElement("th");
+				th.className="_table_th";
+				var tem = option.columns[i].name;
+				//如果该列可编辑
+				var editable = option.columns[i].editable;
+				var select = option.columns[i].select;
+				if(editable && editable==true){
+					//可编辑
+					th.innerHTML = tem+"(※)";
+				}else if(select && select!=null){
+					//复选框
+					th.innerHTML = "";
+				}else{
+					//普通值
+					th.innerHTML=tem;
+				}
+				trh.appendChild(th);
+				table.appendChild(trh);
+			}
+			var size = data.length;
+			for(var i=0; i<size; i++){//表中数据
+				var tr=document.createElement("tr");
+				//序列
+				var sq = document.createElement("td");
+				sq.className="_table_td";
+				sq.innerHTML=i;
+				tr.appendChild(sq);
+				tr.className="_table_tr";
+				for(var j=0; j<k; j++){
+					var td=document.createElement("td");
+					td.className="_table_td";
+					var select = option.columns[j].select;
+					if(select && select!=null){
+						//复选框
+						td.innerHTML = "<input id='_select' type='checkbox'/>";
+					}else{
+						//非复选框
+						var field = option.columns[j].field;
+						var width = option.columns[j].width;
+						td.width=width+'px';
+						//插入数据
+						if(data[i][field]!=undefined){
+							td.innerHTML=data[i][field];
+						}
+						var editable = option.columns[j].editable;
+						//是否可以编辑
+						if(editable && editable==true){
+							td.className=td.className+" _adit";
+						}
+					}
+					tr.appendChild(td);
+				}
+				table.appendChild(tr);
+			}
+			var tb = document.getElementById(option.id);
+			tb.appendChild(table);
+		}
+	});
+}
+
+//插入一条数据
+function _insert(gridOption){
+	debugger;
+	var culumns=gridOption.columns;
+	var size=culumns.length;
+	var tr=document.createElement("tr");
+	for(var i=0; i<size; i++){
+		if(i==0){
+			//序列行
+			var squ=document.createElement("td");
+			squ.className="_table_td";
+			squ.innerHTML="+";
+			tr.appendChild(squ);
+		}
+		var td=document.createElement("td");
+		td.className="_table_td";
+		var editable = culumns[i].editable;
+		var select = culumns[i].select;
+		if(select && select!=null){
+			//复选框
+			td.innerHTML = "<input id='_select' type='checkbox'/>";
+		}
+		//是否可以编辑
+		if(editable && editable==true){
+			td.className=td.className+" _adit";
+		}
+		tr.appendChild(td);
+	}
+	var table = document.getElementById(gridOption.gridId);
+	table.appendChild(tr);
+}
+
+//添加 删除标记
+function _markAsDelete(gridOption){
+	//获取   要操作的 表格
+	var grid = $("#"+gridOption.gridId);
+	var tr = grid.children();
+	debugger;
+	var size = tr.length;
+	for(var i=0; i<size; i++){
+		var selectTd = tr.children();
+		var kk=selectTd[1];
+		console.log(kk);
+	}
+}
+
+
+
+
+
+

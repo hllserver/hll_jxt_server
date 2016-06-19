@@ -1,0 +1,113 @@
+var gridOption = {
+		columns :[{
+			select : "checkBox",
+			name : "权限名",
+		}, {
+			field : "id",
+			name : "",
+			width : 50,
+			hidden:true
+		}, {
+			field : "schoolName",
+			name : "驾校名",
+			width : 100,
+			hidden: true,
+		}, {
+			field : "jobNumber",
+			name : "工号",
+			width : 100,
+			rule:
+			{requerd:true,
+			 type:"string"      	
+			},
+			editable: true
+		}, {
+			field : "name",
+			name : "姓名",
+			width : 100,
+			rule:{
+				requerd:true,
+			},
+		editable: true
+		}, {
+			field : "age",
+			name : "年龄",
+			width : 80,
+			rule:{
+				requerd:true,
+				type:'number'
+			},
+			editable: true
+		}, {
+			field : "tel",
+			name : "电话",
+			width : 80,
+			rule:{
+				requerd:true,
+				type:'number'
+			},
+			editable: true
+		}, {
+			field : "gender",
+			name : "性别",
+			width : 80,
+			editable: true
+		}, {
+			field : "email",
+			name : "邮箱",
+			width : 90,
+			editable: true
+		}, {
+			field : "remark",
+			name : "备注",
+			width : 150,
+			editable: true
+		}],
+		url : "driverSchoolMsg/getDriverInstructor.action" ,//对应操作类action
+		id  :  "gridId",//表格的位置id,所在页面div的id
+		gridId :  "grid1", //表格id，表格属性
+		fromId:'formId'
+};
+function insert(){
+	_insert(gridOption);
+}
+function markAsDelete(){
+	_markAsDelete(gridOption);
+}
+function removeDeleteMark(){
+	_removeDeleteMark(gridOption);
+}
+function save(){
+	var insertedRecords= _getInsertedRecords(gridOption);
+	var updatedRecords=_getUpdatedRecords(gridOption);
+	var deletedRecords=_getDeletedRecords(gridOption);
+	var RecordsO=new Object();
+	RecordsO.insertedRecords=insertedRecords;
+	RecordsO.updatedRecords=updatedRecords;
+	RecordsO.deletedRecords=deletedRecords;
+	_post({
+		url:"driverSchoolMsg/saveInstructor.action",
+		data:JSON.stringify(RecordsO),
+		success:function(value,type){
+			if(value.result){
+				var da =value.result;
+				context="[";
+				for(var i=0;i<da.length;i++){
+					context=context+" "+da[i];
+				}
+				context=context+"]";
+				_showMessage({
+					title:"操作失败",
+					content:"工号"+context+"重复了"
+				});
+			}
+			else{
+				$("#gridId").empty();
+				_Grid(gridOption);
+			}
+		}
+	});
+}
+$(document).ready(function(){
+	_Grid(gridOption);
+});

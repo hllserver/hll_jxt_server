@@ -1,0 +1,68 @@
+package ssm.orm.privilege;
+
+import java.util.List;
+
+import privilege.Item;
+import ssm.entity.privilege.PrivilegeO;
+
+public interface PrivilegeDao{
+
+	/**
+	 * 查询权限 
+	 * liaoyun 2016-3-6
+	 */
+	public List<PrivilegeO> getPrivilegeList(PrivilegeO privilegeO,int currentPage,int pageSize);
+	//查询总条数
+	public int getPrivilegeListTotal(PrivilegeO privilegeO);
+	
+	/**
+	 * 批量插入数据
+	 * @param insertedList
+	 * liaoyun
+	 * 2016-3-16
+	 */
+	public void batchInsert(List<PrivilegeO> insertedList);
+	/**
+	 * 批量 修改  数据
+	 * @param updatedList
+	 * liaoyun
+	 * 2016-3-20
+	 */
+	public void batchUpdate(List<PrivilegeO> updatedList);
+	/**
+	 * 通过 code 查询 是否重复
+	 * liaoyun
+	 * 2016-3-20
+	 * @param codeList
+	 * @return
+	 */
+	public List<String> findRepeatedByCode(List<String> codeList);
+	/**
+	 * 批量 删除  数据
+	 * @param updatedList
+	 * liaoyun
+	 * 2016-3-20
+	 */
+	public void bachDelete(List<PrivilegeO> deletedList);
+	/**
+	 * 修改的数据 是否重复
+	 * liaoyun 2016-4-3
+	 * @param updatedList
+	 * @return
+	 */
+	public List<String> findUpdateRepeatedList(List<PrivilegeO> updatedList);
+
+	/**
+	 * 删除原来的方法权限
+	 * liaoyun
+	 * 2014-4-19
+	 */
+	public void deleteOldMethodPrivilege();
+	
+	/**
+	 * 插入新扫描的方法权限  liaoyun 2016-4-19
+	 * @param items
+	 */
+	public void insertNewMethodPrivilege(List<Item> items);
+
+}

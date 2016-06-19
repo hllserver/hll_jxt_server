@@ -1,0 +1,18 @@
+package ssm.service.user;
+
+import ssm.entity.user.UserO;
+/**
+ * 
+ * @author liaoyun
+ * 2016-3-18
+ */
+public interface UserService {
+
+	/**
+	 * 根据 用户名 和 密码 查询用户信息
+	 * @author liaoyun
+	 * 2016-3-18
+	 */
+	public UserO findUser(String username, String password);
+	
+}

@@ -1,0 +1,32 @@
+$(document).ready(function(){
+	reload();
+});
+
+function reload(){
+	_post({
+		url:"driverSchoolMsg/getDriverSchoolMsg.action",
+		data:"",
+		success:function(da){
+			debugger;
+			$("#schoolName").val(da.schoolName);
+			$("#position").val(da.position);
+			$("#tel").val(da.tel);
+			$("#email").val(da.email);
+			$("#registeredTime").val(da.registeredTime);
+			$("#scale").val(da.scale);
+			$("#remark").val(da.remark);
+			$("#info").val(da.info);
+		}
+	});
+}
+
+function save(){
+	debugger;
+	var kk = $("#formId").serializeObject();
+	_post({
+		url:"driverSchoolMsg/modify.action",
+		data:kk,
+		success:function(da){
+		}
+	});
+}

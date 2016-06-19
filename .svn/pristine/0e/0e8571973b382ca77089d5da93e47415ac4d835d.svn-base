@@ -1,0 +1,39 @@
+$(document).ready(function(){
+	$(".loadImage").on("click", function() {
+		debugger;
+		var src=$(this)[0].src;
+		$(".inputUser").css("background-image","url("+src+")");
+		if(src.indexOf("qqinput")>0){
+			$("#logType").val("qq");
+			$(".inputUser").val("请输入qq账号");
+		}
+		if(src.indexOf("bloginput")>0){
+			$("#logType").val("blog");
+			$(".inputUser").val("请输入微博帐号");
+		}
+		if(src.indexOf("weChatinput")>0){
+			$("#logType").val("weChat");
+			$(".inputUser").val("请输入微信帐号");
+		}
+		if(src.indexOf("emailinput")>0){
+			$("#logType").val("email");
+			$(".inputUser").val("请输入邮箱帐号");
+		}
+		if(src.indexOf("loginput")>0){
+			$("#logType").val("phone");
+			$(".inputUser").val("请输入手机号码");
+		}
+	});
+});
+//跳转到注册页面
+function regist(){
+	$.ajax({
+		url : "front/regist.html",
+		type : 'GET',
+		success : function(data) {
+			$("#div2").html(data);
+		}
+	});
+}
+
+

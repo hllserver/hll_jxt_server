@@ -1,0 +1,83 @@
+<meta charset="UTF-8">
+<!-- 驾校场地信息 
+     @author heyi
+     2016/4/2
+-->
+<script type="text/javascript" src="driverSchool/schoolPlace.js"></script>
+<style>
+.placeMsg{
+	height:550px;
+	overflow-x:auto;
+	overflow-y:auto;
+}
+</style>
+	<div id="_placeNameDIV" style="min-height: 30px; width: 100%; float:top; background-color: #DDDDDD">
+	<button id="newPlace" class="_btn">新增</button>	
+		<div id="allPlace"></div>
+	</div>
+
+
+	<div id="placeMsg"  style="float:bottom">
+		<form target='iframe1' onsubmit="return submitCheck()" action='driverSchoolPlace/addNewPlace.action' enctype='multipart/form-data' method='post'>
+		<input type='text' id='pid' name='id' hidden="true"><br/>
+			<table>
+				<tr>
+					<td>场地名称：</td>
+					<td><input type='text' id='pname' name='placeName'></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>场地位置：</td>
+					<td><input type='text' id='pposition' name='position'></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>场地面积：</td>
+					<td><input type='text' id='parea' name='area'></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>教学车辆数量：</td>
+					<td><input type='text' id='pscale' name='carNo'></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>备 注 ：</td>
+					<td><input type='text' id='premark' name='remark'></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>图片1：</td>
+					<td><img id='img1' height="120px" width="220px"></img></td>
+					<td><input type='file' name='pic1' value='上传'></td>
+				</tr>
+				<tr>
+					<td>图片2：</td>
+					<td><img id='img2' height="120px" width="220px"></img></td>
+					<td><input type='file' name='pic2' value='上传'></td>
+				</tr>
+				<tr>
+					<td>图片3：</td>
+					<td><img id='img3' height="120px" width="220px"></img></td>
+					<td><input type='file' name='pic3' value='上传'></td>
+				</tr>
+				<tr>
+					<td>图片4：</td>
+					<td><img id='img4' height="120px" width="220px"></img></td>
+					<td><input type='file' name='pic4' value='上传'></td>
+				</tr>
+				<tr>
+					<td>图片5：</td>
+					<td><img id='img5' height="120px" width="220px"></img></td>
+					<td><input type='file' name='pic5' value='上传'></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type='submit' value='保存'></td>
+					<td></td>
+				</tr>
+			</table>
+		</form>
+		<button onclick="deletePlace()">删除</button>
+	</div>
+	<iframe width="10" height="10" name="iframe1" frameborder="0"></iframe>

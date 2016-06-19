@@ -1,0 +1,120 @@
+var gridOption = {
+	columns : [  {
+		select : "checkBox",
+		name : "",
+	},{
+		field : "id",
+		name : "ID",
+		hidden:true,
+		width : 50
+	}, {
+		field : "account",
+		name : "账号",
+		width : 100,
+		rule:{
+			requerd:true,
+			type:"string",
+			reg:/^[a-zA-Z0-9]{6,20}$/,
+			hint:"6到20个字母数据组成"
+		},
+		editable:true
+	}, {
+		field : "tel",
+		name : "电话",
+		width : 100,
+		editable:true
+	}, {
+		field : "email",
+		name : "邮箱",
+		editable:true,
+		width : 100
+	}, {
+		field : "qq",
+		name : "qq号",
+		editable:true,
+		width : 100
+	}, {
+		field : "weChat",
+		name : "微信号",
+		editable:true,
+		width : 100
+	} , {
+		field : "type",
+		name : "用户角色类型",
+		editable:true,
+		rule:{
+			requerd:true
+		},
+		dropBox:[{value:'1',display:'系统管理员'},
+		         {value:'2',display:'系统普通管理员'},
+		         {value:'3',display:'驾校管理员'},
+		         {value:'4',display:'驾校普通管理员'},
+		         {value:'5',display:'普通用户'}],
+		width : 100
+	} , {
+		field : "nickName",
+		name : "昵称",
+		editable:true,
+		width : 100
+	} ],
+	url : "user/findRoleList.action",
+	id : "gridDivId",   
+	gridId : "grid1", 
+	fromId : "formid"
+};
+//插入数据
+function insert(){
+	_insert(gridOption);
+}
+//标记为删除
+function markAsDelete(){
+	_markAsDelete(gridOption);
+}
+//取消删除
+function removeMarkAsDelete(){
+	_removeDeleteMark(gridOption);
+}
+//查询
+function search(){
+	$("#gridDivId").empty();
+	_Grid(gridOption);
+}
+//保存
+function save(){
+	var valid=_isValid(gridOption);
+	if(valid==false){
+		return;
+	}
+	var insertdRecords = _getInsertedRecords(gridOption);
+	var updatedRecords = _getUpdatedRecords(gridOption);
+	var deletedRecords = _getDeletedRecords(gridOption);
+	var RecordsO= new Object();
+	RecordsO.insertedRecords=insertdRecords;
+	RecordsO.updatedRecords=updatedRecords;
+	RecordsO.deletedRecords=deletedRecords;
+	_post({
+		url:"user/saveAll.action",
+		data:JSON.stringify(RecordsO),
+		success:function(value, type){
+			if(value.result){//如果保存失败
+				var da = value.result;
+				context="[";
+				for(var i=0; i<da.length; i++){
+					context=context+" "+da[i];
+				}
+				context=context+" ]"
+				_showMessage({
+					title:"操作失败",
+					content:"用户账号 "+context+"重复了"
+				});
+			}else{
+				$("#gridDivId").empty();
+				_Grid(gridOption);
+			}
+		}
+	});
+}
+
+$(document).ready(function(){
+	_Grid(gridOption);
+});

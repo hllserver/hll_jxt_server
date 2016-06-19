@@ -1,0 +1,86 @@
+package ssm.orm.driverSchool;
+
+import java.util.List;
+
+import ssm.entity.driverSchool.SchoolAdO;
+import ssm.entity.driverSchool.SchoolInstructorO;
+import ssm.entity.driverSchool.SchoolO;
+
+public interface DriverSchoolDao {
+
+	public List<SchoolO> getDriverSchoolList(SchoolO schoolO);
+
+	public int getDriverSchoolListTotal(SchoolO schoolO);
+
+	public List<SchoolO> getDriverSchoolList(SchoolO schoolO, int start, int pageSize);
+
+	public List<String> findRepeatedByAccount(List<String> accountList);
+
+	public void batchInsert(List<SchoolO> insertedList);
+
+	public void batchDelete(List<SchoolO> deletedList);
+	
+	/**
+	 * 获取自己驾校信息 liaoyun 2016-3-27
+	 * @param account
+	 * @return
+	 */
+	public List<SchoolO> findDriverSchoolMsg(String account);
+
+	/**
+	 * 保存修改的驾校信息数据 liaoyun 2016-3-27
+	 * @param school
+	 * @param account
+	 */
+	public void saveSchoolMsg(SchoolO school, String account);
+
+	/**
+	 * 查询 驾校 所属的 教练 总人数
+	 *  liaoyun 2016-3-27
+	 * @param schoolInstructorO
+	 * @param account
+	 * @return
+	 */
+	public int getDriverInstructorListTotal(SchoolInstructorO schoolInstructorO, String account);
+
+	/**
+	 * 分页 查询 驾校 所属的 教练 
+	 * liaoyun 2016-3-27
+	 * @param schoolInstructorO
+	 * @param start
+	 * @param pageSize
+	 * @param account
+	 * @return
+	 */
+	public List<SchoolInstructorO> getDriverInstructorList(SchoolInstructorO schoolInstructorO, int start, int pageSize,
+			String account);
+
+	/**
+	 * 新增  驾校的教练 liaoyun 2016-3-27
+	 * @param insertedRecords
+	 */
+	public void insertSchoolInstructor(List<SchoolInstructorO> insertedRecords,String account);
+
+	/**
+	 * 修改  驾校的教练 liaoyun 2016-3-27
+	 * @param uptatedRecords
+	 */
+	public void updateSchoolInstructor(List<SchoolInstructorO> uptatedRecords,String account);
+
+	/**
+	 * 剔除  驾校的教练 liaoyun 2016-3-27
+	 * @param deletedRecords
+	 */
+	public void deleteSchoolInstructor(List<SchoolInstructorO> deletedRecords,String account);
+
+	/**
+	 * 广告数据存入数据库 
+	 * liaoyun 2016-4-2
+	 * @param schoolAd
+	 * @param account
+	 */
+	public void saveAdInfo(SchoolAdO schoolAd, String account);
+
+	public void batchUpdate(List<SchoolO> updatedList);
+
+}

@@ -1,0 +1,33 @@
+<meta charset="UTF-8">
+<script type="text/javascript" src='commonJs/jquery-1.11.3.min.js'></script>
+<script type="text/javascript" src='commonJs/login.js'></script>
+<script src='front/schoolAd.js' type="text/javascript" charset="utf-8"></script>
+<div><font >游客，您好 ！欢迎来到驾校通！  快去学员信息管理系统<a href="#" ><span color='blue' style="font-weight:bold">注册</span></a>或<a href="#" ><span color='blue' style="font-weight:bold">登录</span></a>吧!</font></div></br/>
+		<table id="pic" width="100%">
+			<tr>
+				<td width="45%"><img id='fpic' height='370px' alt="logo" src="" width="100%px"/></td>
+				<td align="left" width="40%">
+					<div align='center'>
+						<font size='40pt' id='title'></font>
+					</div><br/>
+					<div>
+						<font size='20pt' id='content'>
+                  </font>
+				    </div><br/>
+					<div align='center'>
+						<button class="bu" id='info' color="green" style="float:bottom">了解更多</button>
+					</div>
+				</td>
+				<td align="center">
+					<div><img alt="联系客服" width="45px" height="45px" src="pic/acception.jpg"/></div>
+					<br/>
+					<div><img alt="二维码" width="35px" height="45px" src="pic/phoneewm.jpg"/></div>
+					<br/>
+					<div><img alt="分享" width="45px" height="45px" src="pic/shareIcon.jpg"/></div>
+					<br/>
+					<div><img alt="返回首页" width="45px" height="45px" src="pic/returntop.jpg"/></div>
+				</td>
+			</tr>
+		</table>
+		<div id="nav" name="nav" align='center'></div>
+		<div style="background-color:#DEEBF7; height:60px;"></div>

@@ -1,0 +1,71 @@
+var gridOption = {
+	columns : [ {
+		select : "checkBox",
+		name : "权限名",
+	}, {
+		field : "priCode",
+		name : "权限名",
+		width : 150,
+		editable: true
+	}, {
+		field : "priDesc",
+		name : "权限描述",
+		width : 200,
+		editable: true
+	}, {
+		field : "priType",
+		name : "权限类型",
+		width : 100,
+		editable: true
+	}, {
+		field : "priUrl",
+		name : "链接",
+		width : 300,
+		editable: true
+	} ],
+	url : "privilege/getPrivilegeList.action",
+	id : "grid",       //表格 放置的位置 id,就是一个 div 的 id
+	gridId : "grid1",  //定义表格  的 id
+	fromId : "formId"  //查询条件 from 的 id
+};
+//插入数据
+function insert(){
+	_insert(gridOption);
+}
+//标记为删除
+function markAsDelete(){
+	_markAsDelete(gridOption);
+}
+//取消删除
+function removeDeleteMark(){
+	_removeDeleteMark(gridOption);
+}
+//查询
+function search(){
+	$("#grid").empty();
+	_Grid(gridOption);
+}
+//保存数据
+function save(){
+	debugger;
+	var insertdRecords = _getInsertedRecords(gridOption);
+	var updatedRecords = _getUpdatedRecords(gridOption);
+	var deletedRecords = _getDeletedRecords(gridOption);
+	//console.log(deletedRecords);
+	debugger;
+	var RecordsO= new Object();
+	RecordsO.insertedRecords=insertdRecords;
+	RecordsO.updatedRecords=updatedRecords;
+	RecordsO.deletedRecords=deletedRecords;
+	_post({
+		url:"privilege/saveAll.action",
+		data:JSON.stringify(RecordsO),
+		success:function(value, type){
+			alert(value);
+		}
+	});
+}
+//页面加载 完成后 立即执行
+$(document).ready(function() {
+	_Grid(gridOption);
+})

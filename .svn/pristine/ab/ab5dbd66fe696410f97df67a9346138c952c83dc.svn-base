@@ -1,0 +1,92 @@
+package ssm.service.driverSchoolService;
+
+import java.util.List;
+import java.util.Map;
+
+import ssm.entity.common.ResultO;
+import ssm.entity.driverSchool.SchoolAdO;
+import ssm.entity.driverSchool.SchoolInstructorO;
+import ssm.entity.driverSchool.SchoolO;
+/**
+ * 获取学校信息
+ * @author heyi
+ * 2016-3-13
+ */
+public interface DriverSchoolService {
+	/**
+	 * 获取学校列表
+	 * @author heyi
+	 * 2016-3-13
+	 */
+	public ResultO<SchoolO> getDriverSchoolList(SchoolO schoolO,int currentPage,int pageSize);
+	
+	/**
+	 * 批量插入数据
+	 * @author heyi
+	 * 2016/3/22
+	 */
+	public Map<String,String> batchInsert(List<SchoolO> insertList);
+	
+	/**
+	 * 批量修改数据
+	 * @author heyi
+	 * 2016/3/22
+	 */
+	public Map<String,String> batchUpdate(List<SchoolO> updatedList);
+	
+	/**
+	 * 批量删除数据
+	 * @author heyi
+	 * 2016/3/22
+	 */
+	public void batchDelete(List<SchoolO> deletedList);
+
+	/**
+	 * 获取自己驾校信息 liaoyun 2016-3-27
+	 * @param account
+	 * @return
+	 */
+	public SchoolO getDriverSchoolMsg(String account);
+
+	/**
+	 * 保存修改的驾校信息数据 liaoyun 2016-3-27
+	 * @param school
+	 * @param account
+	 */
+	public void saveSchoolMsg(SchoolO school, String account);
+
+	/**
+	 * 查询 驾校 所属的 教练
+	 * liaoyun 2016-3-27
+	 */
+	public ResultO<SchoolInstructorO> getDriverSchoolList(SchoolInstructorO schoolInstructorO, int currentPage,
+			int pageSize, String account);
+
+	/**
+	 * 新增  驾校的教练 liaoyun 2016-3-27
+	 * @param insertedRecords
+	 */
+	public void insertSchoolInstructor(List<SchoolInstructorO> insertedRecords,String account);
+
+	/**
+	 * 修改  驾校的教练 liaoyun 2016-3-27
+	 * @param uptatedRecords
+	 */
+	public void updateSchoolInstructor(List<SchoolInstructorO> uptatedRecords,String account);
+
+	/**
+	 * 剔除  驾校的教练 liaoyun 2016-3-27
+	 * @param deletedRecords
+	 */
+	public void deleteSchoolInstructor(List<SchoolInstructorO> deletedRecords,String account);
+
+	/**
+	 * 广告数据存入数据库
+	 * liaoyun 2016-4-2
+	 * @param schoolAd
+	 * @param account
+	 */
+	public void saveAdInfo(SchoolAdO schoolAd, String account);
+
+	
+}

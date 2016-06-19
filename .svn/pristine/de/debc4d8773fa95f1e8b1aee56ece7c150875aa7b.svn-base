@@ -1,0 +1,104 @@
+package ssm.entity.driverSchool;
+
+import java.util.Date;
+
+import ssm.entity.BaseEntity;
+/**
+ * 学校信息
+ * @author liaoyun
+ * 2016-3-6
+ */
+public class SchoolO extends BaseEntity{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4655778699835126834L;
+	private long id;
+	private String account;       //账号
+	private String password;      //密码
+	private String schoolName;
+	private String possion;       //地址
+	private String tel;
+	private String email;
+	private double price;         //价格 rmb
+	private Date registeredTime;
+	private int scale;            //规模 人数
+	private String info;          //学校具体信息
+	private String remark;        //备注
+	public SchoolO() {
+		super();
+	}
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
+	public String getAccount() {
+		return account;
+	}
+	public void setAccount(String account) {
+		this.account = account;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getSchoolName() {
+		return schoolName;
+	}
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
+	}
+	public String getPossion() {
+		return possion;
+	}
+	public void setPossion(String possion) {
+		this.possion = possion;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public Date getRegisteredTime() {
+		return registeredTime;
+	}
+	public void setRegisteredTime(Date registeredTime) {
+		this.registeredTime = registeredTime;
+	}
+	public int getScale() {
+		return scale;
+	}
+	public void setScale(int scale) {
+		this.scale = scale;
+	}
+	public String getInfo() {
+		return info;
+	}
+	public void setInfo(String info) {
+		this.info = info;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+}

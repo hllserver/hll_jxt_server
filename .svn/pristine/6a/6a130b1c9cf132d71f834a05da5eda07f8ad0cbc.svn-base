@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.orm.studentInfo.StudentInfoDao">
+	<!-- 查询相关学员信息的总条数 -->
+	<select id="getStudentInfoListTotal" resultType="int">
+		select
+		count(*)
+		from
+		student_t t
+		where t.school_account=#{param2}
+		<if test='param1.name!=null and param1.name!=""'>
+			and t.name=#{name}
+		</if>
+		<if test='param1.address!=null and param1.address!=""'>
+			and t.address like CONCAT('%',{#address},'%')
+		</if>
+		<if test='param1.examStatus!=null and param1.examStatus!=""'>
+			and t.exam_status =#{examStatus}
+		</if>
+		<if test='param1.healthExamination!=null and param1.healthExamination!=""'>
+			and t.health_examination=#{healthExamination}
+		</if>
+	</select>
+
+	<!-- 查询相关学员信息列表 -->
+	<select id="getStudentInfoList" resultType="ssm.entity.stu.StudentO">
+		select
+		t.name,
+		t.account,
+		t.nickname,
+		t.tel,
+		t.email,
+		t.qq,
+		t.weChat,
+		t.gender,
+		t.car_type,
+		t.address,
+		t.id_card,
+		t.training_status,
+		t.exam_status,
+		t.health_examination,
+		t.createBy,
+		t.createdDate,
+		t.lastUpdatedBy,
+		t.lastUpdatedDate
+		from
+		student_t t
+		where t.school_account=#{param4}
+		<if test='param1.name!=null and param1.name!=""'>
+			and t.name=#{name}
+		</if>
+		<if test='param1.address!=null and param1.address!=""'>
+			and t.address like CONCAT('%',{#address},'%')
+		</if>
+		<if test='param1.examStatus!=null and param1.examStatus!=""'>
+			and t.exam_status=#{examStatus}
+		</if>
+		<if test='param1.healthExamination!=null and param1.healthExamination!=""'>
+			and t.health_examination=#{healthExamination}
+		</if>
+		order by t.lastUpdatedDate desc
+		limit #{param2},#{param3}
+	</select>
+
+	<!-- 根据账号判断重复 -->
+	<select id="findRepeatedByAccount" resultType="String">
+		select
+		account
+		from
+		student_t
+		where
+		account in
+		<foreach collection="list" item='item' open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- 添加新增数据 -->
+	<insert id="batchInsert">
+		<foreach collection="list" item='item'>
+			insert into student_t
+			(
+			name,
+			account,
+			nickname,
+			tel,
+			email,
+			qq,
+			weChat,
+			gender,
+			car_type,
+			address,
+			id_card,
+			training_status,
+			exam_status,
+			health_examination,
+			createBy,
+			createdDate,
+			lastUpdatedBy,
+			lastUpdatedDate,
+			privilege_flag,
+			password,
+			school_account
+			)values(
+			#{item.name},
+			#{item.account},
+			#{item.nickname},
+			#{item.tel},
+			#{item.email},
+			#{item.qq},
+			#{item.wechat},
+			#{item.gender},
+			#{item.carType},
+			#{item.address},
+			#{item.idCard},
+			#{item.trainingStatus},
+			#{item.examStatus},
+			#{item.healthExamination},
+			#{item.createdBy},
+			now(),
+			#{item.lastUpdatedBy},
+			now(),
+			#{item.privilegeFlag},
+			#{item.password},
+			#{item.schoolAccount}
+			);
+		</foreach>
+	</insert>
+
+	<!-- 批量修改数据 -->
+	<update id="batchUpdate">
+		<foreach collection="list" item='item'>
+			update student_t set
+			name=#{item.name},
+			tel=#{item.tel},
+			email=#{item.email},
+			qq=#{item.qq},
+			weChat=#{item.wechat},
+			gender=#{item.gender},
+			car_type=#{item.carType},
+			address=#{item.address},
+			id_card=#{item.idCard},
+			training_status=#{item.trainingStatus},
+			exam_status=#{item.examStatus},
+			health_examination=#{item.healthExamination},
+			lastUpdatedBy=now(),
+			lastUpdatedDate=now(),
+			privilege_flag=#{item.privilegeFlag},
+			password=#{item.password}
+			where
+			account=#{item.account};
+		</foreach>
+	</update>
+
+<!-- 批量删除学员信息 -->
+
+<delete id="batchDelete">
+		<foreach collection="list" item='item'>
+			delete from student_t where account=#{item.account};
+		</foreach>
+	</delete>
+</mapper>

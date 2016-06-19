@@ -1,0 +1,15 @@
+package ssm.service.privilege;
+
+import java.util.List;
+
+import ssm.entity.privilege.PrivilegeO;
+
+public interface PrivilegeService {
+
+	/**
+	 * 获取 权限信息
+	 * liaoyun 2016-3-6
+	 */
+	public List<PrivilegeO> getPrivilegeList();
+	
+}

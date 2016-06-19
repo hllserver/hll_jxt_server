@@ -1,0 +1,37 @@
+var allAd;
+$(document).ready(function() {
+	// 显示所有的广告数据
+	_get({
+		url : "driverSchoolMsg/getAdSchoolName.action",
+		data : "",
+		success : function(da) {
+			// 获取广告列表
+			var ads = da.ads;
+			allAd = ads;
+			for (var i = 0; i < ads.length; i++) {
+				var aa = $("<a class='nava'><font>●</font></a>");
+				aa.css("cursor",'pointer');
+				aa.attr("account",ads[i].schoolAccount);
+				$("#nav").append(aa);
+			}
+			$(".nava").children().eq(0).css("color","blue");
+			$("#fpic").attr({"src":"file/pic/"+allAd[0].pic1});
+			$("#title").text(allAd[0].title);
+			$("#content").text(allAd[0].content);
+			$(".nava").click(function(){
+				var ly = $(this);
+				var account = ly.attr("account");
+				$(".nava").children().css("color","black");
+				ly.children().css("color","blue");
+				debugger;
+				for(var k=0; k<allAd.length; k++){
+					if(account==allAd[k].schoolAccount){
+						$("#fpic").attr({"src":"file/pic/"+allAd[k].pic1});
+						$("#title").text(allAd[k].title);
+						$("#content").text(allAd[k].content);
+					}
+				}
+			});
+		}
+	});
+});

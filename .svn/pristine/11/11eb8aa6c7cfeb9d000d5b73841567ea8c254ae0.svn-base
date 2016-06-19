@@ -1,0 +1,57 @@
+package ssm.serviceImpl.privilege;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ssm.entity.common.PageO;
+import ssm.entity.common.ResultO;
+import ssm.entity.privilege.PrivilegeO;
+import ssm.entity.privilege.RoleO;
+import ssm.orm.privilege.RoleDao;
+import ssm.service.privilege.RoleService;
+import ssm.util.PageUtil;
+@Service
+public class RoleServiceImpl implements RoleService{
+	
+	@Autowired
+	private RoleDao roleDao;
+
+	/**
+	 * 分页查询 角色 及 权限, liaoyun, 2016-3-20
+	 */
+	@Override
+	public ResultO<RoleO> findRoleList(RoleO role, int currentPage, int pageSize) {
+		//查询角色 的数量
+		int total = roleDao.findTotalRole(role);
+		PageO pageO = PageUtil.getPage(currentPage, pageSize, total);
+		int start = (pageO.getCurrentPage()-1)*pageO.getPageSize();
+		List<RoleO> list = roleDao.findRoleList(role,start,pageSize);
+		ResultO<RoleO> result = new ResultO<>();
+		result.setResultList(list);
+		result.setPage(pageO);
+		return result;
+	}
+
+	/**
+	 * 查询所有的权限 liaoyun 2016-3-22
+	 */
+	@Override
+	public List<PrivilegeO> findAllPrivilege() {
+		List<PrivilegeO> list = roleDao.findAllPrivilege();
+		return list;
+	}
+
+	/**
+	 * 拥有的权限 liaoyun 2016-3-22
+	 * @param roleCode
+	 * @return
+	 */
+	@Override
+	public List<String> findMyOwnPrivilege(String roleCode) {
+		List<String> list = roleDao.findMyOwnPrivilege(roleCode);
+		return list;
+	}
+
+}

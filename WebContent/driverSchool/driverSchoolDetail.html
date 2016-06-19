@@ -1,0 +1,146 @@
+<meta charset="UTF-8">
+<script src="driverSchool/driverSchoolDetail.js" type="text/javascript"></script>
+<style>
+td input {
+	width: 99%;
+}
+
+._title {
+	background-color: #DCDCDC;
+}
+#out{
+	height:550px;
+	overflow-x:auto;
+	overflow-y:auto;
+}
+.item{
+	background-color:#9ACD32;
+}
+</style>
+<div id='out'>
+<div class='item'><span onclick="fn(this)">驾校基本信息</span></div>
+<div id='divbase'>
+	<form id='form11'>
+	<input type='text' name='id' hidden='true'>
+		<table width='100%' border='1' rules=all>
+			<tr>
+				<td width='15%' class='_title'>驾校名称<font color='red'>*</font></td>
+				<td colspan='2'><input id='schoolName' name="schoolName" /></td>
+				<td class='_title'>驾校电话<font color='red'>*</font></td>
+				<td colspan='2'><input type="text" id='tel' name='tel' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>驾校 邮箱</td>
+				<td colspan='2'><input type="text" id='email' name='email' /></td>
+				<td class='_title'>驾校微信</td>
+				<td colspan='2'><input type="text" id='wechat' name='wechat' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>驾校 QQ</td>
+				<td colspan='2'><input type="text" id='qq' name='qq' /></td>
+				<td class='_title'>驾校人数</td>
+				<td colspan='2'><input type="text" id='empno' name='empno' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>场地面积(平方米)</td>
+				<td colspan='2'><input type="text" id='scale' name='scale' /></td>
+				<td class='_title'>驾校训练车数(辆)</td>
+				<td colspan='2'><input type="text" id='carno' name='carno' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>A1级别价格(元)</td>
+				<td colspan='2'><input type="text" id='a1Price' name='a1' /></td>
+				<td class='_title'>A2级别价格(元)</td>
+				<td colspan='2'><input type="text" id='a2Price' name='a2' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>A3级别价格(元)</td>
+				<td colspan='2'><input type="text" id='a3Price' name='a3' /></td>
+				<td class='_title'>B1级别价格(元)</td>
+				<td colspan='2'><input type="text" id='b1Price' name='b1' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>B2级别价格(元)</td>
+				<td colspan='2'><input type="text" id='b2Price' name='b2' /></td>
+				<td class='_title'>C1级别价格(元)</td>
+				<td colspan='2'><input type="text" id='c1Price' name='c1' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>C2级别价格(元)</td>
+				<td colspan='2'><input type="text" id='c2Price' name='c2' /></td>
+				<td class='_title'>C3级别价格(元)</td>
+				<td colspan='2'><input type="text" id='c3Price' name='c3' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>C4级别价格(元)</td>
+				<td colspan='2'><input type="text" id='c4Price' name='c4' /></td>
+				<td class='_title'>D级别价格(元)</td>
+				<td colspan='2'><input type="text" id='dPrice' name='d' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>E级别价格(元)</td>
+				<td colspan='2'><input type="text" id='ePrice' name='e' /></td>
+				<td class='_title'>F级别价格(元)</td>
+				<td colspan='2'><input type="text" id='fPrice' name='f' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>M级别价格(元)</td>
+				<td colspan='2'><input type="text" id='mPrice' name='m' /></td>
+				<td class='_title'>N级别价格(元)</td>
+				<td colspan='2'><input type="text" id='nPrice' name='n' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>P级别价格(元)</td>
+				<td colspan='2'><input type="text" id='pPrice' name='p' /></td>
+			</tr>
+			<tr>
+				<td width='15%' class='_title'>驾校地址(xx省xx市xx县...)<font
+					color='red'>*</font></td>
+				<td colspan='5'><textarea id='address' name='position' rows="3" cols="120"
+						name='address'></textarea></td>
+			</tr>
+			<tr>
+				<td class='_title'>优惠政策</td>
+				<td colspan='5'><textarea id='policy' name='policy' rows="4" cols="120"
+						name='policy'></textarea></td>
+			</tr>
+			<tr>
+				<td class='_title'>驾校简介<font color='red'>*</font></td>
+				<td colspan='5'><textarea id='intruduce' name='intruduce' rows="5" cols="120"
+						name='intruduce'></textarea></td>
+			</tr>
+		</table>
+	</form>
+	<button class='_btn' onclick="sumb()">保存提交</button>
+	<br />
+</div><br/>
+<div class='item'><span onclick="fn(this)">资质荣誉</span></div>
+<div id="divhonor">
+	<form action="driverSchoolMsg/saveSchoolPic.action" method="post" enctype="multipart/form-data" target="ifra">
+		荣誉说明:<input type='text' name='explain'></br>
+		<input type='text' name='type' value='honor' hidden="true">
+		荣誉图片:<input type='file' name='pic'></br>
+		<input type='submit' class='_btn' value='确认上传'>
+	</form>
+</div><br/>
+<div class='item'><span onclick="fn(this)">驾校风采</span></div>
+<div id="divface">
+	<form action="driverSchoolMsg/saveSchoolPic.action" method="post" enctype="multipart/form-data" target="ifra">
+		图片说明:<input type='text' name='explain'></br>
+		<input type='text' name='type' value='view' hidden="true">
+		精彩图片:<input type='file' name='pic'></br>
+		<input type='submit' class='_btn' value='确认上传'>
+	</form>
+</div><br/>
+<div class='item'><span onclick="fn(this)">明星教练</span></div>
+<div><div id="divinstru"></div>
+	<form action="driverSchoolMsg/saveSchoolPic.action" method="post" enctype="multipart/form-data" target="ifra">
+		教练姓名:<input type='text' name='name'></br>
+		<input type='text' name='type' value='instru' hidden="true">
+		教练照片:<input type='file' name='pic'></br>
+		教练简介:<textarea rows="3" cols="50" name='explain'></textarea></br>
+		<input type='submit' class='_btn' value='确认上传'>
+	</form>
+</div>
+</div>
+<iframe name='ifra' hidden="true"></iframe>

@@ -1,0 +1,5 @@
+package ssm.util;
+
+public class MD5Util {
+
+}

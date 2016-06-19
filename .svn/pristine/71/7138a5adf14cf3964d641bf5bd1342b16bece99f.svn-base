@@ -1,0 +1,89 @@
+var gridOption = {
+	columns : [  {
+		select : "checkBox",
+		name : "",
+	},{
+		field : "id",
+		name : "ID",
+		hidden:true,
+		width : 50
+	}, {
+		field : "account",
+		name : "账号",
+		width : 100,
+		editable:true
+	}, {
+		field : "tel",
+		name : "电话",
+		width : 100,
+		editable:true
+	}, {
+		field : "email",
+		name : "邮箱",
+		editable:true,
+		width : 100
+	}, {
+		field : "qq",
+		name : "qq号",
+		editable:true,
+		width : 100
+	}, {
+		field : "weChat",
+		name : "微信号",
+		editable:true,
+		width : 100
+	} , {
+		field : "type",
+		name : "用户角色类型",
+		editable:true,
+		width : 100
+	} , {
+		field : "nickName",
+		name : "昵称",
+		editable:true,
+		width : 100
+	} ],
+	url : "user/findRoleList.action",
+	id : "gridDivId",   
+	gridId : "grid1", 
+	fromId : "formid"
+};
+//插入数据
+function insert(){
+	_insert(gridOption);
+}
+//标记为删除
+function markAsDelete(){
+	_markAsDelete(gridOption);
+}
+//取消删除
+function removeMarkAsDelete(){
+	_removeDeleteMark(gridOption);
+}
+//查询
+function search(){
+	$("#gridDivId").empty();
+	_Grid(gridOption);
+}
+//保存
+function save(){
+	var insertdRecords = _getInsertedRecords(gridOption);
+	var updatedRecords = _getUpdatedRecords(gridOption);
+	var deletedRecords = _getDeletedRecords(gridOption);
+	var RecordsO= new Object();
+	RecordsO.insertedRecords=insertdRecords;
+	RecordsO.updatedRecords=updatedRecords;
+	RecordsO.deletedRecords=deletedRecords;
+	_post({
+		url:"user/saveAll.action",
+		data:JSON.stringify(RecordsO),
+		success:function(value, type){
+			$("#gridDivId").empty();
+			_Grid(gridOption);
+		}
+	});
+}
+
+$(document).ready(function(){
+	_Grid(gridOption);
+});

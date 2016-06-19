@@ -1,0 +1,285 @@
+/**
+ * 和表格相关的操作 , 增、删、改、查、取行数据、
+ */
+//创建表格
+function _Grid(option){
+	if(option.url===undefined || option.columns===undefined){
+		return;
+	}
+	//接收 请求到的数据
+	var data;
+	$.ajax({
+		url:option.url,
+		type:'POST',
+		contentType:'application/json',  
+		dataType : 'json',  
+		success : function(data,type) {
+			//创建表
+			var table = document.createElement("table");
+			table.className="_table";
+			table.style.border="solid 1px";
+			table.id=option.gridId;
+			var trh = document.createElement("tr");
+			var k=option.columns.length;
+			for(var i=0; i<k; i++){ //表头
+				//添加 一个序号行
+				if(i==0){
+					var squence = document.createElement("th");
+					squence.className="_table_th";
+					squence.innerHTML="序号";
+					trh.appendChild(squence);
+				}
+				var th = document.createElement("th");
+				th.className="_table_th";
+				var tem = option.columns[i].name;
+				//如果该列可编辑
+				var editable = option.columns[i].editable;
+				var select = option.columns[i].select;
+				if(editable && editable==true){
+					//可编辑
+					th.innerHTML = tem+"(※)";
+				}else if(select && select!=null){
+					//复选框
+					th.innerHTML = "";
+				}else{
+					//普通值
+					th.innerHTML=tem;
+				}
+				trh.appendChild(th);
+				table.appendChild(trh);
+			}
+			var size = data.length;
+			for(var i=0; i<size; i++){//表中数据
+				var tr=document.createElement("tr");
+				//序列
+				var sq = document.createElement("td");
+				sq.className="_table_td";
+				sq.innerHTML=i;
+				tr.appendChild(sq);
+				tr.className="_table_tr";
+				for(var j=0; j<k; j++){
+					var td=document.createElement("td");
+					td.className="_table_td";
+					var select = option.columns[j].select;
+					if(select && select!=null){
+						//复选框
+						td.innerHTML = "<input class='_select' type='checkbox'/>";
+					}else{
+						//非复选框
+						var field = option.columns[j].field;
+						var width = option.columns[j].width;
+						td.width=width+'px';
+						//插入数据
+						if(data[i][field]!=undefined){
+							td.innerHTML=data[i][field];
+						}
+						var editable = option.columns[j].editable;
+						//是否可以编辑
+						if(editable && editable==true){
+							td.className=td.className+" _edit";
+						}
+					}
+					tr.appendChild(td);
+				}
+				table.appendChild(tr);
+			}
+			var tb = document.getElementById(option.id);
+			tb.appendChild(table);
+			//为  ._edit 绑定可编辑事件 
+			$("._edit").bind("click",function(){
+				_cellBindClick(this);
+			});
+		}
+	});
+}
+
+function _cellBindClick(content){
+	debugger;
+	var tdObj=$(content);
+	//得到 行对象
+	var trObj=tdObj.parent();
+	//获取 tr 对象的 class 值
+	var trClass = trObj.attr("class");
+	//得到当前 值
+	var oldText = tdObj.text();
+	//创建一个文本框
+	var inputObj = $("<input type='text' value="+ oldText +">");
+	//去掉文本框的边框
+	inputObj.css("border-width",0);
+	inputObj.click(function(){
+		return false;
+	});
+	//设置文本框的宽度 与 td 的宽度相同
+	inputObj.width(tdObj.width());
+	inputObj.height(tdObj.height());
+	//去掉 文本框外边距
+	inputObj.css("margin",0);
+	inputObj.css("padding",0);
+	inputObj.css("text-align",'center');
+	inputObj.css("font-size","16px");
+	//inputObj.css("background-color",tdObj.css("background-color"));
+	//把文本框放入td中
+	tdObj.html(inputObj);
+	//文本框失去焦点时 变为文本
+	inputObj.blur(function(){
+		//文本新内容
+		var newText = inputObj.val();
+		tdObj.html(newText);
+		//如果 文本内容 发生改变，且 不为新增的记录 添加 类属性 _update
+		if(trClass.match("_add")==null && oldText!=newText){
+			trObj.addClass("_update");
+		}
+	});
+}
+//插入一条数据
+function _insert(gridOption){
+	var culumns=gridOption.columns;
+	var size=culumns.length;
+	var tr=document.createElement("tr");
+	tr.className="_table_tr _add";
+	for(var i=0; i<size; i++){
+		if(i==0){
+			//序列行
+			var squ=document.createElement("td");
+			squ.className="_table_td";
+			squ.innerHTML="+";
+			tr.appendChild(squ);
+		}
+		var td=document.createElement("td");
+		td.className="_table_td";
+		var editable = culumns[i].editable;
+		var select = culumns[i].select;
+		if(select && select!=null){
+			//复选框
+			td.innerHTML = "<input class='_select' type='checkbox'/>";
+		}
+		//是否可以编辑
+		if(editable && editable==true){
+			td.className=td.className+" _edit";
+		}
+		tr.appendChild(td);
+	}
+	var table = document.getElementById(gridOption.gridId);
+	table.appendChild(tr);
+	//为  ._edit 绑定可编辑事件 
+	$("._edit").bind("click",function(){
+		_cellBindClick(this);
+	});
+}
+
+//添加 删除标记
+function _markAsDelete(gridOption){
+	debugger;
+	var select = $("#"+gridOption.gridId+" ._select");
+	var length = select.length;
+	for(var i=0; i<length; i++){
+		var st = select.eq(i);
+		var selected = st.prop('checked');
+		if(selected==true){
+			//如果 该行被选中，为该行  class 添加  "_del" 
+			var tr = st.parent().parent();
+			tr.addClass("_del");
+			st.attr("checked",false);
+		}
+	}
+}
+//取消删除标记
+function _removeDeleteMark(gridOption){
+	debugger;
+	var select = $("#"+gridOption.gridId+" ._select");
+	var length = select.length;
+	for(var i=0; i<length; i++){
+		var st = select.eq(i);
+		var selected = st.prop('checked');
+		if(selected==true){
+			//如果 该行被选中，为该行  class 添加  "_del" 
+			var tr = st.parent().parent();
+			tr.removeClass("_del");
+			st.attr("checked",false);
+		}
+	}
+}
+//获取 所有新增的记录。class 中 有 _add,且 无 _del,则为 新增的记录
+function _getInsertedRecords(gridOption){
+	var culumns=gridOption.columns;
+	var result = [];
+	var select = $("#"+gridOption.gridId+" ._add");
+	var length = select.length;
+	for(var i=0; i<length; i++){
+		//按class 筛选数据
+		var cla = select[i].className;
+		var del = cla.match("_del");
+		debugger;
+		if(del==null){
+			var record = select.eq(i).children();
+			var size = record.length;
+			var obj={};
+			for(var j=1; j<size; j++){
+				//----------------获取   值 ，，，后面或许会改----------------
+				var text = record[j].innerHTML;
+				var field = culumns[j-1].field;
+				if(field!=undefined){
+					obj[field] = text;
+				}
+			}
+			result.push(obj);
+		}
+		return result;
+	}
+}
+
+//获取所有的 修改的记录 。 class 中有 _update 无 _del
+function _getUpdatedRecords(gridOption){
+	var culumns=gridOption.columns;
+	var result = [];
+	var select = $("#"+gridOption.gridId+" .update");
+	var length = select.length;
+	for(var i=0; i<length; i++){
+		//按class 筛选数据
+		var cla = select[i].className;
+		var del = cla.match("_del");
+		if(del==null){
+			var record = select.eq(i).children();
+			var size = record.length;
+			var obj={};
+			for(var j=1; j<size; j++){
+				//----------------获取   值 ，，，后面或许会改----------------
+				var text = record[j].innerHTML;
+				var field = culumns[j-1].field;
+				if(field!=undefined){
+					obj[field] = text;
+				}
+			}
+			result.push(obj);
+		}
+		return result;
+	}
+}
+//获取所有的 删除的记录 。 class 中有 _del 无 _add
+function _getDeletedRecords(gridOption){
+	var culumns=gridOption.columns;
+	var result = [];
+	var select = $("#"+gridOption.gridId+" ._del");
+	var length = select.length;
+	for(var i=0; i<length; i++){
+		//按class 筛选数据
+		var cla = select[i].className;
+		var add = cla.match("_add");
+		debugger;
+		if(add==null){
+			var record = select.eq(i).children();
+			var size = record.length;
+			var obj={};
+			for(var j=1; j<size; j++){
+				//----------------获取   值 ，，，后面或许会改----------------
+				var text = record[j].innerHTML;
+				var field = culumns[j-1].field;
+				if(field!=undefined){
+					obj[field] = text;
+				}
+			}
+			result.push(obj);
+		}
+		return result;
+	}
+}

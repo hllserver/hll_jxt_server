@@ -1,0 +1,39 @@
+<meta charset="UTF-8">
+<script src='front/first.js' type="text/javascript" charset="utf-8"></script>
+<div><font color='blue'>游客，您好 ！  快去学员信息管理系统<a href="#">注册</a>或<a href="#">登录</a>吧</font></div></br/>
+		<table id="pic" width="100%">
+			<tr>
+				<td width="45%"><img id='fpic' height='370px' alt="logo" src="pic/phone.jpg" width="100%px"/></td>
+				<td align="left" width="40%">
+					<div align='center'>
+						<font size='6' id='title'>手机APP全程服务，学车无忧</font>
+					</div><br/>
+					<div>
+						<font size='4' id='content'>手机预约学车的时代已到来！利用该APP 实现学车乐在其中，
+						帮您节约时间、科学高效学习、管理档案、车友交流、娱乐轻松、资讯获知。
+						真正实现，手机在手，驾照到手！</font>
+				    </div><br/>
+					<div align='center'>
+						<button class="bu" id='info'>下载驾校通APP</button>
+					</div>
+				</td>
+				<td align="center">
+					<div><img alt="联系客服" width="45px" height="45px" src="pic/acception.jpg"/></div>
+					<br/>
+					<div><img alt="二维码" width="35px" height="45px" src="pic/phoneewm.jpg"/></div>
+					<br/>
+					<div><img alt="分享" width="45px" height="45px" src="pic/shareIcon.jpg"/></div>
+					<br/>
+					<div><img alt="返回首页" width="45px" height="45px" src="pic/returntop.jpg"/></div>
+				</td>
+			</tr>
+		</table>
+		<div id="nav" align='center'>
+		<a href='#'><font  id='nav1' color='blue' onclick='page(1)'>●</font></a>
+		<a href='#'><font  id='nav2' color='green' onclick='page(2)'>●</font></a>
+		<a href='#'><font  id='nav3' color='green' onclick='page(3)'>●</font></a>
+		<a href='#'><font  id='nav4' color='green' onclick='page(4)'>●</font></a>
+		<a href='#'><font  id='nav5' color='green' onclick='page(5)'>●</font></a>
+		<a href='#'><font  id='nav6' color='green' onclick='page(6)'>●</font></a>
+		</div>
+		<div style="background-color:#DEEBF7; height:60px;"></div>

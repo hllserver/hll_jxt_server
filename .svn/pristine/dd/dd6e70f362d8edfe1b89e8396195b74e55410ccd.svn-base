@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">      
+<mapper namespace="ssm.orm.privilege.RoleDao">
+	<!-- 
+	* 查询角色 的数量
+	 -->
+	<select id="findTotalRole" resultType="int">
+		select 
+			count(id) 
+		from 
+			user_privilege_t
+		where 1=1
+		<if test='roleCode != null and roleCode != ""'>
+			and roleCode = #{roleCode}
+		</if>
+		<if test='roleName!=null and roleName!=""'>
+			and roleName = #{roleName}
+		</if>
+		<if test='privilegeCode != null and privilegeCode != ""'>
+			and privilegeCode like CONCAT('%',#{privilegeCode},'%')  
+		</if>
+	</select>
+	
+	<select id="findRoleList" resultType="ssm.entity.privilege.RoleO">
+		select 
+			id,
+			roleCode,
+			roleName,
+			privilegeCode
+		from 
+			user_privilege_t
+		where 1=1
+		<if test='param1.roleCode != null and param1.roleCode != ""'>
+			and roleCode = #{param1.roleCode}
+		</if>
+		<if test='param1.roleName!=null and param1.roleName!=""'>
+			and roleName = #{param1.roleName}
+		</if>
+		<if test='param1.privilegeCode != null and param1.privilegeCode != ""'>
+			and privilegeCode = #{param1.privilegeCode}
+		</if>
+		order by lastUpdatedDate desc
+		limit #{param2},#{param3}
+	</select>
+</mapper>

@@ -1,0 +1,27 @@
+package ssm.serviceImpl.privilege;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ssm.entity.privilege.PrivilegeO;
+import ssm.orm.privilege.PrivilegeDao;
+import ssm.service.privilege.PrivilegeService;
+@Service
+public class PrivilegeServiceImpl implements PrivilegeService{
+	
+	@Autowired
+	private PrivilegeDao privilegeDao;
+
+	/**
+	 * 获取 权限信息
+	 * liaoyun 2016-3-6
+	 */
+	@Override
+	public List<PrivilegeO> getPrivilegeList() {
+		List<PrivilegeO> list = privilegeDao.getPrivilegeList();
+		return list;
+	}
+
+}

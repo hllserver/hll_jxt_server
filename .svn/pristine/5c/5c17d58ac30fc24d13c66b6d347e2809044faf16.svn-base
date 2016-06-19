@@ -1,0 +1,42 @@
+package ssm.service.driverSchoolService;
+
+import java.util.List;
+import java.util.Map;
+
+import ssm.entity.common.ResultO;
+import ssm.entity.driverSchool.SchoolO;
+/**
+ * 获取学校信息
+ * @author heyi
+ * 2016-3-13
+ */
+public interface DriverSchoolService {
+	/**
+	 * 获取学校列表
+	 * @author heyi
+	 * 2016-3-13
+	 */
+	public ResultO<SchoolO> getDriverSchoolList(SchoolO schoolO,int currentPage,int pageSize);
+	
+	/**
+	 * 批量插入数据
+	 * @author heyi
+	 * 2016/3/22
+	 */
+	public Map<String,String> batchInsert(List<SchoolO> insertList);
+	
+	/**
+	 * 批量修改数据
+	 * @author heyi
+	 * 2016/3/22
+	 */
+	public Map<String,String> batchUpdate(List<SchoolO> updatedList);
+	
+	/**
+	 * 批量删除数据
+	 * @author heyi
+	 * 2016/3/22
+	 */
+	public void batchDelete(List<SchoolO> deletedList);
+	
+}

@@ -1,0 +1,165 @@
+package ssm.service.driverSchoolService;
+
+import java.util.List;
+import ssm.entity.common.ResultO;
+import ssm.entity.driverSchool.SchoolAdO;
+import ssm.entity.driverSchool.SchoolInstructorO;
+import ssm.entity.driverSchool.SchoolO;
+import ssm.entity.driverSchool.SchoolPicO;
+/**
+ * 获取学校信息
+ * @author heyi
+ * 2016-3-13
+ */
+public interface DriverSchoolService {
+	/**
+	 * 获取学校列表
+	 * @author heyi
+	 * 2016-3-13
+	 */
+	public ResultO<SchoolO> getDriverSchoolList(SchoolO schoolO,int currentPage,int pageSize);
+	
+	/**
+	 * 批量插入数据
+	 * @author heyi
+	 * 2016/3/22
+	 */
+	public List<String>  batchInsert(List<SchoolO> insertList);
+	
+	/**
+	 * 批量修改数据
+	 * @author heyi
+	 * 2016/3/22
+	 */
+	public List<String> batchUpdate(List<SchoolO> updatedList);
+	
+	/**
+	 * 批量删除数据
+	 * @author heyi
+	 * 2016/3/22
+	 */
+	public void batchDelete(List<SchoolO> deletedList);
+
+	/**
+	 * 获取自己驾校信息 liaoyun 2016-3-27
+	 * @param account
+	 * @return
+	 */
+	public SchoolO getDriverSchoolMsg(String account);
+
+	/**
+	 * 保存修改的驾校信息数据 liaoyun 2016-3-27
+	 * @param school
+	 * @param account
+	 */
+	public void saveSchoolMsg(SchoolO school, String account);
+
+	/**
+	 * 查询 驾校 所属的 教练
+	 * liaoyun 2016-3-27
+	 */
+	public ResultO<SchoolInstructorO> getDriverSchoolList(SchoolInstructorO schoolInstructorO, int currentPage,
+			int pageSize, String account);
+
+	/**
+	 * 新增  驾校的教练 liaoyun 2016-3-27
+	 * @param insertedRecords
+	 */
+	public List<String> insertSchoolInstructor(List<SchoolInstructorO> insertedRecords,String account);
+
+	/**
+	 * 修改  驾校的教练 liaoyun 2016-3-27
+	 * @param uptatedRecords
+	 * @return 
+	 */
+	public List<String> updateSchoolInstructor(List<SchoolInstructorO> uptatedRecords,String account);
+
+	/**
+	 * 剔除  驾校的教练 liaoyun 2016-3-27
+	 * @param deletedRecords
+	 */
+	public void deleteSchoolInstructor(List<SchoolInstructorO> deletedRecords,String account);
+
+	/**
+	 * 广告数据存入数据库
+	 * liaoyun 2016-4-2
+	 * @param schoolAd
+	 * @param account
+	 */
+	public void saveAdInfo(SchoolAdO schoolAd, String schoolAcount);
+	
+	
+
+	/**
+	 * 保存修改广告信息
+	 * @author heyi
+	 * 2016/4/10
+	 * @param schoolAd
+	 * @param name
+	 */
+	public void saveUpdateAdInfo(SchoolAdO schoolAd, String schoolAcount);
+
+	/**
+	 * 获取广告列表
+	 *  @author heyi
+	 * 2016/4/10
+	 * @return
+	 */
+	public List<SchoolAdO> getAdSchoolName();
+
+	/**
+	 * 删除广告
+	 * @author heyi
+	 * 2016/4/11
+	 * @param ad
+	 * @return
+	 */
+	public int deleteAd(int id,String schoolAccount1);
+
+	/**
+	 * 根据id和驾校账号查找广告
+	 * @author heyi
+	 * 2016/4/16
+	 */
+	public SchoolAdO getAdByIdAndAccount(int id, String schoolAccount1);
+
+	/**
+	 * 该账号是否有驾校
+	 * liaoyun 2016-4-11
+	 * @param account
+	 * @return
+	 */
+	public int isHasDriverSchool(String account);
+
+	/**
+	 * 添加 驾校信息
+	 * liaoyun 2016-4-11
+	 * @param school
+	 * @param account
+	 */
+	public void insertSchoolMsg(SchoolO school, String account);
+
+	/**
+	 * 保存驾校相关照片
+	 * liaoyun 2016-4-12
+	 * @param picO
+	 * @param account
+	 */
+	public void saveSchoolPic(SchoolPicO picO);
+
+	/**
+	 * 根据 school account 获取 驾校详细信息
+	 * liaoyun 2016-4-16
+	 * @return
+	 */
+	public SchoolO getRecommendSchoolInfo(String schoolAccount);
+
+	/**
+	 * 根据 学校账号 查询 驾校照片
+	 * liaoyun 2016-4-16
+	 * @param schoolAccount
+	 * @param type
+	 * @return
+	 */
+	public List<SchoolPicO> findHonorPic(String schoolAccount,String  type);
+}

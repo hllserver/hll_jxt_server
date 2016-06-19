@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.orm.driverSchool.DriverSchoolDao">
+	<!-- 获取驾校信息 @author heyi 2016/3/13 -->
+	<select id="getDriverSchoolList" resultType="ssm.entity.driverSchool.SchoolO">
+	
+	<!-- 模糊查询报错（报价，规模查询），Parameter index out of range (4 > number of parameters, which is 3). -->
+		select
+		t.id,
+		t.account as account,
+		t.school_name as schoolName,
+		t.position as position,
+		t.tel as tel,
+		t.email as email,
+		t.price as price,
+		t.registered_time as registeredTime,
+		t.scale as scale,
+		t.remark as remark,
+		t.school_info as info
+		from
+		driver_school_t t
+		where 1=1
+		<if test='param1.account !=null and param1.account !=""'>
+			and t.account=#{param1.account}
+		</if>
+		<if test='param1.price !=null and param1.price !=""'>
+			and t.price =#{param1.price}
+		</if>
+		<if test='param1.scale !=null and param1.scale !=""'>
+			and t.scale =#{param1.scale}
+		</if>
+		<if test='param1.schoolName !=null and param1.schoolName !=""'>
+			and t.school_name =#{param1.schoolName}
+		</if>
+		<if test='param1.position !=null and param1.position !=""'>
+			and t.position like CONCAT('%','#{param1.position}','%')
+		</if>
+		<if test='param1.remark !=null and param1.remark !=""'>
+			and t.remark =#{param1.remark}
+		</if>
+		order by t.lastUpdatedDate desc
+		limit #{param2},#{param3}
+	</select>
+
+	<!-- 查询总条数 heyi 2016/3/22 -->
+	<select id="getDriverSchoolListTotal" resultType="int">
+		select
+		count(*)
+		from
+		driver_school_t t
+		where 1=1
+		<if test='account!=null and account!=""'>
+			and t.account like CONCAT('%',#{account},'%')
+		</if>
+		<if test='schoolName!=null and schoolName!=""'>
+			and t.school_name like CONCAT('%',#{schoolName},'%')
+		</if>
+		<if test='position!=null and position!=""'>
+			and t.position like CONCAT('%',#{position},'%')
+		</if>
+		<if test='scale!=null and scale!=""'>
+			and t.scale=#{scale}
+		</if>
+		<if test='price!=null and price!=""'>
+			and t.price=#{price}
+		</if>
+		<if test='remark!=null and remark!=""'>
+			and t.remark =#{remark}=</if>
+	</select>
+
+
+	<!-- *保存新增数据 -->
+	<insert id="batchInsert">
+		<foreach collection="list" item='item'>
+			insert into driver_school_t(
+			account,
+			school_name,
+			position,
+			tel,
+			email,
+			registered_time,
+			scale,
+			price,
+			school_info,
+			remark,
+			createdBy,
+			createdDate,
+			<!--lastUpdatedBy, -->
+			lastUpdatedDate
+			)values(
+			#{item.account},
+			#{item.schoolName},
+			#{item.position},
+			#{item.tel},
+			#{item.email},
+			#{item.registeredTime},
+			#{item.scale},
+			#{item.price},
+			#{item.Info},
+			#{item.remark},
+			#{item.createdBy},
+			now(),
+			now()
+			);
+		</foreach>
+	</insert>
+
+	<!-- *批量修改数据 *@auther heyi *2016/3/22 -->
+	<update id="batchUpdate">
+		<foreach collection="list" item='item'>
+			update driver_school_t set
+			school_name=#{item.schoolName},
+			position=#{item.position},
+			tel=#{item.tel},
+			email=#{item.email},
+			price=#{item.price},
+			scale=#{item.scale},
+			remark=#{item.remark},
+			school_info=#{item.info},
+			lastUpdatedDate=now()
+			where
+			account=#{item.account};
+		</foreach>
+	</update>
+
+	<!-- *根据账号account查询重复的account *heyi *2016/3/22 -->
+	<select id="findRepeatedByAccount" resultType="String">
+		select
+		account
+		from
+		driver_school_t
+		where
+		account in
+		<foreach collection="list" item='item' open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- *批量删除数据 *heyi *2016/3/22 -->
+	<delete id="batchDelete">
+		<foreach collection="list" item='item'>
+			delete from driver_school_t where account=#{item.account};
+		</foreach>
+	</delete>
+	
+	<select id="findDriverSchoolMsg" resultType="ssm.entity.driverSchool.SchoolO">
+		select
+			t.school_name     as schoolName,
+			t.position        as position,
+			t.tel             as tel,
+			t.email           as email,
+			t.registered_time as registeredTime,
+			t.scale           as scale,
+			t.price           as price,
+			t.school_info     as info,
+			t.remark          as remark
+		from
+			driver_school_t t
+		where
+			t.account = #{0}
+	</select>
+	<!-- 
+	 * 保存修改的驾校信息数据 liaoyun 2016-3-27
+	 * @param school
+	 * @param account
+	 -->
+	<update id="saveSchoolMsg">
+		update 
+			driver_school_t t
+		set
+			t.school_name     = #{param1.schoolName},
+			t.position        = #{param1.position},
+			t.tel             = #{param1.tel},
+			t.email           = #{param1.email},
+			t.registered_time = #{param1.registeredTime},
+			t.scale           = #{param1.scale},
+			t.price           = #{param1.price},
+			t.school_info     = #{param1.info},
+			t.remark          = #{param1.remark},
+			t.lastUpdatedBy   = #{param1.lastUpdatedBy},
+			t.lastUpdatedDate = now()
+		where
+			t.account = #{param2}
+	</update>
+	<!-- 
+	 * 查询 驾校 所属的 教练 总人数
+	 *  liaoyun 2016-3-27
+	 * @param schoolInstructorO
+	 * @param account
+	 -->
+	<select id="getDriverInstructorListTotal" resultType="int">
+		select 
+			count(id)
+		from
+			school_instructor_t 
+		where 1=1
+			<if test="param1.name != null and param1.name!=''">
+				and name = #{param1.name}
+			</if>
+			<if test="param1.jobNumber != null and param1.jobNumber != ''">
+				and job_number = #{param1.jobNumber}
+			</if>
+			and school_account = #{param2}
+	</select>
+	<!-- 
+	 * 分页 查询 驾校 所属的 教练 
+	 * liaoyun 2016-3-27
+	 * @param schoolInstructorO
+	 * @param start
+	 * @param pageSize
+	 * @param account
+	 -->
+	<select id="getDriverInstructorList" resultType="ssm.entity.driverSchool.SchoolInstructorO">
+		select
+			t.id             as id,
+			t.school_account as schoolAccount,
+			t.job_number     as jobNumber,
+			t.name           as name,
+			t.age            as age,
+			t.tel            as tel,
+			t.gender         as gender,
+			t.email          as email,
+			t.online         as online,
+			t.remark         as remark
+		from
+			school_instructor_t t
+		where 1=1
+			<if test="param1.name != null and param1.name!=''">
+				and t.name = #{param1.name}
+			</if>
+			<if test="param1.jobNumber != null and param1.jobNumber != ''">
+				and t.job_number = #{param1.jobNumber}
+			</if>
+			and school_account = #{param4}
+		order by t.lastUpdatedDate desc limit #{param2},#{param3}
+	</select>
+	<!-- 
+	 * 新增  驾校的教练 liaoyun 2016-3-27
+	 * @param insertedRecords
+	 * account(school_account)
+	 -->
+	<insert id="insertSchoolInstructor">
+		<foreach collection="param1" item="item">
+			insert into school_instructor_t(
+				school_account,
+				job_number,
+				name,
+				age,
+				tel,
+				gender,
+				email,
+				remark,
+				createdBy,
+				createdDate,
+				lastUpdatedBy,
+				lastUpdatedDate
+			) values (
+				#{param2},
+				#{item.jobNumber},
+				#{item.name},
+				#{item.age},
+				#{item.tel},
+				#{item.gender},
+				#{item.email},
+				#{item.remark},
+				#{item.createdBy},
+				now(),
+				#{item.lastUpdatedBy},
+				now()
+			);
+		</foreach>
+	</insert>
+	<!-- 
+	 * 修改  驾校的教练 liaoyun 2016-3-27
+	 * @param updatedRecords
+	 * account(school_account)
+	 -->
+	<update id="updateSchoolInstructor">
+		<foreach collection="param1" item="item">
+			update 
+				school_instructor_t
+			set
+				job_number      = #{item.jobNumber},
+				name            = #{item.name},
+				age             = #{item.age},
+				tel             = #{item.tel},
+				gender          = #{item.gender},
+				email           = #{item.email},
+				remark          = #{item.remark},
+				lastUpdatedBy   = #{item.lastUpdatedBy},
+				lastUpdatedDate = now()
+			where
+				id=#{item.id} and school_account=#{param2};
+		</foreach>
+	</update>
+	<!-- 
+	 * 剔除  驾校的教练 liaoyun 2016-3-27
+	 * @param deletedRecords
+	 * account(school_account)
+	 -->
+	<delete id="deleteSchoolInstructor">
+		update 
+			school_instructor_t
+		set
+			school_account = ''
+		where
+			id in
+			<foreach collection="param1" item="item" open="(" separator="," close=")">
+				#{item.id}
+			</foreach>
+			 and school_account=#{param2};
+	</delete>
+	<!-- 
+	 * 广告数据存入数据库
+	 * liaoyun 2016-4-2
+	 * @param schoolAd
+	 * @param account
+	 -->
+	<insert id="saveAdInfo">
+		insert into school_ad_t(
+			school_account,
+			title,
+			content,
+			pic1,
+			pic2,
+			pic3,
+			pic4,
+			pic5,
+			createdBy,
+			createdDate,
+			lastUpdatedBy,
+			lastUpdatedDate
+		)values(
+			#{1},
+			#{0.title},
+			#{0.content},
+			#{0.pic1},
+			#{0.pic2},
+			#{0.pic3},
+			#{0.pic4},
+			#{0.pic5},
+			#{0.createdBy},
+			now(),
+			#{0.lastUpdatedBy},
+			now()
+		)
+	</insert>
+</mapper>
+
+
+
+
+
+

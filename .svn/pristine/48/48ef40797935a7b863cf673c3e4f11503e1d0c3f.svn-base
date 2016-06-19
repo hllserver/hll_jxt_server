@@ -1,0 +1,10 @@
+package privilege;
+/**
+ * 请求返回方式
+ * @author Administrator
+ *2016-2-27
+ */
+public enum ResultType {
+	page, //传统网页 返回
+	json  //json 返回
+}

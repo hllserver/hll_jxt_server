@@ -1,0 +1,15 @@
+package ssm.orm.privilege;
+
+import java.util.List;
+
+import ssm.entity.privilege.PrivilegeO;
+
+public interface PrivilegeDao{
+
+	/**
+	 * ��ȡ Ȩ����Ϣ
+	 * liaoyun 2016-3-6
+	 */
+	public List<PrivilegeO> getPrivilegeList();
+
+}

@@ -1,0 +1,46 @@
+package ssm.service.studentInfoService;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import ssm.entity.common.ResultO;
+import ssm.entity.stu.StudentO;
+
+public interface StudentInfoService {
+
+	/**
+	 * 获取学员信息列表
+	 * @heyi
+	 * 2016/3/27
+	 * @param studentO
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	public ResultO<StudentO> getStudentInfoList(StudentO studentO,int currentPage,int pageSize,String account);
+
+	/**
+	 * 批量添加学员信息
+	 * @author heyi
+	 * @param insertedList
+	 * @return
+	 */
+	public List<String> batchInsert(List<StudentO> insertedList);
+
+	/**
+	 * 批量修改学生信息
+	 * @param updatedList
+	 * @return
+	 */
+	public List<String> batchUpdate(List<StudentO> updatedList);
+
+	/**
+	 * 批量删除学生信息
+	 * @param deletedList
+	 * @return
+	 */
+	public void batchDelete(List<StudentO> deletedList);
+	
+}

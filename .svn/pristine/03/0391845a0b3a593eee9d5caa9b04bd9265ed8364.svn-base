@@ -1,0 +1,23 @@
+$(document).ready(function(){
+	$.ajax({
+		url : "front/first.html",
+		type : 'GET',
+		success : function(data) {
+			debugger;
+			$("#div2").html(data);
+		}
+	});
+	$(".go").on("click", function() {
+		debugger;
+		var chain=$(this)[0].hash;
+		var url = chain.substring(1,chain.length);
+		$.ajax({
+			url : url,
+			type : 'GET',
+			success : function(data) {
+				debugger;
+				$("#div2").html(data);
+			}
+		});
+	});
+});

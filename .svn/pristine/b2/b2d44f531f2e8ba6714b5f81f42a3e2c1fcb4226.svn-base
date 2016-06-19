@@ -1,0 +1,54 @@
+package ssm.service.user;
+
+import java.util.List;
+
+import ssm.entity.common.ResultO;
+import ssm.entity.user.UserO;
+/**
+ * 
+ * @author liaoyun
+ * 2016-3-18
+ */
+public interface UserService {
+
+	/**
+	 * 根据 用户名 和 密码 查询用户信息
+	 * @author liaoyun
+	 * 2016-3-18
+	 */
+	public UserO findUser(String username, String password);
+
+	/**
+	 * 分页查询所有的用户 liaoyun 2016-3-26
+	 * @param userO
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	public ResultO<UserO> findAllUser(UserO userO, int currentPage, int pageSize);
+
+	/**
+	 * 批量添加 user 
+	 * liaoyun
+	 * 2016-3-26
+	 * @param insertedRecords
+	 */
+	public void batchInsertUser(List<UserO> insertedRecords);
+
+	/**
+	 * 批量修改 user 
+	 * liaoyun
+	 * 2016-3-26
+	 * @param updatedRecords
+	 */
+	public void batchUpdateUser(List<UserO> updatedRecords);
+
+	/**
+	 * 批量删除 user 
+	 * liaoyun
+	 * 2016-3-26
+	 * @param deletedRecords
+	 */
+	public void batchDeleteUser(List<UserO> deletedRecords);
+	
+}

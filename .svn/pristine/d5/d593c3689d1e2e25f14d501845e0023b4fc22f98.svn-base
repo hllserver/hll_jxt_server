@@ -1,0 +1,37 @@
+$(document).ready(function(){
+	_post({
+		url:"driverSchoolMsg/getDriverSchoolMsg.action",
+		data:"",
+		success:function(da){
+			for(key in da){
+				$("input[name="+key+"]").val(da[key]);
+				$("textarea[name="+key+"]").val(da[key]);
+			}
+		}
+	});
+});
+function sumb(){
+	var kk = $("#form11").serializeObject();
+	_post({
+		url:"driverSchoolMsg/modify.action",
+		data:kk,
+		success:function(da){
+			var res="";
+			if(da.da=='0'){res="操作失败";}
+			if(da.da=='1'){res="操作成功";}
+			_showMessage({title:'提示',content:res});
+		}
+	});
+}
+function fn(t){
+	var div1 = $(t).parent().next();
+	var k = div1.is(":hidden");
+	if(k==false){div1.hide();}else{div1.show();}
+}
+function callback(d){
+	if(d=='0'){
+		_showMessage({title:"提示",content:"操作失败!"});
+	}else{
+		_showMessage({title:"提示",content:"操作成功!"});
+	}
+}

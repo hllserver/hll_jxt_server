@@ -1,0 +1,140 @@
+$(document).ready(function(){
+	//查询用户权限页面 和  基本信息
+	_get({
+		url:"driverSchoolPlace/getSchoolPlace.action",
+		data:"",
+		success:function(da){
+			//获取场地列表
+			var places = da.places;
+			//场地名导航栏
+			var _placeNameDIV = document.getElementById("_placeNameDIV");
+			var item=da.item;
+			$("#_item").html(item);
+			//场地具体信息列表
+			var placeMsg=document.getElementById("placeMsg");
+			var div1 = document.createElement("div");
+			var div2 = document.createElement("div");
+			var form1 = document.createElement("form");
+			var span2 = document.createElement("span");
+			var span3 = document.createElement("span");
+			var span4= document.createElement("span");
+			var span5 = document.createElement("span");
+			var span6 = document.createElement("span");
+			var img1 = document.createElement("img");
+			var img2 = document.createElement("img");
+			var img3 = document.createElement("img");
+			var img4 = document.createElement("img");
+			var img5 = document.createElement("img");
+			$(img1).css({"width":"100px","height":"100px"});
+			$(img2).css({"width":"100px","height":"100px"});
+			$(img3).css({"width":"100px","height":"100px"});
+			$(img4).css({"width":"100px","height":"100px"});
+			$(img5).css({"width":"100px","height":"100px"});
+			var table1=document.createElement("table");
+			var table2=document.createElement("table");
+			var table3=document.createElement("table");
+			var tr1=document.createElement("tr");
+			var tr2=document.createElement("tr");
+			var tr3=document.createElement("tr");
+			var tr4=document.createElement("tr");
+			var tr5=document.createElement("tr");
+			var tr6=document.createElement("tr");
+			var td2=document.createElement("td");
+			var td3=document.createElement("td");
+			var td4=document.createElement("td");
+			var td5=document.createElement("td");
+			var td6=document.createElement("td");
+			var tr7=document.createElement("tr");
+			var tr8=document.createElement("tr");
+			var tr9=document.createElement("tr");
+			var tr10=document.createElement("tr");
+			var tr11=document.createElement("tr");
+			var td7=document.createElement("td");
+			var td8=document.createElement("td");
+			var td9=document.createElement("td");
+			var td10=document.createElement("td");
+			var td11=document.createElement("td");
+			var input1=document.createElement("input");
+			input1.type="file";
+			var input2=document.createElement("input");
+			input2.type="file";
+			var input3=document.createElement("input");
+			input3.type="file";
+			var input4=document.createElement("input");
+			input4.type="file";
+			var input5=document.createElement("input");
+			var button=document.createElement("button");
+			input5.type="file";
+			td2.innerHTML="场名:";
+			td3.innerHTML="位置:";
+			td4.innerHTML="面积:";
+			td5.innerHTML="规模:";
+			td6.innerHTML="备注:";
+			td7.innerHTML="场景一:";
+			td8.innerHTML="场景二：";
+			td9.innerHTML="场景三:";
+			td10.innerHTML="场景四:";
+			td11.innerHTML="场景五:";
+			tr2.appendChild( td2);
+			tr2.appendChild( span2);
+			tr3.appendChild( td3);
+			tr3.appendChild( span3);
+			tr4.appendChild( td4);
+			tr4.appendChild( span4);
+			tr5.appendChild( td5);
+			tr5.appendChild( span5);
+			tr6.appendChild( td6);
+			tr6.appendChild( span6);
+			table2.appendChild(tr2);
+			table2.appendChild(tr3);
+			table2.appendChild(tr4);
+			table2.appendChild(tr5);
+			table2.appendChild(tr6);
+			tr7.appendChild( td7);
+			tr7.appendChild( img1);
+			tr7.appendChild(input1);
+			tr8.appendChild( td8);
+			tr8.appendChild( img2);
+			tr8.appendChild(input2);
+			tr9.appendChild( td9);
+			tr9.appendChild( img3);
+			tr9.appendChild(input3);
+			tr10.appendChild( td10);
+			tr10.appendChild( img4);
+			tr10.appendChild(input4);
+			tr11.appendChild( td11);
+			tr11.appendChild( img5);
+			tr11.appendChild(input5);
+			table3.appendChild(tr7);
+			table3.appendChild(tr8);
+			table3.appendChild(tr9);
+			table3.appendChild(tr10);
+			table3.appendChild(tr11);
+			div1.appendChild(table2);
+			div2.appendChild(table3);
+			placeMsg.appendChild(div1);
+			placeMsg.appendChild(div2);
+			
+			for (var i = 0; i < places.length; i++) {
+				var td = document.createElement("td");
+				td.style.border = "1px solid #CCCCCC";
+				td.innerHTML = places[i].placeName;
+				tr1.appendChild(td);
+				table1.appendChild(tr1);
+				_placeNameDIV.appendChild(table1);
+				span2.innerHTML = places[0].placeName;
+				span3.innerHTML = places[0].position;
+				span4.innerHTML = places[0].area;
+				span5.innerHTML = places[0].carNo;
+				span6.innerHTML = places[0].remark;
+				img1.src = places[0].pic1;
+				img2.src = places[0].pic2;
+				img3.src = places[0].pic3;
+				img4.src = places[0].pic4;
+				img5.src = places[0].pic5;
+			}
+			_placeNameDIV.appendChild(button);
+		}
+	});
+})
+

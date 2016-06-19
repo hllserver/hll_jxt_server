@@ -1,0 +1,103 @@
+
+var schoolGridOption = {
+		columns :[{
+			select : "checkBox",
+			name : "权限名",
+		}, {
+			field : "account",
+			name : "账号",
+			width : 50,
+		}, {
+			field : "schoolName",
+			name : "驾校名",
+			width : 50,
+			editable: true
+		}, {
+			field : "possion",
+			name : "地址",
+			width : 150,
+			editable: true
+		}, {
+			field : "tel",
+			name : "电话",
+			width : 50,
+			editable: true
+		}, {
+			field : "email",
+			name : "邮箱",
+			width : 150,
+			editable: true
+		}, {
+			field : "price",
+			name : "报名价",
+			width : 50,
+			editable: true
+		}, {
+			field : "registeredTime",
+			name : "注册时间",
+			width : 150,
+		}, {
+			field : "scale",
+			name : "规模",
+			width : 50,
+			editable: true
+		}, {
+			field : "remark",
+			name : "等级",
+			width : 50,
+		}, {
+			field : "info",
+			name : "简介",
+			width : 350,
+			editable: true
+		}],
+		url : "driverSchool/getDriverSchoolList.action" ,//对应操作类action
+		id  :  "schoolGrid",//表格的位置id,所在页面div的id
+		gridId :  "schoolGrid1", //表格id，表格属性
+		fromId:'formId'
+			
+};
+
+//插入数据
+function insertSchool(){
+	_insert(schoolGridOption);
+}
+//标记为删除
+function markAsDelete(){
+	_markAsDelete(schoolGridOption);
+}
+
+//取消删除
+function removeMarkAsDelete(){
+	_removeDeleteMark(schoolGridOption);
+}
+
+//查询
+function search(){
+	$("#schoolGrid").empty();
+	_Grid(schoolGridOption);
+}
+
+//保存数据
+function saveSchool(){
+	var insertedRecords= _getInsertedRecords(schoolGridOption);
+	var updatedRecords=_getUpdatedRecords(schoolGridOption);
+	var deletedRecords=_getDeletedRecords(schoolGridOption);
+	var RecordsO=new Object();
+	RecordsO.insertedRecords=insertedRecords;
+	RecordsO.updatedRecords=updatedRecords;
+	RecordsO.deletedRecords=deletedRecords;
+	_post({
+		url:"driverSchool/saveAll.action",
+		data:JSON.stringify(RecordsO),
+		success:function(value,type){
+			$("#grid").empty();
+			_Grid(schoolGridOption);
+		}
+	});
+}
+
+//页面加载 完成后 立即执行
+$(document).ready(function() {
+	_Grid(schoolGridOption);
+})

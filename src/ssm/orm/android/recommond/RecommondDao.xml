@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.orm.android.recommond.RecommondDao">
+
+	<!-- 
+	* 分页查询 liaoyun 2016-6-2 
+	 * @param tranAreaSp 训练场地区域
+	 * @param tranTypeSp 驾照类型
+	 * @param orderTypeSp 排序方式
+	 * @param startIndex 起始页
+	 * @param loadSize 每页的条数
+	-->
+	<select id="getSchoolList" resultType="ssm.entity.android.recommend.RecommendSchoolInfoO">
+		select 
+			t1.school_name as schoolname,
+			t2.pic1        as itemImg,
+			t1.c1_price    as itemPrice,
+			t1.position    as itemAddress
+		from
+			driver_school_t t1
+		left join 
+			school_ad_t t2 on t1.account=t2.school_account
+		order by t1.lastUpdatedDate desc
+		limit #{startPage}, #{pageSize}
+	</select>
+	
+	<!-- 
+	 * 特别推荐栏的数据
+	 * liaoyun 2016-6-4
+	 * @param index
+	 -->
+	<select id="getRecommondAdInfo" resultType="ssm.entity.android.recommend.RecommendSchoolInfoO">
+		SELECT 
+			t1.school_account as schoolAccount,
+			t2.school_name    as schoolname,
+			t1.pic1           as itemImg,
+			t2.c1_price       as itemPrice
+		from school_ad_t t1
+		LEFT JOIN driver_school_t t2 on t1.school_account=t2.account
+		limit #{0},1
+	</select>
+</mapper>

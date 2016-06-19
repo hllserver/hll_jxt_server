@@ -1,0 +1,27 @@
+<meta charset="UTF-8">
+<!-- 学员信息管理页面 
+     @author heyi
+     2016/3/27
+-->
+<script type="text/javascript" src="student/studentInfo.js"></script>
+<div>
+<form width='90%' id='formId' >
+	姓名:<input type="text" id="name" name="name"/>&nbsp&nbsp
+	地址：<input type="text" id="address" name="address">
+	考试状态：<input type="text" id="examStatus" name="examStatus">
+	体检情况:<input type="text" id="healthExamination" name='healthExamination'/><br><br>
+	<span style="display:block;text-align:center">
+	 <input  class="_but" type="button" value="搜索学员"  onclick="search()" />
+	<input   class="_but" type="reset" value="重置数据"  >
+	</span>
+	</form>
+</div>
+
+</br>
+<div>
+<button class='_but' onclick="insertStudent()">新增</button>&nbsp 
+<button class='_but' onclick="markAsDelete()">删除</button>&nbsp
+<button class='_but' onclick="removeMarkAsDelete()">取消删除</button>
+<button class='_but' onclick="saveStudent()">保存</button>
+<div id="studentGrid"></div>
+</div>

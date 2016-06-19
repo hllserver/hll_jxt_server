@@ -1,0 +1,103 @@
+var allAd;
+//查询所有广告信息
+$(document).ready(function(){
+	$("#adMsg").hide();
+	//显示所有的广告数据 
+	getInfo();
+});
+function getInfo(){
+	_get({
+		url:"driverSchoolMsg/getAdSchoolName.action",
+		data:"",
+		success:function(da){
+			//获取广告列表
+			var ads = da.ads;
+			allAd=ads;
+			//驾校名导航栏
+			$("#allAd").empty();
+			for(var i=0; i<ads.length; i++){
+				var adi=$("<button>"+ads[i].title+"</button>");
+				adi.addClass("_btn");
+				$("#allAd").append(adi);
+				//为adi绑定事件
+				(function(val){
+					adi.bind("click",function(){
+						showAd(val);
+						$("#schoolAccount1").val(val.schoolAccount);
+					});
+				})(ads[i])
+			}
+		}
+	});
+}
+//显示广告信息
+function showAd(data){
+	$("#delAd").show();
+	$("#adMsg").show();
+	$("#id").val(data.id);
+	$("#title").val(data.title);
+	$("#content").val(data.content);
+	$("#form1").attr("action","driverSchoolMsg/updateAd.action");
+	$("#pic").attr({"src":""});
+	if(data.pic1!=null && data.pic1!=""){
+		$("#pic").attr({"src":"file/pic/"+data.pic1});
+	}
+}
+//新增广告信息
+function add(){
+	$("#delAd").hide();
+	$("#adMsg").show();
+	$("#title").val("");
+	$("#content").val("");
+	$("#pic").attr({"src":""});
+	$("#form1").attr("action","driverSchoolMsg/addAd.action");
+}
+//保存添加
+function valid(){
+	var title= $("#title");
+	var content=$("#content");
+	var key = true;
+	if(title.val()==null || title.val()==""){
+		key= false;
+		_showMessage({
+			title:"提示",
+			content:"标题不能为空"
+		});
+		return;
+	}
+	if(content.val()==null || content.val()==""){
+		key= false;
+		_showMessage({title:"提示",content:"内容不能为空"});
+		return key;
+	}
+}
+
+//删除广告
+function delAd(){
+	debugger;
+	var id=$("#id").val();
+	var schoolAccount1=$("#schoolAccount1").val();
+	$("#form1").attr("action","");
+	$.ajax({
+		url : "driverSchoolMsg/deleteAd/"+id+"/"+schoolAccount1+".action",
+		type : 'POST',
+		contentType : 'application/json',
+		data : "",
+		success : function(value){
+			if(value.state=="1"){
+				_showMessage({title:"提示",content:"删除成功"});
+				$("#adMsg").hide();
+				getInfo();
+			}
+		}
+	})
+}
+function callback(d){
+	if(d=="1"){//成功
+		_showMessage({title:"提示",content:"操作成功"});
+		$("#adMsg").hide();
+		getInfo();
+	}else{//失败
+		_showMessage({title:"提示",content:"操作失败"});
+	}
+}

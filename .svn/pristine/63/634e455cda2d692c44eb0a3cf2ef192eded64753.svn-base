@@ -1,0 +1,11 @@
+<meta charset="UTF-8">
+<!-- 驾校信息显示页面（只显示自己驾校的信息） 
+     @author heyi
+     2016/3/27
+-->
+<script type="text/javascript" src="driverSchool/driverSchool.js"></script>
+
+<div>
+<button class='_but' onclick="saveSchoolMsg()">保存</button>
+<div id="schoolMsgGrid"></div>
+</div>

@@ -1,0 +1,10 @@
+package ssm.orm.driverSchool;
+
+import java.util.List;
+
+import ssm.entity.driverSchool.SchoolO;
+
+public interface DriverSchoolDao {
+
+	public List<SchoolO> getDriverSchoolList(SchoolO schoolO);
+}

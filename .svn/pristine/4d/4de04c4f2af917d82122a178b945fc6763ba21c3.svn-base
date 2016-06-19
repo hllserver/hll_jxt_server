@@ -1,0 +1,24 @@
+package ssm.serviceImpl.driverSchoolServiceImpl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ssm.entity.driverSchool.SchoolO;
+import ssm.orm.driverSchool.DriverSchoolDao;
+import ssm.service.driverSchoolService.DriverSchoolService;
+@Service
+public class DriverSchoolServiceImpl implements DriverSchoolService {
+
+	@Autowired
+	private DriverSchoolDao driverSchoolDao;
+	
+	@Override
+	public List<SchoolO> getDriverSchoolList(SchoolO schoolO) {
+
+		List<SchoolO> list=driverSchoolDao.getDriverSchoolList(schoolO);
+		return list;
+	}
+
+}

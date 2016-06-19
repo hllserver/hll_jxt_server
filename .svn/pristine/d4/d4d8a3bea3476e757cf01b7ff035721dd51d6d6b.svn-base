@@ -1,0 +1,84 @@
+
+var schoolMsgGridOption = {
+		columns :[{
+			select : "checkBox",
+			name : "权限名",
+		}, {
+			field : "id",
+			name : "ID",
+			hidden:true,
+			width : 50
+		},{
+			field : "account",
+			name : "账号",
+			width : 50,
+		}, {
+			field : "schoolName",
+			name : "驾校名",
+			width : 50,
+			editable: true
+		}, {
+			field : "possion",
+			name : "地址",
+			width : 150,
+			editable: true
+		}, {
+			field : "tel",
+			name : "电话",
+			width : 50,
+			editable: true
+		}, {
+			field : "email",
+			name : "邮箱",
+			width : 150,
+			editable: true
+		}, {
+			field : "price",
+			name : "报名价",
+			width : 50,
+			editable: true
+		}, {
+			field : "registeredTime",
+			name : "注册时间",
+			width : 150,
+		}, {
+			field : "scale",
+			name : "规模",
+			width : 50,
+			editable: true
+		}, {
+			field : "remark",
+			name : "等级",
+			width : 50,
+		}, {
+			field : "info",
+			name : "简介",
+			width : 350,
+			editable: true
+		}],
+		url : "driverSchoolMsg/getDriverSchoolMsg.action" ,//对应操作类action
+		id  :  "schoolGrid",//表格的位置id,所在页面div的id
+		gridId :  "schoolGrid1", //表格id，表格属性
+		fromId:'formId'
+			
+};
+
+//保存数据
+function saveSchoolMsg(){
+	var updatedRecords=_getUpdatedRecords(schoolMsgGridOption);
+	var RecordsO=new Object();
+	RecordsO.updatedRecords=updatedRecords;
+	_post({
+		url:"driverSchoolMsg/save.action",
+		data:JSON.stringify(RecordsO),
+		success:function(value,type){
+			$("#schoolMsgGrid").empty();
+			_Grid(schoolMsgGridOption);
+		}
+	});
+}
+
+//页面加载 完成后 立即执行
+$(document).ready(function() {
+	_Grid(schoolMsgGridOption);
+})

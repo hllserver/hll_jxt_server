@@ -1,0 +1,18 @@
+package ssm.service.driverSchoolService;
+
+import java.util.List;
+
+import ssm.entity.driverSchool.SchoolO;
+/**
+ * 获取学校信息
+ * @author heyi
+ * 2016-3-13
+ */
+public interface DriverSchoolService {
+	/**
+	 * 获取学校列表
+	 * @author heyi
+	 * 2016-3-13
+	 */
+	public List<SchoolO> getDriverSchoolList(SchoolO schoolO);
+}

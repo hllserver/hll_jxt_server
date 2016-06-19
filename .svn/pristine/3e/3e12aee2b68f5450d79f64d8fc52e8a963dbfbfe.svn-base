@@ -1,0 +1,16 @@
+package ssm.orm.privilege;
+
+import java.util.List;
+
+import ssm.entity.privilege.PrivilegeO;
+import ssm.orm.SqlMapper;
+
+public interface PrivilegeDao extends SqlMapper{
+
+	/**
+	 * 获取 权限信息
+	 * liaoyun 2016-3-6
+	 */
+	public List<PrivilegeO> getPrivilegeList();
+
+}

@@ -1,0 +1,184 @@
+package ssm.controller.studentInfo;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ssm.entity.common.RecordsO;
+import ssm.entity.common.ResultO;
+import ssm.entity.stu.StudentO;
+import ssm.entity.user.UserO;
+import ssm.service.studentInfoService.StudentInfoService;
+
+@Controller
+@Transactional
+@RequestMapping(value="/studentInfo")
+public class StudentInfoAction {
+	@Autowired
+    StudentInfoService studentInfoService;
+    /**
+     * 驾校获取学员信息列表
+     * @author heyi
+     * 2016/3/27
+     * @param studentO
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+	@ResponseBody
+	@RequestMapping(value="/getStudentInfoList/{currentPage}/{pageSize}",method=RequestMethod.POST,produces="application/json",
+			consumes="application/json")
+	private ResultO<StudentO> getStudentInfoList(@RequestBody StudentO studentO,@PathVariable int currentPage,
+			@PathVariable int pageSize, HttpSession session ){
+		UserO user=(UserO) session.getAttribute("userInfo");
+		String account=user.getLeader();
+		ResultO<StudentO> list= studentInfoService.getStudentInfoList(studentO,currentPage,pageSize,account);
+		return list;	
+	}
+	
+	/**
+	 * 保存所有的学员数据
+	 * @author heyi
+	 * 2016/3/27
+	 * @param recordsO
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/saveAll",method=RequestMethod.POST,produces="application/json",
+	consumes="application/json")
+	public Map<String,Object> saveAll(@RequestBody RecordsO<StudentO> recordsO,HttpSession session){
+		Map<String,Object> resultMap=new HashMap<String,Object>();
+		UserO user=(UserO) session.getAttribute("userInfo");
+		String account=user.getAccount();
+		String leader=user.getLeader();
+		List<StudentO> insertedRecords =recordsO.getInsertedRecords();
+		List<StudentO> uptatedRecords =recordsO.getUpdatedRecords();
+		List<StudentO> deletedRecords=recordsO.getDeletedRecords();
+		List<StudentO> insertedList= new ArrayList<>();
+		List<StudentO> updatedList=new ArrayList<>();
+		List<StudentO> deletedList=new ArrayList<>();
+		
+		//新增学员数据
+	if(insertedRecords!=null&&insertedRecords.size()>0){
+		for(StudentO s:insertedRecords){
+			s.setAddress(getValue(s.getAddress()));
+			s.setAge(s.getAge());
+			s.setCreatedBy(account);
+			s.setCreatedDate(new Date());
+			s.setEmail(getValue(s.getEmail()));
+			s.setExamStatus(s.getExamStatus());
+			s.setGender(s.getGender());
+			s.setHealthExamination(s.getHealthExamination());
+			s.setIdCard(getValue(s.getIdCard()));
+			s.setLastUpdatedBy(account);
+			s.setLastUpdatedDate(new Date());
+			s.setName(getValue(s.getName()));
+			s.setNickname(getValue(s.getNickname()));
+			s.setQq(getValue(s.getQq()));
+			s.setTel(getValue(s.getTel()));
+			s.setWechat(getValue(s.getWechat()));
+			s.setCarType(s.getCarType());	
+			s.setTrainingStatus(s.getTrainingStatus());
+			s.setAccount(getValue(s.getAccount()));
+			s.setSchoolAccount(leader);
+			insertedList.add(s);
+		}
+		if(insertedList.size()>0){
+			List<String> insertResult = studentInfoService.batchInsert(insertedList);
+			if(insertResult!=null && insertResult.size()>0){
+				resultMap.put("result", insertResult);
+				return resultMap;
+			}
+		}
+	}
+	
+	//修改数据
+	if(uptatedRecords!=null&&uptatedRecords.size()>0){
+		for(StudentO s:uptatedRecords){
+			s.setId(s.getId());
+			s.setAddress(getValue(s.getAddress()));
+			s.setAge(s.getAge());
+			s.setCreatedBy(account);
+			s.setCreatedDate(new Date());
+			s.setEmail(getValue(s.getEmail()));
+			s.setExamStatus(s.getExamStatus());
+			s.setGender(s.getGender());
+			s.setHealthExamination(s.getHealthExamination());
+			s.setIdCard(getValue(s.getIdCard()));
+			s.setLastUpdatedBy(account);
+			s.setLastUpdatedDate(new Date());
+			s.setName(getValue(s.getName()));
+			s.setNickname(getValue(s.getNickname()));
+			s.setQq(getValue(s.getQq()));
+			s.setTel(getValue(s.getTel()));
+			s.setWechat(getValue(s.getWechat()));
+			s.setCarType(s.getCarType());	
+			s.setTrainingStatus(s.getTrainingStatus());
+			s.setAccount(getValue(s.getAccount()));
+			updatedList.add(s);
+		}
+		
+		if(updatedList.size()>0){
+			List<String> updateResult =studentInfoService.batchUpdate(updatedList);
+			if(updateResult!=null && updateResult.size()>0){
+				resultMap.put("result", updateResult);
+				return resultMap;
+			}
+		}
+	}
+	
+	
+	//删除数据
+	if(deletedRecords!=null&&deletedRecords.size()>0){
+		for(StudentO s:deletedRecords){
+			s.setAddress(getValue(s.getAddress()));
+			s.setAge(s.getAge());
+			s.setCreatedBy(account);
+			s.setCreatedDate(new Date());
+			s.setEmail(getValue(s.getEmail()));
+			s.setExamStatus(s.getExamStatus());
+			s.setGender(s.getGender());
+			s.setHealthExamination(s.getHealthExamination());
+			s.setIdCard(getValue(s.getIdCard()));
+			s.setLastUpdatedBy(account);
+			s.setLastUpdatedDate(new Date());
+			s.setName(getValue(s.getName()));
+			s.setNickname(getValue(s.getNickname()));
+			s.setQq(getValue(s.getQq()));
+			s.setTel(getValue(s.getTel()));
+			s.setWechat(getValue(s.getWechat()));
+			s.setCarType(s.getCarType());	
+			s.setTrainingStatus(s.getTrainingStatus());
+			s.setAccount(getValue(s.getAccount()));
+			deletedList.add(s);
+		}
+		if(deletedList.size()>0){
+			studentInfoService.batchDelete(deletedList);
+		}
+	}
+		return resultMap;
+		
+	}
+
+	//去字符串的空格
+	private String getValue(String s) {
+		if(s==null||s.equals("")){
+			return "";
+		}
+		return s.trim();
+	}
+}

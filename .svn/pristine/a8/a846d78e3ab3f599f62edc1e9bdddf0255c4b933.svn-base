@@ -1,0 +1,108 @@
+var gridOption = {
+	columns : [  {
+		select : "checkBox",
+		name : "",
+	},{
+		field : "id",
+		name : "ID",
+		hidden:true,
+		width : 50
+	}, {
+		field : "roleCode",
+		name : "角色编号",
+		width : 150,
+		editable:true
+	}, {
+		field : "roleName",
+		name : "角色名称",
+		width : 150,
+		editable:true
+	}, {
+		field : "privilegeCode",
+		name : "角色拥有的权限",
+		event:{//单元格 绑定事件
+			name:"click",
+			fn:function(context){
+				choose(context);
+			}
+		},  
+		width : 350
+	} ],
+	url : "role/findRoleList.action",
+	id : "gridDiv",       //表格 放置的位置 id,就是一个 div 的 id
+	gridId : "grid1",  //定义表格  的 id
+	fromId : "formId"  //查询条件 from 的 id
+};
+//插入数据
+function insert(){
+	_insert(gridOption);
+}
+//标记为删除
+function markAsDelete(){
+	_markAsDelete(gridOption);
+}
+//取消删除
+function removeDeleteMark(){
+	_removeDeleteMark(gridOption);
+}
+function search(){
+	_Grid(gridOption);
+}
+$(document).ready(function(){
+	_Grid(gridOption);
+});
+//为角色添加权限
+function choose(context){
+	_post({
+		url:"role/findPrivilege/1.action",
+		data:"",
+		success:function(value, type){
+			debugger;
+			//所有的权限
+			var allPri = value.all;
+			//已经拥有的权限
+			var ownPri = value.own;
+			var size = allPri.length;
+			var div = $("#choose");
+			div.empty();
+			div.append("<hr/>");
+			for(var i=0; i<size; i++){
+				var kk=allPri[i].priCode;
+				var box = $("<input type='checkbox' class='box' value="+allPri[i].priCode+">");
+				if(ownPri.search(allPri[i].priCode)>0){
+					box.prop("checked", true);
+				}
+				div.append(box);
+				div.append("<font>"+allPri[i].priDesc+"</font>");
+				div.append("<br/>");
+			}
+			var bu = $("<input type='button' value='确定' class='_btn'>");
+			div.append("<br/>");
+			div.append(bu);
+			$(bu).bind("click",function(){
+				selectPrivilege(context);
+			});
+		}
+	});
+}
+//选中权限，填进表格
+function selectPrivilege(context){
+	debugger;
+	var box = $(".box");
+	var size = box.size();
+	var s="";
+	for(var i=0; i<size; i++){
+		if(box[i].checked==true){
+			s=s+box[i].value+",";
+		}
+	}
+	context.text(s);
+}
+
+//保存数据
+function save(){
+	
+}
+
+
+

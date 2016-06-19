@@ -1,0 +1,89 @@
+package ssm.orm.user;
+
+import java.util.List;
+
+import ssm.entity.privilege.PrivilegeO;
+import ssm.entity.user.UserO;
+import ssm.orm.SqlMapper;
+
+public interface UserDao extends SqlMapper{
+
+	/**
+	 * 根据 用户名 和 密码 查询用户信息
+	 * @author liaoyun
+	 * 2016-3-18
+	 */
+	public List<UserO> findUser(String username, String password);
+
+	/**
+	 * 查询用户 的数量 liaoyun 2016-3-26
+	 * @param userO
+	 * @return
+	 */
+	public int findTotalUser(UserO userO);
+
+	/**
+	 * 分页查询所有的用户 liaoyun 2016-3-26
+	 * @param userO
+	 * @param start
+	 * @param pageSize
+	 * @return
+	 */
+	public List<UserO> findAllUser(UserO userO, int start, int pageSize);
+
+	/**
+	 * 批量添加 user 
+	 * liaoyun
+	 * 2016-3-26
+	 * @param insertedRecords
+	 */
+	public void batchInsertUser(List<UserO> insertedRecords);
+
+	/**
+	 * 批量修改 user 
+	 * liaoyun
+	 * 2016-3-26
+	 * @param insertedRecords
+	 */
+	public void batchUpdateUser(List<UserO> updatedRecords);
+
+	/**
+	 * 批量删除 user 
+	 * liaoyun
+	 * 2016-3-26
+	 * @param insertedRecords
+	 */
+	public void batchDeleteUser(List<UserO> deletedRecords);
+
+	/**
+	 * 查询  该角色的 权限 code
+	 * liaoyun 2016-3-27
+	 * @param type
+	 * @return
+	 */
+	public List<String> findPriCodeByType(int type);
+
+	/**
+	 * 查询 该角色拥有的  页面 liaoyun 2016-3-27
+	 * @param list
+	 * @return
+	 */
+	public List<PrivilegeO> findPriPageList(List<String> list);
+
+	/**
+	 * 查询新添加的用户是否重复
+	 * liaoyun 2016-4-3
+	 * @param insertedRecords
+	 * @return
+	 */
+	public List<String> findInsertUserRepeat(List<UserO> insertedRecords);
+
+	/**
+	 * 查询 修改用户 是否重复
+	 * liaoyun 2016-4-3
+	 * @param updatedRecords
+	 * @return
+	 */
+	public List<String> findUpdateUserRepeat(List<UserO> updatedRecords);
+	
+}

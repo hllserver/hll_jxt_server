@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.orm.privilege.PrivilegeDao">
+	<!-- * 获取 权限信息 * liaoyun 2016-3-6 -->
+	<select id="getPrivilegeList" resultType="ssm.entity.privilege.PrivilegeO">
+		select
+		t.id,
+		t.code as priCode,
+		t.description as priDesc,
+		t.type as priType,
+		t.url as PriUrl
+		from
+		privilege_t t
+		where 1=1
+		<if test='param1.priCode !=null and param1.priCode != ""'>
+			and t.code like CONCAT('%',#{param1.priCode},'%')
+		</if>
+		<if test='param1.priDesc != null and param1.priDesc != ""'>
+			and t.description like CONCAT('%',#{param1.priDesc},'%')
+		</if>
+		order by t.lastUpdatedDate desc
+		limit #{param2}, #{param3}
+	</select>
+
+	<!-- *查询总条数 *liaoyun *2016-3-13 -->
+	<select id="getPrivilegeListTotal" resultType="int">
+		select
+		count(id)
+		from
+		privilege_t t
+		where 1=1
+		<if test='priCode !=null and priCode != ""'>
+			and t.code like CONCAT('%',#{priCode},'%')
+		</if>
+		<if test='priDesc != null and priDesc != ""'>
+			and t.description like CONCAT('%',#{priDesc},'%')
+		</if>
+	</select>
+
+	<!-- * 保存新增的的数据 -->
+	<insert id="batchInsert">
+		<foreach collection="list" item='item'>
+			insert into privilege_t(
+			code,
+			description,
+			type,
+			url,
+			createdBy,
+			createdDate,
+			lastUpdatedBy,
+			lastUpdatedDate
+			)values(
+			#{item.priCode},
+			#{item.priDesc},
+			#{item.priType},
+			#{item.PriUrl},
+			#{item.createdBy},
+			now(),
+			#{item.lastUpdatedBy},
+			now()
+			);
+		</foreach>
+	</insert>
+	<!-- * 批量 修改 数据 * @param updatedList * liaoyun * 2016-3-20 -->
+	<update id="batchUpdate">
+		<foreach collection="list" item='item'>
+			update privilege_t set
+			code=#{item.priCode},
+			description=#{item.priDesc},
+			type=#{item.priType},
+			url=#{item.PriUrl},
+			lastUpdatedBy=#{item.lastUpdatedBy},
+			lastUpdatedDate=now()
+			where
+			id=#{item.id};
+		</foreach>
+	</update>
+	<!-- *根据 code查询 ，重复的 code *liaoyun *2016-3-20 -->
+	<select id="findRepeatedByCode" resultType="String">
+		select
+		code
+		from
+		privilege_t
+		where
+		code in
+		<foreach collection="list" item='item' open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!-- * 批量 删除 数据 * @param updatedList * liaoyun * 2016-3-20 -->
+	<delete id="bachDelete">
+		delete from privilege_t where code in
+		<foreach collection="list" item='item' open="(" separator=","
+			close=")">
+			#{item.priCode}
+		</foreach>
+	</delete>
+
+	<!-- * 修改的数据 是否重复 * liaoyun 2016-4-3 * @param updatedList -->
+	<select id="findUpdateRepeatedList" resultType="String">
+		<foreach collection="list" item="item">
+			select
+			code
+			from
+			privilege_t
+			where
+			code=#{item.priCode} and id != #{item.id};
+		</foreach>
+	</select>
+	
+	<!-- 
+	 * 删除原来的方法权限
+	 * liaoyun
+	 * 2014-4-19
+	 -->
+	<delete id='deleteOldMethodPrivilege'>
+		delete from privilege_t where type='2'
+	</delete>
+	
+	<!-- 
+	 * 插入新扫描的方法权限  liaoyun 2016-4-19
+	 * @param items
+	 -->
+	<insert id="insertNewMethodPrivilege">
+		<foreach collection="list" item='item'>
+			insert into privilege_t(
+				code,
+				description,
+				type,
+				createdBy,
+				createdDate,
+				lastUpdatedBy,
+				lastUpdatedDate
+			)values(
+				#{item.code},
+				#{item.desc},
+				'2',
+				#{item.createdBy},
+				now(),
+				#{item.lastUpdatedBy},
+				now()
+			);
+		</foreach>
+	</insert>
+</mapper>
+
+
+
+

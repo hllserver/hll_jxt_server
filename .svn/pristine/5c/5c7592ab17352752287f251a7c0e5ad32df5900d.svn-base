@@ -1,0 +1,71 @@
+package privilege;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+/**
+ * 权限控制
+ * @author Administrator
+ *
+ */
+public class AuthorityAnnotationIntercepter  extends HandlerInterceptorAdapter {
+	@Override
+	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
+			throws Exception {
+		
+	}
+
+	@Override
+	public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, ModelAndView arg3)
+			throws Exception {
+		
+	}
+
+	@Override
+	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception {
+		//得到 请求 对应的 Controller中的 Method 对象
+		HandlerMethod handle =  (HandlerMethod) arg2;
+		//得到 Method 对象 的 Authority 注解对象
+		Authority authority = handle.getMethodAnnotation(Authority.class);
+		// 如果没有 Authority 注解，则返回 true
+		if(authority==null){
+			return true;
+		}
+		//System.out.println(authority.code()+"  "+authority.desc());
+		String code = authority.code().trim();
+		HttpSession session = arg0.getSession();
+		String[] auth = (String[]) session.getAttribute("authority");
+		int authLength = 0;
+		if(auth!=null){
+			authLength=auth.length;
+		}
+		for(int i=0; i<authLength; i++){
+			if(code.equals(auth[i].trim())){
+				//如果有权限
+				return true;
+			}
+		}
+		//如果没有权限
+		if(authority.resultType().equals(ResultType.page)){
+			//如果以 传统 网页 方式返回
+			arg1.sendRedirect(arg0.getContextPath()+"/login.jsp");
+		}else{
+			//如果 以 json 方式返回
+			arg1.setCharacterEncoding("utf-8");
+			arg1.setContentType("text/html,charset=utf-8");
+			OutputStream out = arg1.getOutputStream();
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(out,"utf-8"));
+			pw.println("{has no authority}");
+			pw.flush();
+			pw.close();
+		}
+		return false;
+	}
+}

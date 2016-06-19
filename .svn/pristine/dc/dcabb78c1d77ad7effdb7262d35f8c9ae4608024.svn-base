@@ -1,0 +1,158 @@
+package ssm.controller.user;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ssm.entity.common.RecordsO;
+import ssm.entity.common.ResultO;
+import ssm.entity.privilege.PrivilegeO;
+import ssm.entity.user.UserO;
+import ssm.service.user.UserService;
+/**
+ * 登陆
+ * @author liaoyun
+ * 2016-3-3
+ */
+@Controller
+//@Transactional
+@RequestMapping("/user")
+public class LoginAction {
+	@Autowired
+	private UserService userService;
+	//@Authority(code="liaoyun",desc="jdjfldjf")
+	@RequestMapping(value="/login",method=RequestMethod.POST)
+	public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession  session){
+		UserO user = userService.findUser(username,password);
+		if(user!=null){
+			//登陆验证成功
+			session.setAttribute("userInfo", user);
+			return "redirect:/index.html";
+		}else{
+			//登陆验证失败
+			return "no.jsp";
+		}
+	}
+	/**
+	 * 分页查询所有的用户 liaoyun 2016-3-26
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value="/findRoleList/{currentPage}/{pageSize}",method=RequestMethod.POST,produces="application/json",
+	consumes="application/json")
+	public ResultO<UserO> findRoleList(@RequestBody UserO userO,@PathVariable int currentPage,@PathVariable int pageSize) throws Exception{
+		ResultO<UserO> list = userService.findAllUser(userO,currentPage,pageSize);
+		return list;
+	}
+	/**
+	 * 批量保存 增、删、改 的数据 
+	 * liaoyun 2016-3-26
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value="/saveAll",method=RequestMethod.POST,produces="application/json",consumes="application/json")
+	public Map<String,String> batchSave(@RequestBody RecordsO<UserO> records,HttpSession session) throws Exception{
+		Map<String,String> resultMap = new HashMap<>();
+		UserO user = (UserO) session.getAttribute("userInfo");
+		String account = user.getAccount();
+		//新增的数据
+		List<UserO> insertedRecords = records.getInsertedRecords();
+		//更新的数据
+		List<UserO> updatedRecords = records.getUpdatedRecords();
+		//删除的数据
+		List<UserO> deletedRecords = records.getDeletedRecords();
+		//对新增的数据
+		if(insertedRecords != null && insertedRecords.size() > 0){
+			for (UserO o : insertedRecords) {
+				o.setAccount(getValue(o.getAccount()));
+				o.setTel(getValue(o.getTel()));
+				o.setEmail(getValue(o.getEmail()));
+				o.setQq(getValue(o.getQq()));
+				o.setWeChat(getValue(o.getWeChat()));
+				o.setNickName(getValue(o.getNickName()));
+				o.setCreatedBy(account);
+				o.setLastUpdatedBy(account);
+				o.setPassword("123456");
+			}
+			userService.batchInsertUser(insertedRecords);
+		}
+		//对修改的数据
+		if(updatedRecords != null && updatedRecords.size() > 0){
+			for (UserO o : updatedRecords) {
+				o.setAccount(getValue(o.getAccount()));
+				o.setTel(getValue(o.getTel()));
+				o.setEmail(getValue(o.getEmail()));
+				o.setQq(getValue(o.getQq()));
+				o.setWeChat(getValue(o.getWeChat()));
+				o.setNickName(getValue(o.getNickName()));
+				o.setLastUpdatedBy(account);
+			}
+			userService.batchUpdateUser(updatedRecords);
+		}
+		//对删除的数据
+		if(deletedRecords != null && deletedRecords.size() > 0){
+			userService.batchDeleteUser(deletedRecords);
+		}
+		return resultMap;
+	}
+	/**
+	 * 查询用户权限页面 和  基本信息
+	 * liaoyun
+	 * 2016-3-27
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value="/myInfo",method=RequestMethod.GET,produces="application/json",consumes="application/json")
+	public Map<String,Object> myInfo(HttpSession  session) throws Exception{
+		Map<String,Object> map = new HashMap<>();
+		UserO user = (UserO) session.getAttribute("userInfo");
+		map.put("account", user.getAccount());       //账号
+		map.put("nickName", user.getNickName());     //昵称
+		//查询该用户角色的页面权限
+		List<PrivilegeO> myPage = userService.findMypage(user.getType());
+		map.put("page", myPage);
+		return map;
+	}
+	/**
+	 * 退出 系统  liaoyun 2016-3-27
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/logout")
+	public String logout(HttpSession  session)throws Exception{
+		session.invalidate();
+		return "redirect:/login.html";
+	}
+	
+	private String getValue(String s){
+		if(s==null){
+			return null;
+		}else{
+			return s.trim();
+		}
+	}
+}
+
+
+
+
+
+
+
+
+

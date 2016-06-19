@@ -1,0 +1,176 @@
+package ssm.controller.driverSchool;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ssm.entity.common.RecordsO;
+import ssm.entity.common.ResultO;
+import ssm.entity.driverSchool.SchoolPlaceO;
+import ssm.entity.user.UserO;
+import ssm.service.driverSchoolService.DriverSchoolPlaceService;
+
+@Controller
+@RequestMapping(value="/driverSchoolPlace")
+public class DriverSchoolPlaceAction {
+	
+
+	@Autowired
+	private DriverSchoolPlaceService driverSchoolPlaceService;
+	/**
+	 * 获取驾校场地信息列表
+	 * @author heyi
+	 * 2016/4/2
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getDriverSchoolPlaceList/{currentPage}/{pageSize}",method=RequestMethod.POST,produces="application/json",
+			consumes="application/json")
+	public ResultO<SchoolPlaceO> getDriverSchoolPlaceList(@RequestBody SchoolPlaceO schoolPlaceO,@PathVariable int currentPage,
+			@PathVariable int pageSize,HttpSession session)throws Exception{
+		UserO user=(UserO) session.getAttribute("userInfo");
+		String leader=user.getLeader();
+		ResultO<SchoolPlaceO> list = driverSchoolPlaceService.getDriverSchoolPlaceList(schoolPlaceO,currentPage,pageSize,leader);
+		return list;
+		
+	}
+	
+	
+	/**
+	 * 按驾校名称获取驾校场地信息列表
+	 * @author heyi
+	 * 2016/4/3
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getSchoolPlace",method=RequestMethod.GET,produces="application/json",consumes="application/json")
+	public Map<String,Object> getSchoolPlace(HttpSession session){
+		UserO user=(UserO) session.getAttribute("userInfo");
+		Map<String,Object> map=new HashMap<String,Object>();
+		String leader =user.getLeader();
+		List<SchoolPlaceO> places =driverSchoolPlaceService.getSchoolPlace( leader);
+		map.put("places",places);
+		map.put("item", leader);
+		return map;
+		
+	}
+	
+	
+	/**
+	 * 保存所有驾校场地信息
+	 * @author heyi
+	 * 2016/4/2
+	 * @param recordsO
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/saveAll",method=RequestMethod.POST,produces="application/json",consumes="application/json")
+	public Map<String,String> saveAll(@RequestBody RecordsO<SchoolPlaceO> recordsO,HttpSession session){
+		
+		Map<String,String> resultMap =new HashMap<>();
+		UserO user =(UserO)session.getAttribute("userInfo");
+		String account =user.getAccount();
+		String leader=user.getLeader();
+		List<SchoolPlaceO> insertedRecords =recordsO.getInsertedRecords();
+		List<SchoolPlaceO> uptatedRecords =recordsO.getUpdatedRecords();
+		List<SchoolPlaceO> deletedRecords=recordsO.getDeletedRecords();
+		List<SchoolPlaceO> insertedList= new ArrayList<>();
+		List<SchoolPlaceO> updatedList=new ArrayList<>();
+		List<SchoolPlaceO> deletedList=new ArrayList<>();
+		//批量新增数据
+		if(insertedRecords!=null&&insertedRecords.size()>0){
+			for(SchoolPlaceO s:insertedRecords){
+				s.setArea(s.getArea());
+				s.setCarNo(s.getCarNo());
+				s.setCreatedBy(account);
+				s.setCreatedDate(new Date());
+				s.setLastUpdatedBy(account);
+				s.setLastUpdatedDate(new Date());
+				s.setPic1(getValue(s.getPic1()));
+				s.setPic2(getValue(s.getPic2()));
+				s.setPic3(getValue(s.getPic3()));
+				s.setPic4(getValue(s.getPic4()));
+				s.setPic5(getValue(s.getPic5()));
+				s.setPlaceName(getValue(s.getPlaceName()));
+				s.setPosition(getValue(s.getPosition()));
+				s.setRemark(getValue(s.getRemark()));
+				s.setSchoolAccount(leader);
+				insertedList.add(s);
+			}
+			if(insertedList.size()>0){
+				Map<String, String> insertMap =driverSchoolPlaceService.batchInsert(insertedList);
+			}
+		}
+		
+		/**
+		 * 批量修改驾校场地信息
+		 * @author heyi
+		 * 2016/4/2
+		 */
+		if(uptatedRecords!=null&&uptatedRecords.size()>0){
+			for(SchoolPlaceO s:uptatedRecords){
+				s.setArea(s.getArea());
+				s.setCarNo(s.getCarNo());
+				s.setLastUpdatedBy(account);
+				s.setLastUpdatedDate(new Date());
+				s.setPic1(getValue(s.getPic1()));
+				s.setPic2(getValue(s.getPic2()));
+				s.setPic3(getValue(s.getPic3()));
+				s.setPic4(getValue(s.getPic4()));
+				s.setPic5(getValue(s.getPic5()));
+				s.setPlaceName(getValue(s.getPlaceName()));
+				s.setPosition(getValue(s.getPosition()));
+				s.setRemark(getValue(s.getRemark()));
+				updatedList.add(s);
+			}
+			if(updatedList.size()>0){
+				Map<String, String> updateMap =driverSchoolPlaceService.batchUpdate(updatedList);
+			}
+		}
+		
+		//批量删除驾校场地信息
+		if(deletedRecords!=null&&deletedRecords.size()>0){
+			for(SchoolPlaceO s:deletedRecords){
+				s.setArea(s.getArea());
+				s.setCarNo(s.getCarNo());
+				s.setLastUpdatedBy(account);
+				s.setLastUpdatedDate(new Date());
+				s.setPic1(getValue(s.getPic1()));
+				s.setPic2(getValue(s.getPic2()));
+				s.setPic3(getValue(s.getPic3()));
+				s.setPic4(getValue(s.getPic4()));
+				s.setPic5(getValue(s.getPic5()));
+				s.setPlaceName(getValue(s.getPlaceName()));
+				s.setPosition(getValue(s.getPosition()));
+				s.setRemark(getValue(s.getRemark()));
+				s.setSchoolAccount(leader);
+				deletedList.add(s);
+			}
+			if(deletedList.size()>0){
+			 driverSchoolPlaceService.batchDelete(deletedList);
+			}
+		}
+		return resultMap;
+}
+	
+	
+	
+	private String getValue(String s){
+		if(s==null||s.equals("")){
+			return "";
+		}
+		return s.trim();
+	}
+}

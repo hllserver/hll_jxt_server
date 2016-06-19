@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">      
+<mapper namespace="ssm.orm.privilege.RoleDao">
+	<!-- 
+	* 查询角色 的数量
+	 -->
+	<select id="findTotalRole" resultType="int">
+		select 
+			count(id) 
+		from 
+			user_privilege_t
+		where 1=1
+		<if test='roleCode != null and roleCode != ""'>
+			and roleCode = #{roleCode}
+		</if>
+		<if test='roleName!=null and roleName!=""'>
+			and roleName = #{roleName}
+		</if>
+		<if test='privilegeCode != null and privilegeCode != ""'>
+			and privilegeCode like CONCAT('%',#{privilegeCode},'%')  
+		</if>
+	</select>
+	
+	<select id="findRoleList" resultType="ssm.entity.privilege.RoleO">
+		select 
+			id,
+			roleCode,
+			roleName,
+			privilegeCode
+		from 
+			user_privilege_t
+		where 1=1
+		<if test='param1.roleCode != null and param1.roleCode != ""'>
+			and roleCode = #{param1.roleCode}
+		</if>
+		<if test='param1.roleName!=null and param1.roleName!=""'>
+			and roleName = #{param1.roleName}
+		</if>
+		<if test='param1.privilegeCode != null and param1.privilegeCode != ""'>
+			and privilegeCode = #{param1.privilegeCode}
+		</if>
+		order by lastUpdatedDate desc
+		limit #{param2},#{param3}
+	</select>
+	
+	<!--   查询所有的权限 liaoyun 2016-3-22 -->
+	<select id="findAllPrivilege" resultType="ssm.entity.privilege.PrivilegeO">
+		select
+			t.code        as priCode,
+			t.description as priDesc
+		from
+			privilege_t t
+		order by t.type
+	</select>
+	
+	<!-- 
+	 * 拥有的权限 liaoyun 2016-3-22
+	 * @param roleCode
+	 -->
+	<select id="findMyOwnPrivilege" resultType="String">
+		select
+			t.privilegeCode
+		from
+			user_privilege_t t
+		where
+			t.roleCode = #{0}
+	</select>
+	<!-- 
+	 * 添加 角色
+	 * liaoyun
+	 * 2015-3-25
+	 * @param insertedRecords
+	 -->
+	<insert id="insertRole">
+			insert into user_privilege_t(
+				roleCode,
+				roleName,
+				privilegeCode,
+				createdBy,
+				createdDate,
+				lastUpdatedBy,
+				lastUpdatedDate
+			)values
+			<foreach collection="list" item="item" index="index" separator="," >  
+        		(
+				#{item.roleCode},
+				#{item.roleName},
+				#{item.privilegeCode},
+				#{item.createdBy},
+				now(),
+				#{item.lastUpdatedBy},
+				now()
+			)
+   		    </foreach> 
+	</insert>
+	<!-- 
+	 * 修改 角色
+	 * liaoyun
+	 * 2015-3-25
+	 * @param insertedRecords
+	 -->
+	<update id="updateRole">
+		 <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update user_privilege_t 
+            <set>       
+                roleCode=#{item.roleCode},
+				roleName=#{item.roleName},
+				privilegeCode=#{item.privilegeCode},
+				lastUpdatedBy=#{item.lastUpdatedBy},
+				lastUpdatedDate=now()
+            </set>
+            where id=#{item.id}
+        </foreach>
+	</update>
+	<!-- 
+	 * 角删除色
+	 * liaoyun
+	 * 2015-3-25
+	 * @param insertedRecords
+	 -->
+	<delete id="deleteRole">
+		delete from user_privilege_t where id in
+		<foreach collection="list" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	<!-- 
+	 * 插入数据时，查询重复的 role code
+	 * liaoyun 2016-4-3
+	 * @param insertedRecords
+	 -->
+	<select id="findInsertRepeat" resultType="String">
+		select
+			roleCode
+		from
+			user_privilege_t
+		where
+			roleCode in 
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+				#{item.roleCode}
+			</foreach>
+	</select>
+	<!-- 
+	 * 查询修改的数据是否有重复  role code
+	 * liaoyun 2016-4-3
+	 * @param updatedRecords
+	 -->
+	<select id="findUpdateRepeat" resultType="ssm.entity.privilege.RoleO">
+		select 
+			t.roleCode as roleCode,
+			t.id       as id
+		from
+			user_privilege_t t
+		where t.roleCode in
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+				#{item.roleCode}
+			</foreach>
+	</select>
+</mapper>
+
+

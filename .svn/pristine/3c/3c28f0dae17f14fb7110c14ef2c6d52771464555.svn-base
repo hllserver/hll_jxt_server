@@ -1,0 +1,151 @@
+package ssm.entity.stu;
+
+import ssm.entity.BaseEntity;
+/**
+ * 学员信息
+ * @author liaoyun
+ * 2016-3-6
+ */
+public class StudentO extends BaseEntity{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -788677175777268169L;
+	private long id;
+	private int privilegeFlag; //状态 0---未报名；1---已报名; 2---已完成
+	private String nickname;
+	private String tel;
+	private String email;
+	private String qq;
+	private String wechat;
+	private int gender;        //0---女；1---男
+	private String password;  
+	private String schoolId;
+	private int age;
+	private String address;   //现居住地址
+	private String idCard;    //身份证
+	private int present;      //是否在场 0---不在；1---在
+	private int wantToGo;     //去不去     0---不去；1---去
+	private int trainingStatus;//训练状态
+	private int examStatus;   //考试状态
+	private String gps;       //定位地址
+	private int healthExamination; //是否体检 0---否；1---是
+	public StudentO() {
+		super();
+	}
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
+	public int getPrivilegeFlag() {
+		return privilegeFlag;
+	}
+	public void setPrivilegeFlag(int privilegeFlag) {
+		this.privilegeFlag = privilegeFlag;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getQq() {
+		return qq;
+	}
+	public void setQq(String qq) {
+		this.qq = qq;
+	}
+	public String getWechat() {
+		return wechat;
+	}
+	public void setWechat(String wechat) {
+		this.wechat = wechat;
+	}
+	public int getGender() {
+		return gender;
+	}
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getSchoolId() {
+		return schoolId;
+	}
+	public void setSchoolId(String schoolId) {
+		this.schoolId = schoolId;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getIdCard() {
+		return idCard;
+	}
+	public void setIdCard(String idCard) {
+		this.idCard = idCard;
+	}
+	public int getPresent() {
+		return present;
+	}
+	public void setPresent(int present) {
+		this.present = present;
+	}
+	public int getWantToGo() {
+		return wantToGo;
+	}
+	public void setWantToGo(int wantToGo) {
+		this.wantToGo = wantToGo;
+	}
+	public int getTrainingStatus() {
+		return trainingStatus;
+	}
+	public void setTrainingStatus(int trainingStatus) {
+		this.trainingStatus = trainingStatus;
+	}
+	public int getExamStatus() {
+		return examStatus;
+	}
+	public void setExamStatus(int examStatus) {
+		this.examStatus = examStatus;
+	}
+	public String getGps() {
+		return gps;
+	}
+	public void setGps(String gps) {
+		this.gps = gps;
+	}
+	public int getHealthExamination() {
+		return healthExamination;
+	}
+	public void setHealthExamination(int healthExamination) {
+		this.healthExamination = healthExamination;
+	}
+}

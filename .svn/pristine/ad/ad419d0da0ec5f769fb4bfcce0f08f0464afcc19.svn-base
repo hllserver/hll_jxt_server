@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.orm.driverSchool.DriverSchoolPlaceDao">
+
+	<!-- 获取驾校场地个数 
+	@author heyi
+	2016/4/2
+	-->
+	<select id="getDriverSchoolPlaceListTotal" resultType="int">
+	select
+	count(*)
+	from
+	school_place_t t
+	where t.school_account=#{param2}
+	<if test='param1.placeName !=null and param1.placeName !=""'>
+	and t.place_name=#{param1.placeName}
+	</if>
+	</select>
+	
+	<!-- 查询驾校场地信息列表 
+	@author heyi
+	2016/4/2
+	-->
+	<select id="getDriverSchoolPlaceList" resultType="ssm.entity.driverSchool.SchoolPlaceO">
+	select
+	t.id,
+	t.place_name as placeName,
+	t.school_account as schoolAccount,
+	t.position as position,
+	t.area as area,
+	t.car_no as carNo,
+	t.pic1 as pic1,
+	t.pic2 as pic2,
+	t.pic3 as pic3,
+	t.pic4 as pic4,
+	t.pic5 as pic5,
+	t.remark as remark,
+	t.createdBy as createdBy,
+	t.createdDate as createdDate,
+	t.lastUpdatedBy as lastUpdatedBy,
+	t.lastUpdatedDate as lastUpdatedDate
+	from
+	school_place_t t
+	where t.school_account=#{param4}
+	<if test='param1.placeName !=null and param1.placeName !=""'>
+	and t.place_name=#{param1.placeName}
+	</if>
+	order by t.lastUpdatedDate desc
+		limit #{param2},#{param3}
+	</select>
+	
+	<!--   
+	按驾校名称获取驾校场地信息列表
+	  @author heyi
+	  2016/4/3 
+	  -->
+	<select id="getSchoolPlaceList" resultType="ssm.entity.driverSchool.SchoolPlaceO">
+	select
+	t.id,
+	t.place_name as placeName,
+	t.school_account as schoolAccount,
+	t.position as position,
+	t.area as area,
+	t.car_no as carNo,
+	t.pic1 as pic1,
+	t.pic2 as pic2,
+	t.pic3 as pic3,
+	t.pic4 as pic4,
+	t.pic5 as pic5,
+	t.remark as remark,
+	t.createdBy as createdBy,
+	t.createdDate as createdDate,
+	t.lastUpdatedBy as lastUpdatedBy,
+	t.lastUpdatedDate as lastUpdatedDate
+	from
+	school_place_t t
+	where t.school_account=#{schoolAccount}
+	</select>
+	 
+	
+	
+	<!-- 根据场地名判断重复
+	@author heyi
+	2016/4/2
+	 -->
+	<select id="findRepeatedByPlaceName" resultType="String">
+		select
+		place_name
+		from
+		school_place_t
+		where
+		place_name in
+		<foreach collection="list" item='item' open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 修改时根据场地名判断重复
+	@author heyi
+	2016/4/2
+	 -->
+	<select id="findUpdateRepeatedByPlaceName" resultType="String">
+	<foreach collection="list" item='item'>
+		select
+		place_name
+		from
+		school_place_t
+		where
+		place_name=#{item.placeName} and id=#{item.id}
+		</foreach>
+		
+	</select>
+	
+	<!-- 插入驾校场地信息 
+	@author heyi
+	2016/4/2
+	-->
+	<insert id="batchInsert">
+		<foreach collection="list" item='item'>
+			insert into school_place_t
+			(
+			place_name,
+			school_account,
+			position,
+			area,
+			car_no,
+			pic1,
+			pic2,
+			pic3,
+			pic4,
+			pic5,
+			remark,
+			createdBy,
+			createdDate,
+			lastUpdatedBy,
+			lastUpdatedDate
+			)values(
+			#{item.placeName},
+			#{item.schoolAccount},
+			#{item.position},
+			#{item.area},
+			#{item.carNo},
+			#{item.pic1},
+			#{item.pic2},
+			#{item.pic3},
+			#{item.pic4},
+			#{item.pic5},
+			#{item.remark},
+			#{item.createdBy},
+			now(),
+			#{item.lastUpdatedBy},
+			now()
+			);
+		</foreach>
+	</insert>
+	
+	<!-- 修改驾校场地信息 
+	@author heyi
+	2016/4/2
+	-->
+	<update id="batchUpdate">
+		<foreach collection="list" item='item'>
+			update school_place_t set
+			car_no=#{item.carNo},
+			area=#{item.area},
+			pic1=#{item.pic1},
+			pic2=#{item.pic2},
+			pic3=#{item.pic3},
+			pic4=#{item.pic4},
+			pic5=#{item.pic5},
+			remark=#{item.remark},
+			position=#{item.position},
+			lastUpdatedBy=now(),
+			lastUpdatedDate=now()
+			where
+			place_name=#{item.placeName};
+		</foreach>
+	</update>
+	
+	<!-- 删除驾校场地信息 
+	@author heyi
+	2016/4/2
+	-->
+	<delete id="batchDelete">
+		<foreach collection="list" item='item'>
+			delete from school_place_t where place_name=#{item.placeName};
+		</foreach>
+	</delete>
+	<!-- 
+	 * 保存新增的场地
+	 * liaoyun
+	 * 2016-4-4
+	 * @param schoolPlaceO
+	 -->
+	<insert id="saveNewPlace">
+		insert into school_place_t(
+			school_account,
+			place_name,
+			position,
+			area,
+			car_no,
+			pic1,
+			pic2,
+			pic3,
+			pic4,
+			pic5,
+			remark,
+			createdBy,
+			createdDate,
+			lastUpdatedBy,
+			lastUpdatedDate
+		)values(
+			#{schoolAccount},
+			#{placeName},
+			#{position},
+			#{area},
+			#{carNo},
+			#{pic1},
+			#{pic2},
+			#{pic3},
+			#{pic4},
+			#{pic5},
+			#{remark},
+			#{createdBy},
+			now(),
+			#{lastUpdatedBy},
+			now()
+		)
+	</insert>
+	<!-- 
+	 * 通过  id 与 驾校账号 查询 场地信息
+	 * liaoyun  2016-4-4
+	 * @param id
+	 * @param account
+	 -->
+	<select id="findPlaceDataById" resultType="ssm.entity.driverSchool.SchoolPlaceO">
+		select 
+			t.id             as id,
+			t.school_account as schoolAccount,
+			t.place_name     as placeName,
+			t.position       as position,
+			t.area           as area,
+			t.car_no         as carNo,
+			t.pic1           as pic1,
+			t.pic2           as pic2,
+			t.pic3           as pic3, 
+			t.pic4           as pic4,
+			t.pic5           as pic5,
+			t.remark         as remark
+		from
+			school_place_t t
+		where
+			t.id=#{0} and t.school_account=#{1}
+	</select>
+	<!-- 
+	 * 保存修改的场地信息
+	 * liaoyun 2016-4-4
+	 * @param place
+	 -->
+	<update id="saveUpdatedPlace">
+		update 
+			school_place_t t
+		set
+			t.place_name      = #{placeName},
+			t.position        = #{position},
+			t.area            = #{area},
+			t.car_no          = #{carNo},
+			t.pic1            = #{pic1},
+			t.pic2            = #{pic2},
+			t.pic3            = #{pic3}, 
+			t.pic4            = #{pic4},
+			t.pic5            = #{pic5},
+			t.remark          = #{remark},
+			t.lastUpdatedBy   = #{lastUpdatedBy},   
+			t.lastUpdatedDate = now() 
+		where
+			t.school_account = #{schoolAccount} and t.id=#{id}
+	</update>
+</mapper>

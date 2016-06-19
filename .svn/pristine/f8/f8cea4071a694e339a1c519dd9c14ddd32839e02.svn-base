@@ -1,0 +1,404 @@
+package ssm.controller.driverSchool;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import ssm.entity.common.RecordsO;
+import ssm.entity.common.ResultO;
+import ssm.entity.driverSchool.SchoolAdO;
+import ssm.entity.driverSchool.SchoolInstructorO;
+import ssm.entity.driverSchool.SchoolO;
+import ssm.entity.driverSchool.SchoolPicO;
+import ssm.entity.user.UserO;
+import ssm.service.driverSchoolService.DriverSchoolService;
+@Controller
+@RequestMapping(value="/driverSchoolMsg")
+public class DriverSchoolMsgAction {
+
+	@Autowired
+	DriverSchoolService driverSchoolService;
+	/**
+	 * 获取自己驾校信息
+	 * liaoyun
+	 * 2016/3/27
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getDriverSchoolMsg",method=RequestMethod.POST,produces="application/json",
+			consumes="application/json")
+	public SchoolO getDriverSchoolMsg(HttpSession session){
+		UserO user = (UserO) session.getAttribute("userInfo");
+		String account="";
+		if(user.getType()==4){//如果是驾校的职员
+			account = user.getLeader();
+		}else if(user.getType()==3){//如果是驾校的管理员
+			account = user.getAccount();
+		}
+		if(account != null && !account.equals("")){
+			SchoolO schO =driverSchoolService.getDriverSchoolMsg(account);
+			return schO;
+		}else{
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * 保存修改的驾校信息数据
+	 * @author liaoyun
+	 * 2016/3/27
+	 * 
+	 */
+	@ResponseBody
+	@RequestMapping(value="/modify",method=RequestMethod.POST,produces="application/json",
+	consumes="application/json")
+	public Map<String,String> save(@RequestBody SchoolO school,HttpSession session){
+		Map<String,String> resultMap=new HashMap<>();
+		UserO user =(UserO)session.getAttribute("userInfo");
+		String account="";
+		if(user.getType()==4){//如果是驾校的职员
+			account = user.getLeader();
+		}else if(user.getType()==3){//如果是驾校的管理员
+			account = user.getAccount();
+		}
+		if(school!=null){
+			school.setSchoolName(getValue(school.getSchoolName()));
+			school.setTel(getValue(school.getTel()));
+			school.setEmail(getValue(school.getEmail()));
+			school.setWechat(getValue(school.getWechat()));
+			school.setQq(getValue(school.getQq()));
+			school.setCreatedBy(user.getAccount());
+			school.setLastUpdatedBy(user.getAccount());
+			
+		}
+		//查找该账号是否有驾校
+		int isHas = driverSchoolService.isHasDriverSchool(account);
+		try{
+			//如果有，则修改
+			if(isHas==1){
+				driverSchoolService.saveSchoolMsg(school,account);
+			}
+			//如果没有，则添加
+			if(isHas<1){
+				driverSchoolService.insertSchoolMsg(school,account);
+			}
+		}catch(Exception e){
+			resultMap.put("da", "0");
+			return resultMap;
+		}
+		resultMap.put("da", "1");
+		return resultMap;
+	}
+	/**
+	 * 查询 驾校 所属的 教练
+	 * @param schoolInstructorO
+	 * @param currentPage
+	 * @param pageSize
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getDriverInstructor/{currentPage}/{pageSize}",method=RequestMethod.POST,produces="application/json",
+	consumes="application/json")
+	public ResultO<SchoolInstructorO> findDriverInstructor(@RequestBody SchoolInstructorO schoolInstructorO,@PathVariable int currentPage,
+			@PathVariable int pageSize,HttpSession session){
+		Map<String,String> resultMap=new HashMap<>();
+		UserO user =(UserO)session.getAttribute("userInfo");
+		String account="";
+		if(user.getType()==4){//如果是驾校的职员
+			account = user.getLeader();
+		}else if(user.getType()==3){//如果是驾校的管理员
+			account = user.getAccount();
+		}
+		ResultO<SchoolInstructorO> list = driverSchoolService.getDriverSchoolList(schoolInstructorO,currentPage,pageSize,account);
+		return list;
+	}
+	/**
+	 * 增、删、改 驾校的教练 liaoyun 2016-3-27
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/saveInstructor",method=RequestMethod.POST,produces="application/json",
+	consumes="application/json")
+	public Map<String,String> saveInstructor(@RequestBody RecordsO<SchoolInstructorO> recordsO,HttpSession session){
+		Map<String,String> resultMap =new HashMap<>();
+		UserO user =(UserO)session.getAttribute("userInfo");
+		String account="";
+		if(user.getType()==4){//如果是驾校的职员
+			account = user.getLeader();
+		}else if(user.getType()==3){//如果是驾校的管理员
+			account = user.getAccount();
+		}
+		List<SchoolInstructorO> insertedRecords =recordsO.getInsertedRecords();
+		List<SchoolInstructorO> uptatedRecords =recordsO.getUpdatedRecords();
+		List<SchoolInstructorO> deletedRecords=recordsO.getDeletedRecords();
+		
+		//对新增的数据
+		if(insertedRecords != null && insertedRecords.size() > 0){
+			for (SchoolInstructorO s : insertedRecords) {
+				s.setJobNumber(getValue(s.getJobNumber()));
+				s.setName(getValue(s.getName()));
+				s.setTel(getValue(s.getTel()));
+				s.setEmail(getValue(s.getEmail()));
+				s.setCreatedBy(user.getAccount());
+				s.setLastUpdatedBy(user.getAccount());
+			}
+			driverSchoolService.insertSchoolInstructor(insertedRecords,account);
+		}
+		//对修改的数据
+		if(uptatedRecords != null && uptatedRecords.size() > 0){
+			for (SchoolInstructorO s : uptatedRecords) {
+				s.setJobNumber(getValue(s.getJobNumber()));
+				s.setName(getValue(s.getName()));
+				s.setTel(getValue(s.getTel()));
+				s.setEmail(getValue(s.getEmail()));
+				s.setLastUpdatedBy(user.getAccount());
+			}
+			driverSchoolService.updateSchoolInstructor(uptatedRecords,account);
+		}
+		//对剔除的数据
+		if(deletedRecords != null && deletedRecords.size() > 0){
+			driverSchoolService.deleteSchoolInstructor(deletedRecords,account);
+		}
+		return resultMap;
+	}
+	//提交广告 图片、标题、内容
+	@ResponseBody
+	@RequestMapping(value="/updloadAd")
+	public Map<String,String> upload(MultipartHttpServletRequest request,HttpServletResponse response,HttpSession session){
+		Map<String,String> map = new HashMap<>();
+		SchoolAdO schoolAd = new SchoolAdO();
+		UserO user =(UserO)session.getAttribute("userInfo");
+		String account="";
+		if(user.getType()==4){//如果是驾校的职员
+			account = user.getLeader();
+		}else if(user.getType()==3){//如果是驾校的管理员
+			account = user.getAccount();
+		}
+		try{
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+			schoolAd.setTitle(title);
+			schoolAd.setContent(content);
+			//获取 文件 map
+			Map<String,MultipartFile> fileMap = request.getFileMap();
+			//得到 map 的 key值
+			Set<String> fileSet = fileMap.keySet();
+			//创建 迭代器
+			Iterator<String> fileNameIterator = fileSet.iterator();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+			int i=1;
+			while(fileNameIterator.hasNext()){
+				// input 中的 name 属性 的 名称
+				String uploadFileName = fileNameIterator.next();
+				MultipartFile file = fileMap.get(uploadFileName);
+				//上传的文件 的名字如：kk.jpg
+				String origFileName = file.getOriginalFilename();
+				//得到文件的 流
+				InputStream isRef = file.getInputStream();
+				//保存文件的路径
+				String dir = request.getSession().getServletContext().getRealPath("/file/pic");
+				//获取图片后缀
+				int pos = origFileName.lastIndexOf(".");
+				String suffix = origFileName.substring(pos, origFileName.length());
+				Date date = new Date();
+				//文件取别名，防止同名
+				String newName = sdf.format(date)+i+suffix;
+				i++;
+				//新文件全路径
+				File targetFile = new File(dir,newName);
+				//文件输出流
+				FileOutputStream fosRef = new FileOutputStream(targetFile);
+				//保存文件到文件夹
+				IOUtils.copy(isRef, fosRef);
+				if(uploadFileName.equals("pic1")){
+					schoolAd.setPic1(newName);
+				}else if(uploadFileName.equals("pic2")){
+					schoolAd.setPic2(newName);
+				}else if(uploadFileName.equals("pic3")){
+					schoolAd.setPic3(newName);
+				}else if(uploadFileName.equals("pic4")){
+					schoolAd.setPic4(newName);
+				}else if(uploadFileName.equals("pic5")){
+					schoolAd.setPic5(newName);
+				}
+			}
+			//广告数据存入数据库 
+			schoolAd.setCreatedBy(user.getAccount());
+			schoolAd.setLastUpdatedBy(user.getAccount());
+			driverSchoolService.saveAdInfo(schoolAd,account);
+		}catch(IOException e){
+			e.printStackTrace();
+			map.put("type","0");
+			//反回失败
+			return map;
+		}
+		map.put("type","1");
+		//反回成功
+		return map;
+	}
+	/**
+	 * 保存 驾校 相关图片
+	 * liaoyun  2016-4-12
+	 * @param request
+	 * @param response
+	 * @param session
+	 * @return
+	 * @throws IOException 
+	 */
+	@ResponseBody
+	@RequestMapping(value="/saveSchoolPic")
+	public void saveSchoolPic(MultipartHttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException{
+		UserO user =(UserO)session.getAttribute("userInfo");
+		response.setContentType("text/html;charset='utf-8'");
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("Cache-Control", "no-cache");
+		Writer output = response.getWriter();
+		response.setHeader("content-type", "text/html;charset=utf-8");
+		String account="";
+		if(user.getType()==4){//如果是驾校的职员
+			account = user.getLeader();
+		}else if(user.getType()==3){//如果是驾校的管理员
+			account = user.getAccount();
+		}
+		SchoolPicO picO = new SchoolPicO();
+		try{
+			picO.setSchoolAccount(account);
+			//姓名
+			String name = request.getParameter("name");
+			//图片类型
+			String type = request.getParameter("type");
+			//图片说明
+			String explain = request.getParameter("explain");
+			if(name!=null){//教练姓名
+				picO.setExtra1(name.trim());
+			}
+			if(type!=null && (type.equals("honor") || type.equals("view") || type.equals("instru"))){
+				//照片类别：1--驾校资质荣誉照片;2--驾校风采照片;3--明星教练照片;
+				if(type.equals("honor")){
+					picO.setPicType(1);
+				}else if(type.equals("view")){
+					picO.setPicType(2);
+				}else{
+					picO.setPicType(3);
+				}
+			}
+			if(explain!=null){//照片介绍
+				picO.setPicContent(explain);
+			}
+			//获取 文件 map
+			Map<String,MultipartFile> fileMap = request.getFileMap();
+			//得到 map 的 key值
+			Set<String> fileSet = fileMap.keySet();
+			//创建 迭代器
+			Iterator<String> fileNameIterator = fileSet.iterator();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+			while(fileNameIterator.hasNext()){
+				// input 中的 name 属性 的 名称
+				String uploadFileName = fileNameIterator.next();
+				MultipartFile file = fileMap.get(uploadFileName);
+				//上传的文件 的名字如：kk.jpg
+				String origFileName = file.getOriginalFilename();
+				//得到文件的 流
+				InputStream isRef = file.getInputStream();
+				//保存文件的路径
+				String dir = request.getSession().getServletContext().getRealPath("/file/pic");
+				//获取图片后缀
+				int pos = origFileName.lastIndexOf(".");
+				String suffix = origFileName.substring(pos, origFileName.length());
+				Date date = new Date();
+				//文件取别名，防止同名
+				String newName = account+sdf.format(date)+suffix;
+				//新文件全路径
+				File targetFile = new File(dir,newName);
+				//文件输出流
+				FileOutputStream fosRef = new FileOutputStream(targetFile);
+				//保存文件到文件夹
+				IOUtils.copy(isRef, fosRef);
+				//照片名字
+				picO.setPic(newName);
+				picO.setCreatedBy(user.getAccount());
+				picO.setLastUpdatedBy(user.getAccount());
+				driverSchoolService.saveSchoolPic(picO);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			output.write("<script language='javascript'>parent.callback(0)</script>");
+		}
+		output.write("<script language='javascript'>parent.callback(1)</script>");
+	}
+	/**
+	 * 跳转到 驾校详细信息 页面
+	 * liaoyun 2016-4-16
+	 * @return
+	 */
+	@RequestMapping(value="/recommend",method=RequestMethod.POST)
+	public String adDetail(@RequestParam("schoolAccount") String schoolAccount,Model model){ 
+		model.addAttribute("account", schoolAccount);
+		return "/front/adDetail.jsp";
+	}
+	/**
+	 * 根据 school account 获取 驾校详细信息
+	 * liaoyun 2016-4-16
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getRecommendSchoolInfo/{schoolAccount}")
+	public SchoolO recommend(@PathVariable String schoolAccount){
+		SchoolO sco = driverSchoolService.getRecommendSchoolInfo(schoolAccount);
+		return sco;
+	}
+	/**
+	 * 根据 school account 获取 驾校相关的图片
+	 * liaoyun 2016-4-16
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getRecommendSchoolPic/{schoolAccount}")
+	public Map<String,Object> recommendPic(@PathVariable String schoolAccount){
+		//1--驾校资质荣誉照片
+		List<SchoolPicO> honor = driverSchoolService.findHonorPic(schoolAccount,"1");
+		//2--驾校风采照片
+		List<SchoolPicO> spirit = driverSchoolService.findHonorPic(schoolAccount,"2");
+		//3--明星教练照片;
+		List<SchoolPicO> instructor = driverSchoolService.findHonorPic(schoolAccount,"3");
+		Map<String,Object> map = new HashMap<>();
+		map.put("honor", honor);
+		map.put("spirit", spirit);
+		map.put("instructor", instructor);
+		return map;
+	}
+	//需要修改，适合任何类型
+	private String getValue(String s){
+		if(s!=null){
+			return s.trim();
+		}
+		return null;
+	}
+}

@@ -1,0 +1,88 @@
+$(document).ready(function(){
+	//保存所有的场地数据 
+	var allPlace;
+	$("#newPlace").bind("click",function(){
+		$("#placeMsg").empty();
+		$("#placeMsg").append(complate);
+		$("#pid").attr("hidden",true);
+	});
+	//查询用户权限页面 和  基本信息
+	_get({
+		url:"driverSchoolPlace/getSchoolPlace.action",
+		data:"",
+		success:function(da){
+			//获取场地列表
+			var places = da.places;
+			allPlace=places;
+			//场地名导航栏
+			for(var i=0; i<places.length; i++){
+				var placei=$("<button>"+places[i].placeName+"</button>");
+				placei.addClass("_btn");
+				$("#newPlace").before(placei);
+				//为placei绑定事件
+				(function(pla){
+					placei.bind("click",function(){
+						showPlace(pla);
+					});
+				})(places[i])
+			}
+			var item=da.item;
+			$("#_item").html(item);
+
+		}
+	});
+});
+//显示场景
+function showPlace(data){
+	$("#placeMsg").empty();
+	$("#placeMsg").append(complate);
+	$("#pid").attr("hidden",true);
+	$("#pname").val(data.placeName);
+	$("#pposition").val(data.position);
+	$("#parea").val(data.area);
+	$("#pid").val(data.id);
+	$("#pscale").val(data.carNo);
+	$("#premark").val(data.remark);
+	if(data.pic1!=null && data.pic1!=""){
+		$("#img1").attr({"src":"file/pic/"+data.pic1});
+	}
+	$("#img1").attr({"width":"160px","height":"160px"});
+	if(data.pic2!=null && data.pic2!=""){
+		$("#img2").attr({"src":"file/pic/"+data.pic2});
+	}
+	$("#img2").attr({"width":"160px","height":"160px"});
+	if(data.pic3!=null && data.pic3!=""){
+		$("#img3").attr({"src":"file/pic/"+data.pic3});
+	}
+	$("#img3").attr({"width":"160px","height":"160px"});
+	if(data.pic4!=null && data.pic4!=""){
+		$("#img4").attr({"src":"file/pic/"+data.pic4});
+	}
+	$("#img4").attr({"width":"160px","height":"160px"});
+	if(data.pic5!=null && data.pic5!=""){
+		$("#img5").attr({"src":"file/pic/"+data.pic5});
+	}
+	$("#img5").attr({"width":"160px","height":"160px"});
+	//$("input[type='file']").val("修改");
+	$("form").attr("action","driverSchoolPlace/updatePlace.action");
+}
+var complate = "<form target='iframe1' action='driverSchoolPlace/addNewPlace.action' enctype='multipart/form-data' method='post'>" +
+		"<input type='text' id='pid' name='id'><br/>" +
+		"场地名称：<input type='text' id='pname' name='placeName'><br/>" +
+		"场地位置：<input type='text' id='pposition' name='position'><br/>" +
+		"场地面积：<input type='text' id='parea' name='area'><br/>" +
+		"场地规模：<input type='text' id='pscale' name='carNo'><br/>" +
+		" 备 注 ： <input type='text' id='premark' name='remark'><br/>" +
+		"图片1：<img id='img1'></img><input type='file' name='pic1' value='上传'>" +
+		"图片2：<img id='img2'></img><input type='file' name='pic2' value='上传'><br/>" +
+		"图片3：<img id='img3'></img><input type='file' name='pic3' value='上传'>" +
+		"图片4：<img id='img4'></img><input type='file' name='pic4' value='上传'><br/>" +
+		"图片5：<img id='img5'></img><input type='file' name='pic5' value='上传'><br/>" +
+		"<input type='submit' value='确认保存'>" +
+		"<br/></form>"
+
+
+
+
+
+

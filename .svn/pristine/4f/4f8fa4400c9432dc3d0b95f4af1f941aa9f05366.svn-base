@@ -1,0 +1,6 @@
+<meta charset="UTF-8">
+<script type="text/javascript" src="front/schoolRecommendation.js"></script>
+<form action="driverSchoolMsg/recommend.action" method="post">
+	<input value="14601691329627" type='text' name='schoolAccount'>
+	<input type='submit' value='驾校详情'>
+</form>

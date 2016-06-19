@@ -1,0 +1,44 @@
+var gridOption = {
+	columns : [ {
+		select : "checkBox",
+		name : "权限名",
+	}, {
+		field : "priCode",
+		name : "权限名",
+		width : 150,
+		editable: true
+	}, {
+		field : "priDesc",
+		name : "权限描述",
+		width : 200,
+		editable: true
+	}, {
+		field : "priType",
+		name : "权限类型",
+		width : 100
+	}, {
+		field : "priUrl",
+		name : "链接",
+		width : 300
+	} ],
+	url : "privilege/getPrivilegeList.action",
+	id : "grid",       //表格 放置的位置 id,就是一个 div 的 id
+	gridId : "grid1"   //定义表格  的 id
+};
+//插入数据
+function insert(){
+	_insert(gridOption);
+}
+//
+function markAsDelete(){
+	_markAsDelete(gridOption);
+}
+//查询
+function search(){
+	$("#grid").empty();
+	_Grid(gridOption);
+}
+//页面加载 完成后 立即执行
+$(document).ready(function() {
+	_Grid(gridOption);
+})

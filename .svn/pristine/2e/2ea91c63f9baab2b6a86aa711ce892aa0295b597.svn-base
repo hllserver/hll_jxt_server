@@ -1,0 +1,129 @@
+package ssm.controller.privilege;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ssm.entity.common.RecordsO;
+import ssm.entity.common.ResultO;
+import ssm.entity.privilege.PrivilegeO;
+import ssm.entity.user.UserO;
+import ssm.service.privilege.PrivilegeService;
+/**
+ * 权限控件
+ * @author liaoyun
+ * 2016-3-6
+ */
+@Controller
+//@Transactional
+//@ResponseBody
+@RequestMapping(value="/privilege")
+public class PrivilegeAction {
+	
+	@Autowired
+	private PrivilegeService privilegeService;
+	/**
+	 * 查询权限
+	 * liaoyun 
+	 * 2016-3-6
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getPrivilegeList/{currentPage}/{pageSize}",method=RequestMethod.POST,produces="application/json",
+	consumes="application/json")
+	public ResultO<PrivilegeO> getPrivilegeList(@RequestBody PrivilegeO privilegeO,@PathVariable int currentPage,@PathVariable int pageSize) throws Exception{
+		ResultO<PrivilegeO> list = privilegeService.getPrivilegeList(privilegeO,currentPage,pageSize);
+		return list;
+	}
+	/**
+	 * 保存所有的数据
+	 * @param recordsO
+	 * liaoyun
+	 * 2016-3-15
+	 */
+	@ResponseBody
+	@RequestMapping(value="/saveAll",method=RequestMethod.POST,produces="application/json",consumes="application/json")
+	public Map<String,String> saveAll(@RequestBody RecordsO<PrivilegeO> recordsO,HttpSession  session){
+		Map<String,String> resultMap = new HashMap<>();
+		UserO user = (UserO) session.getAttribute("userInfo");
+		String account = user.getAccount();
+		//新增的数据
+		List<PrivilegeO> insertedRecords = recordsO.getInsertedRecords();
+		//更新的数据
+		List<PrivilegeO> updatedRecords = recordsO.getUpdatedRecords();
+		//删除的数据
+		List<PrivilegeO> deletedRecords = recordsO.getDeletedRecords();
+		List<PrivilegeO> insertedList = new ArrayList<>();
+		List<PrivilegeO> updatedList = new ArrayList<>();
+		List<PrivilegeO> deletedList = new ArrayList<>();
+		//-------------------------对新增的数据-----------------------------
+		if(insertedRecords != null && insertedRecords.size()>0){
+			for (PrivilegeO p : insertedRecords) {
+				p.setPriCode(getValue(p.getPriCode()));
+				p.setPriDesc(getValue(p.getPriDesc()));
+				p.setPriUrl(getValue(p.getPriUrl()));
+				p.setCreatedBy(account);
+				p.setLastUpdatedBy(account);
+				insertedList.add(p);
+			}
+		}
+		if(insertedList.size()>0){
+			Map<String,String> insertMap = privilegeService.batchInsert(insertedList);
+		}
+		//-------------------------对修改的数据-----------------------------
+		if(updatedRecords != null && updatedRecords.size()>0){
+			for (PrivilegeO p : updatedRecords) {
+				p.setPriCode(getValue(p.getPriCode()));
+				p.setPriDesc(getValue(p.getPriDesc()));
+				p.setPriUrl(getValue(p.getPriUrl()));
+				p.setCreatedBy(account);
+				p.setLastUpdatedBy(account);
+				updatedList.add(p);
+			}
+		}
+		if(updatedRecords.size()>0){
+			Map<String,String> updateMap =privilegeService.batchUpdate(updatedList);
+		}
+		//-------------------------对删除的数据-----------------------------
+		if(deletedRecords != null && deletedRecords.size()>0){
+			for (PrivilegeO p : deletedRecords) {
+				p.setPriCode(getValue(p.getPriCode()));
+				p.setPriDesc(getValue(p.getPriDesc()));
+				p.setPriUrl(getValue(p.getPriUrl()));
+				p.setCreatedBy(account);
+				p.setLastUpdatedBy(account);
+				deletedList.add(p);
+			}
+		}
+		return resultMap;
+	}
+	private String getValue(String s){
+		if(s==null || s.equals("")){
+			return "";
+		}
+		return s.trim();
+	}
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,14 @@
+<meta charset="UTF-8">
+<script type="text/javascript" src="driverSchool/driverSchoolInstructor.js"></script>
+<form id="formId">
+	姓名：<input type="text" id="name" name="name"/>
+	工号：<input type="text" id="jobNumber" name="jobNumber"/>
+	<input class="_btn" type="button" value="搜索">
+	<input class="_btn" type="reset" value="重置">
+</form>
+<br/>
+<button class='_btn' onclick="insert()">新增</button>
+<button class='_btn' onclick="markAsDelete()">删除</button>
+<button class='_btn' onclick="removeDeleteMark()">取消删除</button>
+<button class='_btn' onclick="save()">保存</button>
+<div id="gridId"></div>

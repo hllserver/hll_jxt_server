@@ -1,0 +1,75 @@
+package ssm.serviceImpl.privilege;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ssm.entity.common.PageO;
+import ssm.entity.common.ResultO;
+import ssm.entity.privilege.PrivilegeO;
+import ssm.orm.privilege.PrivilegeDao;
+import ssm.service.privilege.PrivilegeService;
+import ssm.util.PageUtil;
+@Service
+public class PrivilegeServiceImpl implements PrivilegeService{
+	
+	@Autowired
+	private PrivilegeDao privilegeDao;
+
+	/**
+	 * 查询 权限 信息
+	 * liaoyun 2016-3-6
+	 */
+	@Override
+	public ResultO<PrivilegeO> getPrivilegeList(PrivilegeO privilegeO,int currentPage,int pageSize) {
+		int total = privilegeDao.getPrivilegeListTotal(privilegeO);
+		PageO pageO = PageUtil.getPage(currentPage, pageSize, total);
+		//起始编号
+		int start = (pageO.getCurrentPage()-1)*pageO.getPageSize();
+		List<PrivilegeO> list = privilegeDao.getPrivilegeList(privilegeO,start,pageSize);
+		ResultO<PrivilegeO> result = new ResultO<>();
+		result.setResultList(list);
+		result.setPage(pageO);
+		return result;
+	}
+
+	/**
+	 * 批量插入数据
+	 * @param insertedList
+	 * liaoyun
+	 * 2016-3-16
+	 */
+	@Override
+	public Map<String,String> batchInsert(List<PrivilegeO> insertedList) {
+		Map<String,String> map = new HashMap<>();
+		//判断重复
+		List<String> codeList = new ArrayList<>();
+		for (PrivilegeO o : insertedList) {
+			codeList.add(o.getPriCode());
+		}
+		List<String> repeatedCodeList = privilegeDao.findRepeatedByCode(codeList);
+		//保存
+		privilegeDao.batchInsert(insertedList);
+		return map;
+	}
+
+	/**
+	 * 批量 修改  数据
+	 * @param updatedList
+	 * liaoyun
+	 * 2016-3-20
+	 */
+	@Override
+	public Map<String,String> batchUpdate(List<PrivilegeO> updatedList) {
+		Map<String,String> map = new HashMap<>();
+		//判断重复
+		//保存
+		privilegeDao.batchUpdate(updatedList);
+		return map;
+	}
+
+}

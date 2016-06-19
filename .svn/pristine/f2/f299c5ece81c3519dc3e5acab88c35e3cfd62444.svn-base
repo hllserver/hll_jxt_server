@@ -1,0 +1,31 @@
+package ssm.serviceImpl.user;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ssm.entity.user.UserO;
+import ssm.orm.user.UserDao;
+import ssm.service.user.UserService;
+@Service
+public class UserServiceImpl implements UserService{
+
+	@Autowired
+	private UserDao userDao;
+	/**
+	 * 根据 用户名 和 密码 查询用户信息
+	 * @author liaoyun
+	 * 2016-3-18
+	 */
+	@Override
+	public UserO findUser(String username, String password) {
+		List<UserO> user = userDao.findUser(username,password);
+		if(user!=null && user.size()>0){
+			return user.get(0);
+		}else{
+			return null;
+		}
+	}
+
+}

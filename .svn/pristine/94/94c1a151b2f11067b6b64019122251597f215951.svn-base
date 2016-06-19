@@ -1,0 +1,109 @@
+package ssm.serviceImpl.user;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ssm.entity.common.PageO;
+import ssm.entity.common.ResultO;
+import ssm.entity.privilege.PrivilegeO;
+import ssm.entity.user.UserO;
+import ssm.orm.user.UserDao;
+import ssm.service.user.UserService;
+import ssm.util.PageUtil;
+@Service
+public class UserServiceImpl implements UserService{
+
+	@Autowired
+	private UserDao userDao;
+	/**
+	 * 根据 用户名 和 密码 查询用户信息
+	 * @author liaoyun
+	 * 2016-3-18
+	 */
+	@Override
+	public UserO findUser(String username, String password) {
+		List<UserO> user = userDao.findUser(username,password);
+		if(user!=null && user.size()>0){
+			return user.get(0);
+		}else{
+			return null;
+		}
+	}
+	/**
+	 * 分页查询所有的用户 liaoyun 2016-3-26
+	 * @param userO
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	@Override
+	public ResultO<UserO> findAllUser(UserO userO, int currentPage, int pageSize) {
+		//查询用户 的数量
+		int total = userDao.findTotalUser(userO);
+		PageO pageO = PageUtil.getPage(currentPage, pageSize, total);
+		int start = (pageO.getCurrentPage()-1)*pageO.getPageSize();
+		List<UserO> list = userDao.findAllUser(userO,start,pageSize);
+		ResultO<UserO> result = new ResultO<UserO>();
+		result.setResultList(list);
+		result.setPage(pageO);
+		return result;
+	}
+	/**
+	 * 批量添加 user 
+	 * liaoyun
+	 * 2016-3-26
+	 * @param insertedRecords
+	 */
+	@Override
+	public void batchInsertUser(List<UserO> insertedRecords) {
+		userDao.batchInsertUser(insertedRecords);
+	}
+	/**
+	 * 批量修改 user 
+	 * liaoyun
+	 * 2016-3-26
+	 * @param insertedRecords
+	 */
+	@Override
+	public void batchUpdateUser(List<UserO> updatedRecords) {
+		userDao.batchUpdateUser(updatedRecords);
+	}
+	/**
+	 * 批量删除 user 
+	 * liaoyun
+	 * 2016-3-26
+	 * @param insertedRecords
+	 */
+	@Override
+	public void batchDeleteUser(List<UserO> deletedRecords) {
+		userDao.batchDeleteUser(deletedRecords);
+	}
+	/**
+	 * 查询该用户角色的页面权限
+	 * liaoyun 2016-3-27
+	 * @param type
+	 * @return
+	 */
+	@Override
+	public List<PrivilegeO> findMypage(int type) {
+		//查询  该角色的 权限 code
+		List<String> code = userDao.findPriCodeByType(type);
+//		if(code ==null || code.size()==0){
+//			
+//		}
+		//以逗号为分隔 将 权限 拆分为 字符串数组
+		String codeArray[]=code.get(0).split(",");
+		//转为list
+		List<String> list = new ArrayList<>();
+		for(int i=0; i<codeArray.length; i++){
+			list.add(codeArray[i]);
+		}
+		//查询 该角色拥有的  页面
+		List<PrivilegeO> priPageList = userDao.findPriPageList(list);
+		return priPageList;
+	}
+
+}

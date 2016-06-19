@@ -1,0 +1,29 @@
+package ssm.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import privilege.Authority;
+/**
+ * µÇÂ½ Ïà¹Ø
+ * @author liaoyun
+ * 2016-3-3
+ */
+@Controller
+//@Transactional
+public class Login {
+	//@Authority(code="liaoyun",desc="jdjfldjf")
+	@RequestMapping(value="/login",method=RequestMethod.POST)
+	public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model){
+		if(username.equals("ly") && password.equals("123")){
+			//model.addAttribute("username", username);
+			return "redirect:/index.html";
+		}
+		
+		return "no.jsp";
+	}
+}

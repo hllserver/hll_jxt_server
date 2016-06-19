@@ -1,0 +1,20 @@
+<meta charset="UTF-8">
+<!-- 驾校信息显示页面（只显示自己驾校的信息） 
+     @author liaoyun
+     2016/3/27
+-->
+<script type="text/javascript" src="driverSchool/driverSchoolMsg.js"></script>
+<div>
+	<form id="formId">
+		驾校名称：<input type="text" id="schoolName" class="" name="schoolName" /><br/>
+		驾校位置：<input type="text" id="position" class="" name="position" /><br/>
+		联系电话：<input type="text" id="tel" class="" name="tel" /><br/>
+		公司邮箱：<input type="text" id="email" class="" name="email" /><br/>
+		注册时间：<input type="text" id="registeredTime" class="" name="registeredTime" /><br/>
+		驾校规模：<input type="text" id="scale" class="" name="scale" /><br/>
+		驾校等级：<input type="text" id="remark" class="" name="remark" /><br/>
+		驾校简介：<input type="text" id="info" class="" name="info" /><br/>
+		<input class="_btn" type="button" onclick="save()" value="保存">
+		<input class="_btn" type="button" onclick="reload()" value="放弃">
+	</form>
+</div>

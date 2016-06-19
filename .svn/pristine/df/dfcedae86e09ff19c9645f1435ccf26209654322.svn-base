@@ -1,0 +1,20 @@
+package ssm.orm.driverSchool;
+
+import java.util.List;
+
+import ssm.entity.driverSchool.SchoolO;
+
+public interface DriverSchoolDao {
+
+	public List<SchoolO> getDriverSchoolList(SchoolO schoolO);
+
+	public int getDriverSchoolListTotal(SchoolO schoolO);
+
+	public List<SchoolO> getDriverSchoolList(SchoolO schoolO, int start, int pageSize);
+
+	public List<String> findRepeatedByAccount(List<String> accountList);
+
+	public void batchInsert(List<SchoolO> insertedList);
+
+	public void batchDelete(List<SchoolO> deletedList);
+}

@@ -1,0 +1,44 @@
+package ssm.controller.driverSchool;
+
+/*
+ *显示学校信息操作类
+ *@heyi
+ *2016/3/12
+*/
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ssm.entity.driverSchool.SchoolO;
+import ssm.service.driverSchoolService.DriverSchoolService;
+
+@Controller
+@RequestMapping(value = "/driverSchool")
+public class DriverSchoolAction {
+
+	@Autowired
+	private DriverSchoolService driverSchoolService;
+
+	/**
+	 * 获取驾校列表的方法
+	 * @author heyi
+	 * 2016-3-13
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getDriverSchoolList/{currentPage}/{pageSize}",method=RequestMethod.POST,produces="application/json",
+			consumes="application/json")
+	public List<SchoolO> getDriverSchoolList(@RequestBody SchoolO schoolO,@PathVariable int currentPage,
+			@PathVariable int pageSize) throws Exception
+
+	{
+		System.out.println("aaaaaaaaaaaa");
+		List<SchoolO> list = driverSchoolService.getDriverSchoolList(schoolO);
+		return list;
+	}
+}

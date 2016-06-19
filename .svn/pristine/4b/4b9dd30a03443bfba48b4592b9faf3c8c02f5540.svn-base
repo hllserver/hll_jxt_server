@@ -1,0 +1,38 @@
+package ssm.controller.privilege;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ssm.entity.privilege.PrivilegeO;
+import ssm.service.privilege.PrivilegeService;
+/**
+ * 权限控制 
+ * @author liaoyun
+ * 2016-3-6
+ */
+@Controller
+//@Transactional
+//@ResponseBody
+@RequestMapping(value="/privilege")
+public class PrivilegeAction {
+	
+	@Autowired
+	private PrivilegeService privilegeService;
+	/**
+	 * 获取 权限信息
+	 * liaoyun 2016-3-6
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getPrivilegeList",method=RequestMethod.POST,produces="application/json",
+	consumes="application/json")
+	public List<PrivilegeO> getPrivilegeList() throws Exception{
+		List<PrivilegeO> list = privilegeService.getPrivilegeList();
+		return list;
+	}
+	
+}

@@ -1,0 +1,111 @@
+function _page_ready() {
+	//查询用户权限页面 和  基本信息
+	_get({
+		url:"user/myInfo.action",
+		data:"",
+		success:function(da){
+			var nickName = da.nickName;
+			//用户信息显示 
+			if(nickName!=null && nickName!=""){
+				$("#_user").html(nickName);
+			}else{
+				$("#_user").html("还没有昵称");
+			}
+			var nav = da.page;
+			//导航栏处理
+			var _navigator = document.getElementById("_navigator");
+			for (var i = 0; i < nav.length; i++) {
+				// 外框
+				var div1 = document.createElement("div");
+				var div2 = document.createElement("div");
+				var a = document.createElement("a");
+				div1.style.border = "1px solid #CCCCCC";
+				a.style.textDecoration = "none";
+				a.href = "#" + nav[i].priUrl;
+				a.className = "_herf_to"
+				a.id = "_href_to_" + i;
+				div2.innerHTML = nav[i].priDesc;
+				a.appendChild(div2);
+				div1.appendChild(a);
+				_navigator.appendChild(div1);
+				(function(i) {
+					$("#_href_to_" + i).on("click", function() {
+						$.ajax({
+							url : nav[i].priUrl,
+							type : 'GET',
+							success : function(data) {
+								$("#_rightDIV").html(data);
+							}
+						});
+					});
+				})(i);
+			}
+		}
+	});
+}
+
+//jquery 扩展 from 转 json
+$.fn.serializeObject=function(){
+	var o={};
+	var a=this.serializeArray();
+	$.each(a,function(){
+		if(o[this.name]){
+			if(!o[this.name].push){
+				o[this.name]=[o[this.name]];
+			}
+			o[this.name].push(this.value || '');
+		}else{
+			o[this.name]=this.value || '';
+		}
+	});
+	return JSON.stringify(o);
+}
+//数组 转 json
+function _arrayToJson(o) {
+    var r = [];
+    if (typeof o == "string") return "\"" + o.replace(/([\'\"\\])/g, "\\$1").replace(/(\n)/g, "\\n").replace(/(\r)/g, "\\r").replace(/(\t)/g, "\\t") + "\"";
+    if (typeof o == "object") {
+      if (!o.sort) {
+        for (var i in o)
+          r.push(i + ":" + _arrayToJson(o[i]));
+        if (!!document.all && !/^\n?function\s*toString\(\)\s*\{\n?\s*\[native code\]\n?\s*\}\n?\s*$/.test(o.toString)) {
+          r.push("toString:" + o.toString.toString());
+        }
+        r = "{" + r.join() + "}";
+      } else {
+        for (var i = 0; i < o.length; i++) {
+          r.push(_arrayToJson(o[i]));
+        }
+        r = "[" + r.join() + "]";
+      }
+      return r;
+    }
+    return o.toString();
+  }
+//以GET方式获取数据
+function _get(option){
+	$.ajax({
+		url : option.url,
+		type : 'GET',
+		contentType : 'application/json',
+		data : option.data,
+		dataType : 'json',
+		success : function(value, type){
+			option.success(value, type);
+		}
+	});
+}
+
+//以POST方式获取数据
+function _post(option){
+	$.ajax({
+		url : option.url,
+		type : 'POST',
+		contentType : 'application/json',
+		data : option.data,
+		dataType : 'json',
+		success : function(value, type){
+			option.success(value, type);
+		}
+	});
+}

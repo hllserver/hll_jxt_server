@@ -1,0 +1,24 @@
+<meta charset="UTF-8">
+<!-- 驾校场地的增删改查 
+     @author heyi
+     2016/4/2
+-->
+<script type="text/javascript" src="driverSchool/driverSchoolPlace.js"></script>
+<div>
+<form id='formId' style="text-align:center">
+场地名:<input type="text" id="placeName" name="placeName"/><br><br>
+<span style="display:block;text-align:center">
+	&nbsp;&nbsp;&nbsp;<input  class="_but" type="button" value="搜索场地"  onclick="search()" />
+	&nbsp;<input   class="_but" type="reset" value="重置"  >
+	</span>
+</form>
+</div>
+<hr>
+<br>
+<div>
+<button class='_but' onclick="insertSchoolPlace()">新增</button>&nbsp; 
+<button class='_but' onclick="markAsDelete()">删除</button>&nbsp;
+<button class='_but' onclick="removeMarkAsDelete()">取消删除</button>
+<button class='_but' onclick="saveSchoolPlace()">保存</button>
+<div id="schoolPlaceGrid"></div>
+</div>

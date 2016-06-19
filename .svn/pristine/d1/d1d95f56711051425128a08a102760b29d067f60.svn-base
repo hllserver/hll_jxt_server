@@ -1,0 +1,14 @@
+<meta charset="UTF-8">
+<script type="text/javascript" src="driverSchool/driverSchoolAd.js"></script>
+<div>
+	<form action="driverSchoolMsg/updloadAd.action" method="post" enctype="multipart/form-data">
+		标题：<input type="text" name="title"><br/>
+		内容：<input type="text" name="content"><br/>
+		图片1：<input type="file" name="pic1"><br/>
+		图片2：<input type="file" name="pic2"><br/>
+		图片3：<input type="file" name="pic3"><br/>
+		图片4：<input type="file" name="pic4"><br/>
+		图片5：<input type="file" name="pic5"><br/>
+		<input type="submit" value="提交">
+	</form>
+</div>

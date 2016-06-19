@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">      
+<mapper namespace="ssm.orm.privilege.PrivilegeDao">
+	<!-- 
+	 * 获取 权限信息
+	 * liaoyun 2016-3-6
+	 -->
+	<select id="getPrivilegeList" resultType="ssm.entity.privilege.PrivilegeO">
+		select 
+			t.id,
+			t.code as priCode,
+			t.desc as priDesc,
+			t.type as priType,
+			t.url  as PriUrl
+		from 
+			privilege_t t
+		where 1=1
+		<if test='priCode !=null and priCode != ""'>
+			and t.code like CONCAT('%',#{priCode},'%')
+		</if>
+		<if test='priDesc != null and priDesc != ""'>
+			and t.desc like CONCAT('%',#{priDesc},'%') 
+		</if>
+	</select>
+</mapper>

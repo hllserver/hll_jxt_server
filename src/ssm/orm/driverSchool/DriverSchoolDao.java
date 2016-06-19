@@ -1,0 +1,199 @@
+package ssm.orm.driverSchool;
+
+import java.util.List;
+
+import ssm.entity.driverSchool.SchoolAdO;
+import ssm.entity.driverSchool.SchoolInstructorO;
+import ssm.entity.driverSchool.SchoolO;
+import ssm.entity.driverSchool.SchoolPicO;
+
+public interface DriverSchoolDao {
+
+	/**
+	 * 获取驾校数
+	 * @author heyi
+	 * 2016/4/4
+	 * @param updatedList
+	 */
+	public int getDriverSchoolListTotal(SchoolO schoolO);
+
+	/**
+	 * 获取驾校数据列表
+	 * @author heyi
+	 * 2016/4/4
+	 * @param updatedList
+	 */
+	public List<SchoolO> getDriverSchoolList(SchoolO schoolO, int start, int pageSize);
+
+	/**
+	 * 添加时查重驾校数据
+	 * @author heyi
+	 * 2016/4/4
+	 * @param updatedList
+	 */
+	public List<String> findRepeatedByAccount(List<String> accountList);
+
+	/**
+	 * 批量添加驾校数据
+	 * @author heyi
+	 * 2016/4/4
+	 * @param updatedList
+	 */
+	public void batchInsert(List<SchoolO> insertedList);
+
+	/**
+	 * 批量删除驾校数据
+	 * @author heyi
+	 * 2016/4/4
+	 * @param updatedList
+	 */
+	public void batchDelete(List<SchoolO> deletedList);
+	
+	/**
+	 * 获取自己驾校信息 liaoyun 2016-3-27
+	 * @param account
+	 * @return
+	 */
+	public List<SchoolO> findDriverSchoolMsg(String account);
+
+	/**
+	 * 保存修改的驾校信息数据 liaoyun 2016-3-27
+	 * @param school
+	 * @param account
+	 */
+	public void saveSchoolMsg(SchoolO school, String account);
+
+	/**
+	 * 查询 驾校 所属的 教练 总人数
+	 *  liaoyun 2016-3-27
+	 * @param schoolInstructorO
+	 * @param account
+	 * @return
+	 */
+	public int getDriverInstructorListTotal(SchoolInstructorO schoolInstructorO, String account);
+
+	/**
+	 * 分页 查询 驾校 所属的 教练 
+	 * liaoyun 2016-3-27
+	 * @param schoolInstructorO
+	 * @param start
+	 * @param pageSize
+	 * @param account
+	 * @return
+	 */
+	public List<SchoolInstructorO> getDriverInstructorList(SchoolInstructorO schoolInstructorO, int start, int pageSize,
+			String account);
+
+	/**
+	 * 新增  驾校的教练 liaoyun 2016-3-27
+	 * @param insertedRecords
+	 * @return 
+	 */
+	public void insertSchoolInstructor(List<SchoolInstructorO> insertedRecords,String account);
+
+	/**
+	 * 修改  驾校的教练 liaoyun 2016-3-27
+	 * @param uptatedRecords
+	 */
+	public void updateSchoolInstructor(List<SchoolInstructorO> uptatedRecords,String account);
+
+	/**
+	 * 剔除  驾校的教练 liaoyun 2016-3-27
+	 * @param deletedRecords
+	 */
+	public void deleteSchoolInstructor(List<SchoolInstructorO> deletedRecords,String account);
+
+	/**
+	 * 广告数据存入数据库 
+	 * liaoyun 2016-4-2
+	 * @param schoolAd
+	 * @param account
+	 */
+	public void saveAdInfo(SchoolAdO schoolAd, String schoolAcount);
+	
+	
+
+	/**
+	 * 批量修改驾校数据
+	 * @author heyi
+	 * 2016/4/4
+	 * @param updatedList
+	 */
+	public void batchUpdate(List<SchoolO> updatedList);
+	
+
+	/**
+	 * 修改时候查重
+	 * @author heyi
+	 * 2016/4/4
+	 * @param accountList
+	 * @return
+	 */
+	public List<String> findUpdateRepeatedByAccount(List<SchoolO> updatedList);
+	
+
+	/**
+	 * 保存修改的广告
+	 * @author heyi
+	 * 2016/4/10
+	 * @param schoolAd
+	 * @param name
+	 */
+	public void saveUpdateAdInfo(SchoolAdO schoolAd, String schoolAcount);
+
+	/**
+	 * 获取广告列表
+	 * heyi 2016-4-10
+	 * @param schoolAd
+	 * @param account
+	 */
+	public List getAdSchoolName();
+
+	/**
+	 * 删除广告
+	 * @author heyi
+	 * 2016/4/11
+	 * @param ad
+	 * @return
+	 */
+	public int deleteAd(int id,String schoolAccount1);
+
+	/**
+	 * 根据id和驾校账号查找广告
+	 * @author heyi
+	 * 2016/4/16
+	 */
+	public SchoolAdO getAdByIdAndAccount(int id, String schoolAccount1);
+
+	public void insertSchoolMsg(SchoolO school, String account);
+
+	public void saveSchoolPic(SchoolPicO picO);
+
+	public SchoolO getRecommendSchoolInfo(String schoolAccount);
+
+	public List<SchoolPicO> findHonorPic(String schoolAccount, String type);
+
+	public int isHasDriverSchool(String account);
+
+	/**
+	 * 通过工号查重
+	 * @author heyi
+	 * 2016/4/21
+	 * @param jobNumberList
+	 * @param account
+	 * @return
+	 */
+	public List<String> findRepeatedByJobNumber(List<String> jobNumberList, String account);
+
+	/**
+	 * 修改时通过工号查重
+	 * @author heyi
+	 * 2016/4/21
+	 * @param schoolInstructorO
+	 * @param account
+	 * @return
+	 */
+	public List<SchoolInstructorO> findUpdatedRepeatedByJobNumber(List<SchoolInstructorO> schoolInstructorO, String account);
+
+
+}

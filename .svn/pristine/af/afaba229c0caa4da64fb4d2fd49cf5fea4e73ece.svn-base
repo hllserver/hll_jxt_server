@@ -1,0 +1,40 @@
+package ssm.service.privilege;
+
+import java.util.List;
+import java.util.Map;
+
+import ssm.entity.common.ResultO;
+import ssm.entity.privilege.PrivilegeO;
+
+public interface PrivilegeService {
+
+	/**
+	 * ��ȡ Ȩ����Ϣ
+	 * liaoyun 2016-3-6
+	 */
+	public ResultO<PrivilegeO> getPrivilegeList(PrivilegeO privilegeO,int currentPage,int pageSize);
+
+	/**
+	 * 批量 插入 数据
+	 * @param insertedList
+	 * liaoyun
+	 * 2016-3-16
+	 */
+	public Map<String,String> batchInsert(List<PrivilegeO> insertedList);
+	/**
+	 * 批量 修改  数据
+	 * @param updatedList
+	 * liaoyun
+	 * 2016-3-20
+	 */
+	public Map<String,String> batchUpdate(List<PrivilegeO> updatedList);
+
+	/**
+	 * 批量 删除  数据
+	 * @param updatedList
+	 * liaoyun
+	 * 2016-3-20
+	 */
+	public void bachDelete(List<PrivilegeO> deletedList);
+	
+}

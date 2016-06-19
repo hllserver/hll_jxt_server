@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="gbk">
+<title>main</title>
+<script src='commonJs/jquery-1.11.3.min.js'></script>
+<script src='front/welcome.js' type="text/javascript" charset="utf-8"></script>
+<style>
+.bu{
+	background-color:#F2F2F2;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 0 1px 1px #f6f6f6;
+    box-shadow: inset 0 0 1px 1px #f6f6f6;
+    color: #333;
+    font: bold 12px/1 "helvetica neue", helvetica, arial, sans-serif;
+    padding: 8px 0 9px;
+    text-align: center;
+    text-shadow: 0 1px 0 #fff;
+    width: 150px;
+}
+a{
+	text-decoration:none;
+}
+</style>
+</head>
+<body>
+	<div id="div1" style="width:1330px;background-color:#F2F2F2;margin:0 auto;">
+		<table width="100%">
+			<tr>
+				<td width='100px' align="right">
+					<div width="80px"><img alt="logo" src="pic/LOGO.jpg" width="70px" height="70px"/></div>
+				</td>
+				<td>
+					<div width="100px"><font color='blue' size='5'><div>驾校通学车</div> <div>www.hll.com</div></font></div>
+				</td>
+				<td>
+					<button class="bu"><a href='#front/first.html' class='go'>首页</a></button>
+					<button class="bu"><a href='#front/flogin.html' class='go'>学员信息管理系统</a></button>
+
+					<button class="bu"><a href='#front/schoolAd.html' class='go'>名校名教推荐</a></button>
+
+					<button class="bu"><a href='#front/schoolRecommendation.html' class='go'>名校名教推荐</a></button>
+					<button class="bu">模拟考试题库</button>
+					<button class="bu"><a href='#front/erweima.html' class='go'>APP下载</a></button>
+					<button class="bu"><a href='#front/faq.html' class='go'>常见问题</a></button>
+				</td>
+				<td id='ufo' style="text-align: center;">
+					未登陆
+				</td>
+			</tr/>
+		</table>		
+	</div>
+	<div id="div2" style="width:1330px;margin:0 auto;">	</div>
+</body>
+</html>

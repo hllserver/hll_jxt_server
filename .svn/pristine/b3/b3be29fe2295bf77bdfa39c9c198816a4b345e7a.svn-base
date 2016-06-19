@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">      
+<mapper namespace="ssm.orm.user.UserDao">
+	<!-- 
+	 * 根据 用户名 和 密码 查询用户信息
+	 * @author liaoyun
+	 * 2016-3-18
+	 -->
+	<select id="findUser" resultType="ssm.entity.user.UserO">
+		select
+			t.account      as account,
+			t.tel          as tel,
+			t.email        as email,
+			t.qq           as qq,
+			t.weChat       as weChat,
+			t.leader       as leader,
+			t.type         as type,
+			t.nickName     as nickName,
+			t.creationDate as createdDate
+		from
+			user_t t
+		where
+			t.account=#{0} and t.password=#{1}
+	</select>
+</mapper>

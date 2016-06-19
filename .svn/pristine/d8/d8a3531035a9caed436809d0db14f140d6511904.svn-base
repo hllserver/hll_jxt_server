@@ -1,0 +1,29 @@
+package ssm.util;
+
+import ssm.entity.common.PageO;
+
+public class PageUtil {
+	public static PageO getPage(int currentPage,int pageSize,int totalNum){
+		PageO o = new PageO();
+		int totalPage = 0;
+		if(totalNum%pageSize==0){
+			totalPage = totalNum/pageSize;
+		}else{
+			totalPage = totalNum/pageSize+1;
+		}
+		if(currentPage<1){
+			currentPage=1;
+		}
+		if(currentPage>totalPage){
+			currentPage=totalPage;
+		}
+		if(pageSize<0 || pageSize>100){
+			pageSize=7;
+		}
+		o.setCurrentPage(currentPage);
+		o.setPageSize(pageSize);
+		o.setTotalPage(totalPage);
+		o.setTotalRecords(totalNum);
+		return o;
+	}
+}

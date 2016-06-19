@@ -1,0 +1,91 @@
+package ssm.serviceImpl.driverSchoolServiceImpl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ssm.entity.common.PageO;
+import ssm.entity.common.ResultO;
+import ssm.entity.driverSchool.SchoolO;
+import ssm.orm.driverSchool.DriverSchoolDao;
+import ssm.service.driverSchoolService.DriverSchoolService;
+import ssm.util.PageUtil;
+@Service
+public class DriverSchoolServiceImpl implements DriverSchoolService {
+
+	@Autowired
+	private DriverSchoolDao driverSchoolDao;
+	
+	/**
+	 * 查询驾校信息
+	 * heyi 
+	 * 2016/3/22
+	 */
+	@Override
+	public ResultO<SchoolO> getDriverSchoolList(SchoolO schoolO,int currentPage,int pageSize){
+		int totalNum=driverSchoolDao.getDriverSchoolListTotal(schoolO);
+		PageO pageO= PageUtil.getPage(currentPage, pageSize, totalNum);
+		int start = (pageO.getCurrentPage()-1)*pageO.getPageSize();
+		System.out.println("------"+start+"----");
+		List<SchoolO> list =driverSchoolDao.getDriverSchoolList(schoolO,start,pageSize);
+		ResultO<SchoolO> result = new ResultO<>();
+		result.setResultList(list);
+		result.setPage(pageO);
+		return result;
+		
+	}
+	
+	
+
+	/**
+	 * 批量插入数据
+	 * heyi
+	 * 2016/3/22
+	 */
+	@Override
+	public Map<String, String> batchInsert(List<SchoolO> insertedList) {
+		Map<String,String> map =new HashMap<>();
+		//判断重复
+		List<String> accountList= new ArrayList<>();
+		for(SchoolO o:insertedList){
+			accountList.add(o.getAccount());
+		}
+		List<String> repeatedAccountList=driverSchoolDao.findRepeatedByAccount(accountList);
+		driverSchoolDao.batchInsert(insertedList);
+		return map;
+	}
+
+	
+	/**
+	 * 批量修改数据
+	 * heyi
+	 * 2016/3/22
+	 */
+	@Override
+	public Map<String, String> batchUpdate(List<SchoolO> updatedList) {
+       Map<String,String> map=new HashMap<>();
+       List<String> accountList= new ArrayList<>();
+		for(SchoolO o:updatedList){
+			accountList.add(o.getAccount());
+		}
+		List<String> repeatedAccountList=driverSchoolDao.findRepeatedByAccount(accountList);
+		driverSchoolDao.batchInsert(updatedList);
+		return map;
+	}
+
+	/**
+	 * 批量删除数据
+	 * heyi
+	 * 2016/3/22
+	 */
+	@Override
+	public void batchDelete(List<SchoolO> deletedList) {
+
+	driverSchoolDao.batchDelete(deletedList);
+	}
+
+}

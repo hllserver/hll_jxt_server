@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.orm.driverSchool.DriverSchoolDao">
+	<!-- 获取驾校信息 @author heyi 2016/3/13 -->
+	<select id="getDriverSchoolList" resultType="ssm.entity.driverSchool.SchoolO">
+		select
+		t.id,
+		t.account as account,
+		t.school_name as schoolName,
+		t.position as address,
+		t.tel as tel,
+		t.email as email,
+		t.buget as policy,
+		t.registered_time as registeredTime,
+		t.scale as scale,
+		t.remark as
+		remark,
+		t.school_info as info
+		from
+		driver_school_t t
+		where 1=1
+		<if test='param1.account !=null and param1.account !=""'>
+			and t.account=#{param1.account}
+		</if>
+		<if test='param1.scale !=null and param1.scale !=""'>
+			and t.scale =#{param1.scale}
+		</if>
+		<if test='param1.schoolName !=null and param1.schoolName !=""'>
+			and t.school_name like CONCAT('%',#{param1.schoolName},'%')
+		</if>
+		<if test='param1.address !=null and param1.address !=""'>
+			and t.position like CONCAT('%','#{param1.address}','%')
+		</if>
+		<if test='param1.remark !=null and param1.remark !=""'>
+			and t.remark =#{param1.remark}
+		</if>
+		order by t.lastUpdatedDate desc
+		limit #{param2},#{param3}
+	</select>
+
+	<!-- 查询总条数 heyi 2016/3/22 -->
+	<select id="getDriverSchoolListTotal" resultType="int">
+		select
+		count(*)
+		from
+		driver_school_t t
+		where 1=1
+		<if test='account!=null and account!=""'>
+			and t.account =#{account}
+		</if>
+		<if test='schoolName!=null and schoolName!=""'>
+			and t.school_name like CONCAT('%',#{schoolName},'%')
+		</if>
+		<if test='address!=null and address!=""'>
+			and t.position like CONCAT('%',#{address},'%')
+		</if>
+		<if test='scale!=null and scale!=""'>
+			and t.scale=#{scale}
+		</if>
+		<if test='remark!=null and remark!=""'>
+			and t.remark =#{remark}
+		</if>
+	</select>
+
+
+	<!-- *保存新增数据 -->
+	<insert id="batchInsert" >
+		<foreach collection="list" item='item'>
+			insert into driver_school_t(
+			account,
+			school_name,
+			position,
+			tel,
+			email,
+			registered_time,
+			scale,
+			school_info,
+			buget,
+			remark,
+			createdBy,
+			createdDate,
+			lastUpdatedBy,
+			lastUpdatedDate
+			)values(
+			#{item.account},
+			#{item.schoolName},
+			#{item.address},
+			#{item.tel},
+			#{item.email},
+			#{item.registeredTime},
+			#{item.scale},
+			#{item.intruduce},
+			#{item.policy},
+			#{item.remark},
+			#{item.createdBy},
+			now(),
+			#{item.lastUpdatedBy},
+			now()
+			);
+		</foreach>
+	</insert>
+
+	<!-- *批量修改数据 *@auther heyi *2016/3/22 -->
+	<update id="batchUpdate">
+		<foreach collection="list" item='item'>
+			update driver_school_t set
+			school_name=#{item.schoolName},
+			position=#{item.address},
+			tel=#{item.tel},
+			buget=#{item.policy},
+			email=#{item.email},
+			scale=#{item.scale},
+			remark=#{item.remark},
+			school_info=#{item.intruduce},
+			lastUpdatedDate=now()
+			where
+			account=#{item.account} and id=#{item.id};
+		</foreach>
+	</update>
+
+	<!-- *根据账号account查询重复的account *heyi *2016/3/22 -->
+	<select id="findRepeatedByAccount" resultType="String">
+		select
+		account
+		from
+		driver_school_t
+		where
+		account in
+		<foreach collection="list" item='item' open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- 修改驾校数据时查重 @author heyi 2016/4/4 -->
+	<select id="findUpdateRepeatedByAccount" resultType="String">
+		<foreach collection="list" item="item">
+			select
+			account
+			from
+			driver_school_t
+			where
+			account=#{item.account} and id !=#{item.id};
+		</foreach>
+	</select>
+
+	<!-- *批量删除数据 *heyi *2016/3/22 -->
+	<delete id="batchDelete">
+		<foreach collection="list" item='item'>
+			delete from driver_school_t
+			where account=#{item.account};
+		</foreach>
+	</delete>
+
+	<select id="findDriverSchoolMsg" resultType="ssm.entity.driverSchool.SchoolO">
+		select
+		t.school_name as schoolName,
+		t.position as position,
+		t.tel as tel,
+		t.email as email,
+		t.registered_time as registeredTime,
+		t.scale as scale,
+		t.remark as remark,
+		t.wechat      as wechat,
+		t.qq          as qq,
+		t.scale       as empno,
+		t.area        as scale, 
+		t.car_no      as carno,
+		t.a1_price    as a1,
+		t.a2_price    as a2,
+		t.a3_price    as a3,
+		t.b1_price    as b1,
+		t.b2_price    as b2,
+		t.c1_price    as c1,
+		t.c2_price    as c2,
+		t.c3_price    as c3,
+		t.c4_price    as c4,
+		t.d_price     as d,
+		t.e_price     as e,
+		t.f_price     as f,
+		t.m_price     as m,
+		t.n_price     as n,
+		t.p_price     as p,
+		t.buget       as policy,
+		t.school_info as intruduce
+		from
+		driver_school_t t
+		where
+		t.account = #{0}
+	</select>
+	<!-- * 保存修改的驾校信息数据 liaoyun 2016-3-27 * @param school * @param account -->
+	<update id="saveSchoolMsg">
+		update 
+			driver_school_t 
+		set
+			school_name=#{0.schoolName},   
+			tel = #{0.tel},
+			email= #{0.email},
+			wechat=#{0.wechat},
+			remark=#{0.remark},
+			qq= #{0.qq},
+			scale= #{0.empno},
+			area= #{0.scale}, 
+			car_no= #{0.carno},
+			position= #{0.position},
+			a1_price= #{0.a1},
+			a2_price= #{0.a2},
+			a3_price= #{0.a3},
+			b1_price= #{0.b1},
+			b2_price= #{0.b2},
+			c1_price= #{0.c1},
+			c2_price= #{0.c2},
+			c3_price= #{0.c3},
+			c4_price= #{0.c4},
+			d_price= #{0.d},
+			e_price= #{0.e},
+			f_price= #{0.f},
+			m_price= #{0.m},
+			n_price= #{0.n},
+			p_price= #{0.p},
+			buget= #{0.policy},
+			school_info= #{0.intruduce},
+			lastUpdatedBy= #{0.lastUpdatedBy},
+			lastUpdatedDate= now()
+		where
+			account = #{1}
+	</update>
+	<!-- * 查询 驾校 所属的 教练 总人数 * liaoyun 2016-3-27 * @param schoolInstructorO * 
+		@param account -->
+	<select id="getDriverInstructorListTotal" resultType="int">
+		select
+		count(id)
+		from
+		school_instructor_t
+		where 1=1
+		<if test="param1.name != null and param1.name!=''">
+			and name = #{param1.name}
+		</if>
+		<if test="param1.jobNumber != null and param1.jobNumber != ''">
+			and job_number = #{param1.jobNumber}
+		</if>
+		and school_account = #{param2}
+	</select>
+	<!-- * 分页 查询 驾校 所属的 教练 * liaoyun 2016-3-27 * @param schoolInstructorO * 
+		@param start * @param pageSize * @param account -->
+	<select id="getDriverInstructorList" resultType="ssm.entity.driverSchool.SchoolInstructorO">
+		select
+		t.id as id,
+		t.school_account as schoolAccount,
+		t.job_number as
+		jobNumber,
+		t.name as name,
+		t.age as age,
+		t.tel as tel,
+		t.gender as gender,
+		t.email as email,
+		t.online as online,
+		t.remark as remark
+		from
+		school_instructor_t t
+		where 1=1
+		<if test="param1.name != null and param1.name!=''">
+			and t.name = #{param1.name}
+		</if>
+		<if test="param1.jobNumber != null and param1.jobNumber != ''">
+			and t.job_number = #{param1.jobNumber}
+		</if>
+		and school_account = #{param4}
+		order by t.lastUpdatedDate desc limit
+		#{param2},#{param3}
+	</select>
+	<!-- * 新增 驾校的教练 liaoyun 2016-3-27 * @param insertedRecords * account(school_account) -->
+	<insert id="insertSchoolInstructor">
+		<foreach collection="param1" item="item">
+			insert into
+			school_instructor_t(
+			school_account,
+			job_number,
+			name,
+			age,
+			tel,
+			gender,
+			email,
+			remark,
+			createdBy,
+			createdDate,
+			lastUpdatedBy,
+			lastUpdatedDate
+			)
+			values (
+			#{param2},
+			#{item.jobNumber},
+			#{item.name},
+			#{item.age},
+			#{item.tel},
+			#{item.gender},
+			#{item.email},
+			#{item.remark},
+			#{item.createdBy},
+			now(),
+			#{item.lastUpdatedBy},
+			now()
+			)
+		</foreach>
+	</insert>
+	<!-- 通过教练工号查重，heyi ，2016/4/21 -->
+	<select id="findRepeatedByJobNumber" resultType="String">
+	 select
+	 job_number
+	 from
+	 school_instructor_t
+	 where 
+	 school_account=#{param2}
+	 <if test='param1!=null and param1.size>0'>
+	 and  job_number
+	 in
+	 <foreach collection="param1" item='item' open="(" separator=","
+			close=")">
+	 #{item}
+	 </foreach>
+	 </if>
+	</select>
+	
+	<!-- 修改时通过教练工号查重，heyi ，2016/4/21 -->
+	<select id="findUpdatedRepeatedByJobNumber" resultType="String">
+	<foreach collection="param1" item="item"></foreach>
+	 select
+	 job_number
+	 from
+	 school_instructor_t
+	 where 
+	 school_account=#{param2}
+	 and  job_number=
+	 #{item}
+	</select>
+	<!-- * 修改 驾校的教练 liaoyun 2016-3-27 * @param updatedRecords * account(school_account) -->
+	<update id="updateSchoolInstructor">
+		<foreach collection="param1" item="item">
+			update
+			school_instructor_t
+			set
+			job_number = #{item.jobNumber},
+			name = #{item.name},
+			age =
+			#{item.age},
+			tel = #{item.tel},
+			gender = #{item.gender},
+			email =
+			#{item.email},
+			remark = #{item.remark},
+			lastUpdatedBy =
+			#{item.lastUpdatedBy},
+			lastUpdatedDate = now()
+			where
+			id=#{item.id} and
+			school_account=#{param2};
+		</foreach>
+	</update>
+	<!-- * 剔除 驾校的教练 liaoyun 2016-3-27 * @param deletedRecords * account(school_account) -->
+	<delete id="deleteSchoolInstructor">
+		update
+		school_instructor_t
+		set
+		school_account = ''
+		where
+		id in
+		<foreach collection="param1" item="item" open="(" separator=","
+			close=")">
+			#{item.id}
+		</foreach>
+		and school_account=#{param2};
+	</delete>
+
+
+
+	<!-- * 广告数据存入数据库 * liaoyun 2016-4-2 * @param schoolAd * @param account -->
+	<insert id="saveAdInfo">
+		insert into school_ad_t(
+		school_account,
+		title,
+		content,
+		pic1,
+		createdBy,
+		createdDate,
+		lastUpdatedBy,
+		lastUpdatedDate
+		)values(
+		#{1},
+		#{0.title},
+		#{0.content},
+		#{0.pic1},
+		#{0.createdBy},
+		now(),
+		#{0.lastUpdatedBy},
+		now()
+		)
+	</insert>
+
+	<!-- 保存修改的广告信息 heyi 2016-4-10 -->
+	<update id="saveUpdateAdInfo">
+		update school_ad_t 
+		set
+		title=#{0.title},
+		content=#{0.content},
+		pic1=#{0.pic1},
+		lastUpdatedBy=#{0.lastUpdatedBy},
+		lastUpdatedDate=now()
+		where
+		school_account=#{1}
+	</update>
+
+	<!-- 获取广告信息列表 heyi 2016-4-10 -->
+	<select id="getAdSchoolName" resultType="ssm.entity.driverSchool.SchoolAdO">
+		select
+		t.id as id,
+		t.title as title,
+		t.content as content,
+		t.pic1 as pic1,
+		t.school_account as schoolAccount,
+		t.lastUpdatedBy as lastUpdatedBy,
+		t.lastUpdatedDate as lastUpdatedDate,
+		t.createdBy as createdBy,
+		t.createdDate as createdDate
+		from
+		school_ad_t t
+	</select>
+	
+	<!--  
+	 * 根据id和驾校账号查找广告
+	 * @author heyi
+	 * 2016/4/16
+	 -->
+	<select id="getAdByIdAndAccount" resultType="ssm.entity.driverSchool.SchoolAdO">
+	select
+		t.title as title,
+		t.content as content,
+		t.pic1 as pic1,
+		t.lastUpdatedBy as lastUpdatedBy,
+		t.lastUpdatedDate as lastUpdatedDate,
+		t.createdBy as createdBy,
+		t.createdDate as createdDate
+		from
+		school_ad_t t
+		where
+		t.id=#{0} and t.school_account=#{1};
+	</select>
+	
+	<!-- 删除广告 heyi 2016-4-11 -->
+	<delete id="deleteAd">
+	delete
+	from
+	school_ad_t 
+	where
+	id=#{0} and school_account=#{1};
+	</delete>
+	<!-- 
+	 * 该账号是否有驾校
+	 * liaoyun 2016-4-11
+	 * @param account
+	 -->
+	<select id='isHasDriverSchool' resultType="int">
+		select
+			count(id) 
+		from
+			driver_school_t
+		where
+			account = #{0}
+	</select>
+	<!-- 
+	 * 添加 驾校信息
+	 * liaoyun 2016-4-11
+	 * @param school
+	 * @param account
+	 -->
+	<insert id="insertSchoolMsg">
+		insert into driver_school_t(
+			account,
+			school_name,
+			tel,
+			email,
+			wechat,
+			qq,
+			scale,
+			area,
+			car_no,
+			position,
+			a1_price,
+			a2_price,
+			a3_price,
+			b1_price,
+			b2_price,
+			c1_price,
+			c2_price,
+			c3_price,
+			c4_price,
+			d_price,
+			e_price,
+			f_price,
+			m_price,
+			n_price,
+			p_price,
+			buget,
+			school_info,
+			createdBy,
+			createdDate,
+			lastUpdatedBy,
+			lastUpdatedDate
+		)values(
+			#{1},
+			#{0.schoolName},
+			#{0.tel},
+			#{0.email},
+			#{0.wechat},
+			#{0.qq},
+			#{0.empno},
+			#{0.scale},
+			#{0.carno},
+			#{0.address},
+			#{0.a1},
+			#{0.a2},
+			#{0.a3},
+			#{0.b1},
+			#{0.b2},
+			#{0.c1},
+			#{0.c2},
+			#{0.c3},
+			#{0.c4},
+			#{0.d},
+			#{0.e},
+			#{0.f},
+			#{0.m},
+			#{0.n},
+			#{0.p},
+			#{0.policy},
+			#{0.intruduce},
+			#{0.createdBy},
+			now(),
+			#{0.lastUpdatedBy},
+			now()
+		)
+	</insert>
+	
+	<!-- 
+	 * 保存驾校相关照片
+	 * liaoyun 2016-4-12
+	 * @param picO
+	 * @param account
+	 -->
+	<insert id="saveSchoolPic">
+		insert into school_pic_t (
+			school_account,
+			pic_type,
+			pic,
+			pic_content,
+			extra1,
+			createdBy,
+			creationDate,
+			lastUpdatedBy,
+			lastUpdatedDate
+		)values(
+			#{schoolAccount},
+			#{picType},
+			#{pic},
+			#{picContent},
+			#{extra1},
+			#{createdBy},
+			now(),
+			#{lastUpdatedBy},
+			now()
+		)
+	</insert>
+	<!-- 
+	* 根据 school account 获取 驾校详细信息
+	* liaoyun 2016-4-16
+	 -->
+	<select id='getRecommendSchoolInfo' resultType="ssm.entity.driverSchool.SchoolO">
+			select
+			t.school_name as schoolName,   
+			t.tel         as tel,
+			t.email       as email,
+			t.wechat      as wechat,
+			t.qq          as qq,
+			t.scale       as empno,
+			t.area        as scale, 
+			t.car_no      as carno,
+			t.position    as address,
+			t.a1_price    as a1,
+			t.a2_price    as a2,
+			t.a3_price    as a3,
+			t.b1_price    as b1,
+			t.b2_price    as b2,
+			t.c1_price    as c1,
+			t.c2_price    as c2,
+			t.c3_price    as c3,
+			t.c4_price    as c4,
+			t.d_price     as d,
+			t.e_price     as e,
+			t.f_price     as f,
+			t.m_price     as m,
+			t.n_price     as n,
+			t.p_price     as p,
+			t.buget       as policy,
+			t.school_info as intruduce
+		from
+			driver_school_t t
+		where
+			t.account = #{0}
+	</select>
+	<!-- 
+	 * 根据 学校账号 查询 驾校照片
+	 * liaoyun 2016-4-16
+	 * @param schoolAccount
+	 * @param type
+	 -->
+	<select id="findHonorPic" resultType="ssm.entity.driverSchool.SchoolPicO">
+		select 
+			t.pic         as pic,
+			t.pic_content as picContent,
+			t.extra1      as extra1
+		from
+			school_pic_t t
+		where
+			t.school_account = #{0} and t.pic_type=#{1}
+		order by t.lastUpdatedDate desc
+		limit 0,5
+	</select>
+</mapper>
+
+
+
+
+
+

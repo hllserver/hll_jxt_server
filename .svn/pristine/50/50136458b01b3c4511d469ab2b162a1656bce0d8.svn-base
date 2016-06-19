@@ -1,0 +1,106 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script src='../commonJs/jquery-1.11.3.min.js'></script>
+<script type="text/javascript" src="../front/adDetail.js"></script>
+<style>
+.cont {
+	border-style: solid;
+	width: '100%';
+	heigth: '100%';
+}
+</style>
+</head>
+<body>
+	<input type='text' id='account' value='${account}' />
+	<div id="div1"
+		style="width: 1330px; background-color: #F2F2F2; margin: 0 auto;">
+		<table width="100%">
+			<tr>
+				<td width='100px' align="right">
+					<div width="80px">
+						<img alt="logo" src="../pic/LOGO.jpg" width="70px" height="70px" />
+					</div>
+				</td>
+				<td>
+					<div width="100px">
+						<font color='blue' size='5'><div>驾校通学车</div>
+							<div>www.hll.com</div></font>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="div2" style="width:1330px;margin:0 auto;">	
+	<table width="100%">
+		<tr>
+			<td rowspan='6' width="450px" align="center"><img id='pich' src=""
+				width="400px" height="300px" /></td>
+			<td colspan='2' align='center'><font size='20px'><b
+					id='scname'></b></font></td>
+		</tr>
+		<tr>
+			<td width="130px">电话：</td>
+			<td id='tel'></td>
+		</tr>
+		<tr>
+			<td>QQ:</td>
+			<td id='qq'></td>
+		</tr>
+		<tr>
+			<td>微信：</td>
+			<td id="wechat"></td>
+		</tr>
+		<tr>
+			<td>地址</td>
+			<td id='address'></td>
+		</tr>
+		<tr>
+			<td></td>
+		</tr>
+		<tr>
+			<td id='picht'></td>
+		</tr>
+	</table>
+	<table width='100%'>
+		<tr>
+			<td><font color='blue'>优惠政策</font></td>
+		</tr>
+		<tr>
+			<td>
+				<div class='cont' id='policy'></div>
+			</td>
+		</tr>
+		<tr>
+			<td><font color='blue'>驾校简介</font></td>
+		</tr>
+		<tr>
+			<td>
+				<div class='cont' id='intruduce'></div>
+			</td>
+		</tr>
+		<tr>
+			<td><font color='blue'>学车类型及价格</font></td>
+		</tr>
+		<tr>
+			<td>
+				<div class='cont'>
+					<div>
+			</td>
+		</tr>
+		<tr>
+			<td><font color='blue'>驾校荣誉</font></td>
+		</tr>
+		<tr>
+			<td>
+				<div class='cont' id='honorp'></div>
+			</td>
+		</tr>
+	</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+package ssm.util;
+/**
+ * 二维码相关
+ * @author liaoyun
+ *2016-4-4
+ */
+public class Erweima {
+
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">      
+<mapper namespace="ssm.orm.driverSchool.DriverSchoolDao">
+<!-- 
+获取权限信息
+@author heyi
+2016/3/13
+ -->
+<select id="getDriverSchoolList"  resultType="ssm.entity.driverSchool.SchoolO">
+	select
+    t.id,
+    t.account as account,
+    t.school_name  as schoolName,
+    t.position as possion,
+    t.tel as tel,
+    t.email as email,
+    t.price as price,
+    t.registered_time as registeredTime,
+    t.scale as scale,
+    t.remark as remark,
+    t.school_info as info
+	from
+    driver_school_t t
+    where 1=1
+    <if test='account !=null and account !=""'>
+    and t.account=#{account}
+    </if>
+    <if test='price !=null and price !=""'>
+    and t.price like CONCAT('%','#{price}','%')
+    </if>
+    <if test='scale !=null and scale !=""'>
+    and t.scale like CONCAT('%','#{scale}','%')
+    </if>
+    <if test='schoolName !=null and schoolName !=""'>
+    and t.school_name =#{schoolName}
+    </if>
+    <if test='possion !=null and possion !=""'>
+    and t.possion like CONCAT('%','#{possion}','%')
+    </if>
+    <if test='remark !=null and remark !=""'>
+     and t.remark =#{remark}</if>
+</select>
+</mapper>

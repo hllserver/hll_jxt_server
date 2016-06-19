@@ -1,0 +1,85 @@
+var registMethod="email";
+function getVerifyCode(){
+	var account = $(".inputUser").val();
+	if(account){
+		$.ajax({
+			url : "user/verifyCode/"+account+"/"+registMethod+".action",
+			type : 'POST',
+			contentType : 'application/json',
+			data : "",
+			dataType : 'json',
+			success : function(value, type){
+				alert(value.result);
+			}
+		});
+	}else{
+		_showMessage({
+			title:"操作失败",
+			content:"账号不能为空"
+		});
+		return;
+	}
+}
+function toRegist(){
+	var account = $("#account").val();
+	var psw = $("#psw2").val();
+	var code = $("#code").val();
+	if(isNull(account) || isNull(psw) || isNull(code)){
+		_showMessage({
+			title:"操作失败",
+			content:"请将信息填写完整"
+		});
+		return;
+	}
+	$.ajax({
+		url : "user/registAccount/"+account+"/"+psw+"/"+code+"/"+registMethod+".action",
+		type : 'POST',
+		contentType : 'application/json',
+		data : "",
+		dataType : 'json',
+		success : function(value, type){
+			alert(value.result);
+		}
+	});
+}
+function _showMessage(op){
+	debugger;
+	var ti = new Date();
+	var secend = ti.getTime();
+	var title = op.title;
+	var content = op.content;
+	var width = op.width || 260;
+	var height = op.height || 50;
+	var winHeight = window.outerHeight;
+	var winWidth = window.innerWidth;
+	var div = $("<div></div>");
+	div.attr("id",secend);
+	div.css({"border":"1px solid","left":(winWidth-width)/2+"px","top":(winHeight-height)/3+"px",
+			 "position":"absolute","z-index":"2"
+			 });
+	var div1 = $("<div></div>");//弹出框标题
+	div1.text(title);
+	div1.css({"background-color":"#D3D3D3","font-size":"22px","text-align":"center"});
+	var div2 = $("<div></div>");//弹出框内容
+	div2.text(content);
+	div2.css({"overflow":"hidden","word-wrap":"break-word","word-break":"break-all",
+		"width":width,"height":height,"background-color":"#FFF0F5"});
+	var div3 = $("<div></div>");//弹出框操作
+	div3.css({"background-color":"#D3D3D3","text-align":"center"});
+	div3.html("<button onclick='_closeTipBox("+secend+")'>确定</button>")
+	div.append(div1);
+	div.append(div2);
+	div.append(div3);
+	$("body").append(div);
+}
+//关闭弹出框
+function _closeTipBox(id){
+	$("#"+id).remove();
+}
+function isNull(s){
+	if(s==null || s=="" || s==undefined){
+		return true;
+	}else{
+		return false;
+	}
+}

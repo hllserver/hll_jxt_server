@@ -1,0 +1,52 @@
+<meta charset="UTF-8">
+<script src='front/flogin.js' type="text/javascript" charset="utf-8"></script>
+<style>
+.inputUser{
+	width: 299px;
+	height: 34px;
+	border:none;
+	background-image:url("pic/loginput.png");
+	background-repeat:no-repeat;
+	padding-left: 57px;
+	font-size: 14px;
+	margin:3px;
+	color: #90a2bc;
+	font-weight: 
+}
+.inputpsw{
+	width: 299px;
+	height: 34px;
+	border:none;
+	background-image:url("pic/pswinput.png");
+	background-repeat:no-repeat;
+	padding-left: 57px;
+	font-size: 14px;
+	margin:3px;
+	color:#90a2bc;
+}
+</style>
+<div style="background-image:url('pic/flogin.png');background-repeat:round;background-position-x:center; height:450px">
+	<br/><br/>
+	<div style="width:300px;margin:0 auto;">
+		<div style="text-align:center;">
+			<font size="6">
+				学员信息登录系统
+			</font>
+		</div>
+		<form id='logform' action="#" method="post">
+			<input type='text' class="inputUser" name="account" value="请输入手机号码"/><br/>
+			<input type='text' class="inputpsw" name="password" value="请输入密码"/><br/>
+			<input type='submit' value='登陆'>
+		</form>
+		<div><font>你还可以通过其实方式登陆</font></div>
+		<div style="width:300px;margin:0 auto;">
+			<span><img class="loadImage" width='30px' height='30px' alt="qq" src="pic/qqinput.png"></span>
+			<span><img class="loadImage" width='30px' height='30px' alt="blog" src="pic/bloginput.png"></span>
+			<span><img class="loadImage" width='30px' height='30px' alt="weChat" src="pic/weChatinput.jpg"></span>
+			<span><img class="loadImage" width='30px' height='30px' alt="email" src="pic/emailinput.png"></span>
+			<span><img class="loadImage" width='30px' height='30px' alt="email" src="pic/loginput.png"></span>
+		</div>
+		<div><button onclick='regist()'>尚未注册，立即注册</button></div>
+	</div>
+</div>
+<div style="background-color:#DEEBF7; height:60px;"></div>
