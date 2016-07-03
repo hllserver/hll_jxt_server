@@ -29,8 +29,10 @@ public class RecommondAction {
 	 * @throws Exception
 	 */
 	@ResponseBody
-	@RequestMapping(value="/getSchoolList",method=RequestMethod.POST)
+	@RequestMapping(value="/getSchoolList",method=RequestMethod.POST,produces="application/json",
+			consumes="application/json")
 	public List<RecommendSchoolInfoO> getSchoolList(@RequestBody SchoolSelectBy schoolSelect) throws Exception{
+		System.out.println("fgfhgghgjhjh");
 		if(schoolSelect==null){
 			return null;
 		}

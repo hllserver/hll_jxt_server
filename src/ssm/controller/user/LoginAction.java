@@ -49,6 +49,7 @@ public class LoginAction {
 			consumes="application/json")
 	public Map<String,String> login(@PathVariable String username, @PathVariable String password, HttpSession  session,@PathVariable String type){
 		Map<String,String> map = new HashMap<>();
+		System.out.println("username=="+username +"   "+"password=="+password);
 		if(username !=null){
 			username = username.trim();
 		}
@@ -69,6 +70,9 @@ public class LoginAction {
 			session.setAttribute("userInfo", user);
 			map.put("type", ""+user.getType());
 			map.put("url","index.html");
+			map.put("nickName", user.getNickName());
+			map.put("email", user.getEmail());
+			map.put("tel", user.getTel());
 			return map;
 		}else if(user!=null && user.getType()==5){//普通用户
 			session.setAttribute("userInfo", user);

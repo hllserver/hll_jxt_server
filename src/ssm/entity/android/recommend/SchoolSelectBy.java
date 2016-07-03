@@ -11,9 +11,6 @@ public class SchoolSelectBy {
 	private int startPage;     //第几列
 	private int pageSize;      //每页的记录条数
 	public SchoolSelectBy() {
-		super();
-		this.startPage=1;
-		this.pageSize=5;
 	}
 	public String getTranAreaSp() {
 		return tranAreaSp;
