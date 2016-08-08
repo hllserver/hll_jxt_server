@@ -242,8 +242,8 @@ public class DriverSchoolServiceImpl implements DriverSchoolService {
 	 * @param account
 	 */
 	@Override
-	public List<SchoolAdO> getAdSchoolName() {
-		List<SchoolAdO> list =driverSchoolDao.getAdSchoolName();
+	public List<SchoolAdO> getAdSchoolName(String account) {
+		List<SchoolAdO> list =driverSchoolDao.getAdSchoolName(account);
 		return list;
 	}
 

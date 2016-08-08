@@ -26,4 +26,11 @@ public interface RecommondDao {
 	 */
 	public List<RecommendSchoolInfoO> getRecommondAdInfo(int index);
 
+	/**
+	 * 查询广告的总条数
+	 * liaoyun 2016-7-31
+	 * @return
+	 */
+	public int getAdTotalNum();
+
 }

@@ -23,7 +23,7 @@ var schoolGridOption = {
 			},
 			editable: true
 		}, {
-			field : "address",
+			field : "possion",
 			name : "地址",
 			width : 50,
 			rule:{

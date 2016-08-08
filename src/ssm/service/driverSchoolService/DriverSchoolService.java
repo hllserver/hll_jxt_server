@@ -105,7 +105,7 @@ public interface DriverSchoolService {
 	 * 2016/4/10
 	 * @return
 	 */
-	public List<SchoolAdO> getAdSchoolName();
+	public List<SchoolAdO> getAdSchoolName(String account);
 
 	/**
 	 * 删除广告

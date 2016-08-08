@@ -45,7 +45,7 @@ import ssm.service.driverSchoolService.DriverSchoolService;
 @Transactional
 @RequestMapping(value = "/driverSchoolMsg")
 public class DriverSchoolMsgAction {
-
+	
 	private final String SUCCESS="1";  //操作成功
 	private final String FAILD="0";    //操作失败
 	@Autowired
@@ -245,9 +245,16 @@ public class DriverSchoolMsgAction {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/getAdSchoolName", method = RequestMethod.GET, produces = "application/json", consumes = "application/json")
-	public Map<String, Object> getAdSchoolName() {
+	public Map<String, Object> getAdSchoolName(HttpSession session) {
+		UserO user = (UserO) session.getAttribute("userInfo");
+		String account = "";
+		if (user.getType() == 4) {// 如果是驾校的职员
+			account = user.getLeader();
+		} else if (user.getType() == 3) {// 如果是驾校的管理员
+			account = user.getAccount();
+		}
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<SchoolAdO> ads = driverSchoolService.getAdSchoolName();
+		List<SchoolAdO> ads = driverSchoolService.getAdSchoolName(account);
 		map.put("ads", ads);
 		return map;
 	}

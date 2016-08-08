@@ -39,4 +39,8 @@
 		LEFT JOIN driver_school_t t2 on t1.school_account=t2.account
 		limit #{0},1
 	</select>
+	
+	<select id="getAdTotalNum" resultType="int">
+		select count(*) from school_ad_t;
+	</select>
 </mapper>

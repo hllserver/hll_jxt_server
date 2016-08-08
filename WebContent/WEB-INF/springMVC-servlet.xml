@@ -23,6 +23,9 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd
 		http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.1.xsd">
+	<!-- 启用spring mvc 注解 -->
+    <context:annotation-config />
+   
 	<context:component-scan base-package="ssm.controller"></context:component-scan>
 <!-- 	<aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>   -->
 	
@@ -30,11 +33,12 @@
 	<!-- 限定默认访问的是 /根路径 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/"></bean>
 	
-	<!-- 配置 intercepter 用于权限 -->
+	<!-- 
+	配置 intercepter 用于权限
 	<mvc:interceptors>
 		<bean id="authorityAnnotationIntercepter" class="privilege.AuthorityAnnotationIntercepter"></bean>
-		 <!-- 如果不定义 mvc:mapping path 将拦截所有的URL请求 -->  
-	</mvc:interceptors>   
+	</mvc:interceptors>    
+	-->
 	 
 	<!-- 开启 springMVC 上传文件功能 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

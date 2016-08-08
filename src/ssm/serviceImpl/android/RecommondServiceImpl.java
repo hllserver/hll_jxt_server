@@ -35,12 +35,15 @@ public class RecommondServiceImpl implements RecommondService{
 	
 	/**
 	 * 特别推荐栏的数据
-	 * liaoyun 2016-6-4
+	 * liaoyun 2016-8-4
 	 * @param index
 	 * @return
 	 */
 	@Override
 	public List<RecommendSchoolInfoO> getRecommondAdInfo(int index) {
+		//查询广告的总条数
+		int adTotalNum = recommondDao.getAdTotalNum();
+		index = Math.abs(index % adTotalNum);
 		List<RecommendSchoolInfoO> list = recommondDao.getRecommondAdInfo(index);
 		return list;
 	}

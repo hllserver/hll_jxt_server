@@ -147,7 +147,7 @@ public interface DriverSchoolDao {
 	 * @param schoolAd
 	 * @param account
 	 */
-	public List getAdSchoolName();
+	public List<SchoolAdO> getAdSchoolName(String account);
 
 	/**
 	 * 删除广告

@@ -103,8 +103,10 @@ function sumb(){
 		}
 	}
 	//驾校地址
-	var address=$.trim($("#address").val());
-	if(address==null || address=="" || address.length>100){
+	debugger;
+	var kk = $("#possion").val();
+	var possion=$.trim($("#possion").val());
+	if(possion==null || possion=="" || possion.length>100){
 		_showMessage({title:"提示",content:"驾校地址不大于100个字符，必填!"});
 		return;
 	}

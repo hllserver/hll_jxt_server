@@ -49,7 +49,7 @@ public class LoginAction {
 			consumes="application/json")
 	public Map<String,String> login(@PathVariable String username, @PathVariable String password, HttpSession  session,@PathVariable String type){
 		Map<String,String> map = new HashMap<>();
-		System.out.println("username=="+username +"   "+"password=="+password);
+		System.out.println("username=="+username +" kkkk  "+"password=="+password);
 		if(username !=null){
 			username = username.trim();
 		}

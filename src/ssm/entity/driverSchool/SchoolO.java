@@ -39,7 +39,6 @@ public class SchoolO extends BaseEntity{
 	private double m;
 	private double n;
 	private double p;
-	private String address;   
 	private String policy;    //优惠政策
 	private String position;  //地理位置
 	private String intruduce; //驾校简介
@@ -214,12 +213,6 @@ public class SchoolO extends BaseEntity{
 	}
 	public void setP(double p) {
 		this.p = p;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
 	}
 	public String getPolicy() {
 		return policy;

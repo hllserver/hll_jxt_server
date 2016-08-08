@@ -50,7 +50,7 @@ public class DriverSchoolAction {
 	   SchoolO s=new SchoolO();
 	   s.setAccount(getValue(schoolO.getAccount()));
 	   s.setSchoolName(getValue(schoolO.getSchoolName()));
-	   s.setAddress(schoolO.getAddress());
+	   s.setPosition(getValue(schoolO.getPosition()));
 	   s.setScale(schoolO.getScale());
 		ResultO<SchoolO> list = driverSchoolService.getDriverSchoolList(s,currentPage,pageSize);
 		return list;
@@ -84,7 +84,7 @@ public class DriverSchoolAction {
 				s.setEmail(getValue(s.getEmail()));
 				s.setPolicy(getValue(s.getPolicy()));
 				s.setIntruduce(getValue(s.getIntruduce()));
-				s.setAddress(getValue(s.getAddress()));
+				s.setPosition(getValue(s.getPosition()));
 				s.setRemark(getValue(s.getRemark()));
 				s.setScale((s.getScale()));
 				s.setSchoolName(getValue(s.getSchoolName()));
@@ -106,7 +106,7 @@ public class DriverSchoolAction {
 			s.setLastUpdatedBy(account);
 			s.setEmail(getValue(s.getEmail()));
 			s.setIntruduce(getValue(s.getIntruduce()));
-			s.setAddress(getValue(s.getAddress()));
+			s.setPosition(getValue(s.getPosition()));
 			s.setRemark(getValue(s.getRemark()));
 			s.setPolicy(getValue(s.getPolicy()));
 			s.setScale((s.getScale()));
@@ -129,7 +129,7 @@ public class DriverSchoolAction {
 		s.setLastUpdatedBy(account);
 		s.setEmail(getValue(s.getEmail()));
 		s.setIntruduce(getValue(s.getIntruduce()));
-		s.setAddress(getValue(s.getAddress()));
+		s.setPosition(getValue(s.getPosition()));
 		s.setPolicy(getValue(s.getPolicy()));
 		s.setRemark(getValue(s.getRemark()));
 		s.setScale((s.getScale()));

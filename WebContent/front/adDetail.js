@@ -13,7 +13,7 @@ $(document).ready(function(){
 			$("#tel").text(value.tel);
 			$("#qq").text(value.qq);
 			$("#wechat").text(value.wechat);
-			$("#address").text(value.address);
+			$("#possion").text(value.possion);
 			$("#policy").text(value.policy);
 			$("#intruduce").text(value.intruduce);
 		}

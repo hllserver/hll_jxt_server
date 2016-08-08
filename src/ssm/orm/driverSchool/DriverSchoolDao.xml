@@ -7,7 +7,7 @@
 			t.id,
 			t.account as account,
 			t.school_name as schoolName,
-			t.position as address,
+			t.position as position,
 			t.tel as tel,
 			t.email as email,
 			t.buget as policy,
@@ -25,8 +25,8 @@
 		<if test='param1.schoolName !=null and param1.schoolName !=""'>
 			and t.school_name like CONCAT('%',#{param1.schoolName},'%')
 		</if>
-		<if test='param1.address !=null and param1.address !=""'>
-			and t.position like CONCAT('%',#{param1.address},'%')
+		<if test='param1.position !=null and param1.position !=""'>
+			and t.position like CONCAT('%',#{param1.position},'%')
 		</if>
 		order by t.lastUpdatedDate desc
 		limit #{param2},#{param3}
@@ -45,8 +45,8 @@
 		<if test='schoolName!=null and schoolName!=""'>
 			and t.school_name like CONCAT('%',#{schoolName},'%')
 		</if>
-		<if test='address!=null and address!=""'>
-			and t.position like CONCAT('%',#{address},'%')
+		<if test='position!=null and position!=""'>
+			and t.position like CONCAT('%',#{position},'%')
 		</if>
 	</select>
 
@@ -72,7 +72,7 @@
 			)values(
 			#{item.account},
 			#{item.schoolName},
-			#{item.address},
+			#{item.position},
 			#{item.tel},
 			#{item.email},
 			#{item.registeredTime},
@@ -93,7 +93,7 @@
 		<foreach collection="list" item='item'>
 			update driver_school_t set
 			school_name=#{item.schoolName},
-			position=#{item.address},
+			position=#{item.position},
 			tel=#{item.tel},
 			buget=#{item.policy},
 			email=#{item.email},
@@ -407,6 +407,7 @@
 		t.createdDate as createdDate
 		from
 		school_ad_t t
+		where t.school_account = #{0}
 	</select>
 	
 	<!--  
@@ -499,7 +500,7 @@
 			#{0.empno},
 			#{0.scale},
 			#{0.carno},
-			#{0.address},
+			#{0.position},
 			#{0.a1},
 			#{0.a2},
 			#{0.a3},
@@ -567,7 +568,7 @@
 			t.scale       as empno,
 			t.area        as scale, 
 			t.car_no      as carno,
-			t.position    as address,
+			t.position    as position,
 			t.a1_price    as a1,
 			t.a2_price    as a2,
 			t.a3_price    as a3,
