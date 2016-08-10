@@ -48,12 +48,13 @@ public class DriverSchoolAction {
 
 	{
 	   SchoolO s=new SchoolO();
-	   s.setAccount(getValue(schoolO.getAccount()));
-	   s.setSchoolName(getValue(schoolO.getSchoolName()));
-	   s.setPosition(getValue(schoolO.getPosition()));
+	   s.setAccount(schoolO.getAccount());
+	   s.setSchoolName(schoolO.getSchoolName());
+	   s.setPosition(schoolO.getPosition());
 	   s.setScale(schoolO.getScale());
-		ResultO<SchoolO> list = driverSchoolService.getDriverSchoolList(s,currentPage,pageSize);
-		return list;
+	   s.trim();
+	   ResultO<SchoolO> list = driverSchoolService.getDriverSchoolList(s,currentPage,pageSize);
+	   return list;
 	}
 	
 	
@@ -78,17 +79,9 @@ public class DriverSchoolAction {
 		//新增数据
 		if(insertedRecords!=null&&insertedRecords.size()>0){
 			for(SchoolO s:insertedRecords){
-				s.setAccount(getValue(s.getAccount()));
 				s.setCreatedBy(account);
 				s.setLastUpdatedBy(account);
-				s.setEmail(getValue(s.getEmail()));
-				s.setPolicy(getValue(s.getPolicy()));
-				s.setIntruduce(getValue(s.getIntruduce()));
-				s.setPosition(getValue(s.getPosition()));
-				s.setRemark(getValue(s.getRemark()));
-				s.setScale((s.getScale()));
-				s.setSchoolName(getValue(s.getSchoolName()));
-				s.setTel(getValue(s.getTel()));
+				s.trim();
 				insertedList.add(s);
 			}
 		}
@@ -96,22 +89,15 @@ public class DriverSchoolAction {
 			List<String> insertResult =driverSchoolService.batchInsert(insertedList);
 			if(insertResult!=null && insertResult.size()>0){
 			resultMap.put("result", insertResult);
-		     return resultMap;
-		}
+		    return resultMap;
+			}
 		}
 	//修改数据
 	if(uptatedRecords!=null &&uptatedRecords.size()>0){
 		for (SchoolO s : uptatedRecords) {
 			s.setId(s.getId());
 			s.setLastUpdatedBy(account);
-			s.setEmail(getValue(s.getEmail()));
-			s.setIntruduce(getValue(s.getIntruduce()));
-			s.setPosition(getValue(s.getPosition()));
-			s.setRemark(getValue(s.getRemark()));
-			s.setPolicy(getValue(s.getPolicy()));
-			s.setScale((s.getScale()));
-			s.setSchoolName(getValue(s.getSchoolName()));
-			s.setTel(getValue(s.getTel()));
+			s.trim();
 			updatedList.add(s);
 		}
 	}
@@ -125,31 +111,16 @@ public class DriverSchoolAction {
 	}
 	//删除数据
 	if(deletedRecords!=null&&deletedRecords.size()>0){
-	for(SchoolO s:deletedRecords){
-		s.setLastUpdatedBy(account);
-		s.setEmail(getValue(s.getEmail()));
-		s.setIntruduce(getValue(s.getIntruduce()));
-		s.setPosition(getValue(s.getPosition()));
-		s.setPolicy(getValue(s.getPolicy()));
-		s.setRemark(getValue(s.getRemark()));
-		s.setScale((s.getScale()));
-		s.setSchoolName(getValue(s.getSchoolName()));
-		s.setTel(getValue(s.getTel()));
-		deletedList.add(s);
-	}	
+		for(SchoolO s:deletedRecords){
+			s.setLastUpdatedBy(account);
+			s.trim();
+			deletedList.add(s);
+		}	
 	}
 	
 	if(deletedList.size()>0){
 		driverSchoolService.batchDelete(deletedList);
 	}
 	return resultMap;
-	}
-	
-	//需要修改，适合任何类型
-	private String getValue(String s){
-		if(s==null||s.equals("")){
-			return "";
-		}
-		return s.trim();
 	}
 }

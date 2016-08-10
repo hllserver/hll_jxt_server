@@ -1,23 +1,16 @@
 package ssm.controller.driverSchool;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +27,7 @@ import ssm.entity.common.ResultO;
 import ssm.entity.driverSchool.SchoolPlaceO;
 import ssm.entity.user.UserO;
 import ssm.service.driverSchoolService.DriverSchoolPlaceService;
+import ssm.util.CommonUtil;
 
 @Controller
 @Transactional
@@ -56,16 +50,9 @@ public class DriverSchoolPlaceAction {
 			consumes="application/json")
 	public ResultO<SchoolPlaceO> getDriverSchoolPlaceList(@RequestBody SchoolPlaceO schoolPlaceO,@PathVariable int currentPage,
 			@PathVariable int pageSize,HttpSession session)throws Exception{
-		UserO user=(UserO) session.getAttribute("userInfo");
-		String account="";
-		if(user.getType()==4){//如果是驾校的职员
-			account = user.getLeader();
-		}else if(user.getType()==3){//如果是驾校的管理员
-			account = user.getAccount();
-		}
+		String account = CommonUtil.getSchoolAccount(session);
 		ResultO<SchoolPlaceO> list = driverSchoolPlaceService.getDriverSchoolPlaceList(schoolPlaceO,currentPage,pageSize,account);
 		return list;
-		
 	}
 	
 	
@@ -77,14 +64,8 @@ public class DriverSchoolPlaceAction {
 	@ResponseBody
 	@RequestMapping(value="/getSchoolPlace",method=RequestMethod.GET,produces="application/json",consumes="application/json")
 	public Map<String,Object> getSchoolPlace(HttpSession session){
-		UserO user=(UserO) session.getAttribute("userInfo");
 		Map<String,Object> map=new HashMap<String,Object>();
-		String account="";
-		if(user.getType()==4){//如果是驾校的职员
-			account = user.getLeader();
-		}else if(user.getType()==3){//如果是驾校的管理员
-			account = user.getAccount();
-		}
+		String account = CommonUtil.getSchoolAccount(session);
 		List<SchoolPlaceO> places =driverSchoolPlaceService.getSchoolPlace( account);
 		map.put("places",places);
 		map.put("item", account);
@@ -118,30 +99,21 @@ public class DriverSchoolPlaceAction {
 		//批量新增数据
 		if(insertedRecords!=null&&insertedRecords.size()>0){
 			for(SchoolPlaceO s:insertedRecords){
-				s.setArea(s.getArea());
-				s.setCarNo(s.getCarNo());
 				s.setCreatedBy(account);
 				s.setCreatedDate(new Date());
 				s.setLastUpdatedBy(account);
 				s.setLastUpdatedDate(new Date());
-				s.setPic1(getValue(s.getPic1()));
-				s.setPic2(getValue(s.getPic2()));
-				s.setPic3(getValue(s.getPic3()));
-				s.setPic4(getValue(s.getPic4()));
-				s.setPic5(getValue(s.getPic5()));
-				s.setPlaceName(getValue(s.getPlaceName()));
-				s.setPosition(getValue(s.getPosition()));
-				s.setRemark(getValue(s.getRemark()));
 				s.setSchoolAccount(leader);
+				s.trim();
 				insertedList.add(s);
 			}
 			
 			if(insertedList.size()>0){
 				List<String> insertResult =driverSchoolPlaceService.batchInsert(insertedList);
 				if(insertResult!=null && insertResult.size()>0){
-				resultMap.put("result", insertResult);
-			     return resultMap;
-			}
+					resultMap.put("result", insertResult);
+				    return resultMap;
+				}
 			}
 		}
 		
@@ -152,19 +124,9 @@ public class DriverSchoolPlaceAction {
 		 */
 		if(uptatedRecords!=null&&uptatedRecords.size()>0){
 			for(SchoolPlaceO s:uptatedRecords){
-				s.setId(s.getId());
-				s.setArea(s.getArea());
-				s.setCarNo(s.getCarNo());
 				s.setLastUpdatedBy(account);
 				s.setLastUpdatedDate(new Date());
-				s.setPic1(getValue(s.getPic1()));
-				s.setPic2(getValue(s.getPic2()));
-				s.setPic3(getValue(s.getPic3()));
-				s.setPic4(getValue(s.getPic4()));
-				s.setPic5(getValue(s.getPic5()));
-				s.setPlaceName(getValue(s.getPlaceName()));
-				s.setPosition(getValue(s.getPosition()));
-				s.setRemark(getValue(s.getRemark()));
+				s.trim();
 				updatedList.add(s);
 			}
 			if(updatedList.size()>0){
@@ -179,28 +141,17 @@ public class DriverSchoolPlaceAction {
 		//批量删除驾校场地信息
 		if(deletedRecords!=null&&deletedRecords.size()>0){
 			for(SchoolPlaceO s:deletedRecords){
-				s.setArea(s.getArea());
-				s.setCarNo(s.getCarNo());
 				s.setLastUpdatedBy(account);
 				s.setLastUpdatedDate(new Date());
-				s.setPic1(getValue(s.getPic1()));
-				s.setPic2(getValue(s.getPic2()));
-				s.setPic3(getValue(s.getPic3()));
-				s.setPic4(getValue(s.getPic4()));
-				s.setPic5(getValue(s.getPic5()));
-				s.setPlaceName(getValue(s.getPlaceName()));
-				s.setPosition(getValue(s.getPosition()));
-				s.setRemark(getValue(s.getRemark()));
 				s.setSchoolAccount(leader);
+				s.trim();
 				deletedList.add(s);
 			}
 			if(deletedList.size()>0){
 			 driverSchoolPlaceService.batchDelete(deletedList);
 			}
 		}
-	
 		return resultMap;
-		
 	}	
 	/**
 	 * 添加新场地 /修改场地
@@ -213,11 +164,7 @@ public class DriverSchoolPlaceAction {
 			HttpSession session) throws Exception{
 		//是否操作成功
 		boolean iscucess = true;
-		response.setContentType("text/html;charset='utf-8'");
-		response.setCharacterEncoding("utf-8");
-		response.setHeader("Cache-Control", "no-cache");
-		Writer output = response.getWriter();
-		response.setHeader("content-type", "text/html;charset=utf-8");
+		Writer output = CommonUtil.getResponseWriter(response);
 		
 		String id = request.getParameter("id");
 		String placeName = request.getParameter("placeName");
@@ -228,12 +175,7 @@ public class DriverSchoolPlaceAction {
 		
 		//得到驾校编号
 		UserO user =(UserO)session.getAttribute("userInfo");
-		String account="";
-		if(user.getType()==4){//如果是驾校的职员
-			account = user.getLeader();
-		}else if(user.getType()==3){//如果是驾校的管理员
-			account = user.getAccount();
-		}
+		String account = CommonUtil.getSchoolAccount(session);
 		//插入数据库的数据
 		SchoolPlaceO schoolPlaceO = new SchoolPlaceO();
 		schoolPlaceO.setPlaceName(placeName);
@@ -245,51 +187,16 @@ public class DriverSchoolPlaceAction {
 		schoolPlaceO.setCreatedBy(user.getAccount());
 		schoolPlaceO.setLastUpdatedBy(user.getAccount());
 		
-		// 保存文件的根路径
-		String dir = request.getSession().getServletContext().getRealPath("/");
-		if(!dir.endsWith(File.separator)){
-				dir = dir+File.separator;
-		}
-		dir = dir + "file/pic";
-		File docu = new File(dir);
-		if(!docu.exists()){
-			docu.mkdirs();
-		}
-		dir = request.getSession().getServletContext().getRealPath("/file/pic");
-		
-		if(id==null || id.equals("")){
-			//-----当 id 为空,为新增的数据----------------------
+		if(id==null || id.equals("")){//-----当 id 为空,为新增的数据----------------------
 			try{
-				//获取 文件 map
-				Map<String,MultipartFile> fileMap = request.getFileMap();
-				//得到 map 的 key值
-				Set<String> fileSet = fileMap.keySet();
-				//创建 迭代器
-				Iterator<String> fileNameIterator = fileSet.iterator();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+				Map<String,MultipartFile> fileMap = request.getFileMap();              //获取 文件 map
+				Iterator<String> fileNameIterator = fileMap.keySet().iterator();       //创建 迭代器
 				int i=1;
 				while(fileNameIterator.hasNext()){
-					// input 中的 name 属性 的 名称
-					String uploadFileName = fileNameIterator.next();
+					String uploadFileName = fileNameIterator.next();                   // input 中的 name 属性 的 名称
 					MultipartFile file = fileMap.get(uploadFileName);
 					if(file.getSize()>0){
-						//上传的文件 的名字如：kk.jpg
-						String origFileName = file.getOriginalFilename();
-						//得到文件的 流
-						InputStream isRef = file.getInputStream();
-						//获取图片后缀
-						int pos = origFileName.lastIndexOf(".");
-						String suffix = origFileName.substring(pos, origFileName.length());
-						Date date = new Date();
-						//文件取别名，防止同名
-						String newName =account+ sdf.format(date)+i+suffix;
-						i++;
-						//新文件全路径
-						File targetFile = new File(dir,newName);
-						//文件输出流
-						FileOutputStream fosRef = new FileOutputStream(targetFile);
-						//保存文件到文件夹
-						IOUtils.copy(isRef, fosRef);
+						String newName = CommonUtil.savePic(request, session, file, i);//保存图片并返回图片名称
 						if(uploadFileName.equals("pic1")){
 							schoolPlaceO.setPic1(newName);
 						}else if(uploadFileName.equals("pic2")){
@@ -302,128 +209,53 @@ public class DriverSchoolPlaceAction {
 							schoolPlaceO.setPic5(newName);
 						}
 					}
+					i++;
 				}
 				//将数据保存到数据库
+				schoolPlaceO.trim();
 				driverSchoolPlaceService.saveNewPlace(schoolPlaceO);
 			}catch(Exception e){
 				e.printStackTrace();
 				iscucess=false;
 			}
-		}else{
-			//-------为修改的数据-------------------------------
-			//通过 id 查询历史数据
+		}else{//-------为修改的数据-------------------------------
 			schoolPlaceO.setId(Long.valueOf(id));
-			SchoolPlaceO place = driverSchoolPlaceService.findPlaceDataById(id, account);
+			SchoolPlaceO place = driverSchoolPlaceService.findPlaceDataById(id, account);//通过 id 查询历史数据
 			schoolPlaceO.setPic1(place.getPic1());
 			schoolPlaceO.setPic2(place.getPic2());
 			schoolPlaceO.setPic3(place.getPic3());
 			schoolPlaceO.setPic4(place.getPic4());
 			schoolPlaceO.setPic5(place.getPic5());
 			try{
-				//获取 文件 map
-				Map<String,MultipartFile> fileMap = request.getFileMap();
-				//得到 map 的 key值
-				Set<String> fileSet = fileMap.keySet();
-				//创建 迭代器
-				Iterator<String> fileNameIterator = fileSet.iterator();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+				Map<String,MultipartFile> fileMap = request.getFileMap();  //获取 文件 map
+				Iterator<String> fileNameIterator = fileMap.keySet().iterator();//创建 迭代器
 				int i=1;
 				while(fileNameIterator.hasNext()){
-					// input 中的 name 属性 的 名称
-					String uploadFileName = fileNameIterator.next();
+					String uploadFileName = fileNameIterator.next();       //input 中的 name 属性 的 名称
 					MultipartFile file = fileMap.get(uploadFileName);
-					if(file.getSize()>0){//如果不为空,删除原来的图片  ， 存入新的图片
-						//上传的文件 的名字如：kk.jpg
-						String origFileName = file.getOriginalFilename();
-						//得到文件的 流
-						InputStream isRef = file.getInputStream();
-						//获取图片后缀
-						int pos = origFileName.lastIndexOf(".");
-						String suffix = origFileName.substring(pos, origFileName.length());
-						Date date = new Date();
-						//文件取别名，防止同名
-						String newName =account + sdf.format(date)+i+suffix;
-						i++;
+					if(file.getSize()>0){                                  //如果不为空,删除原来的图片  ， 存入新的图片
+						String newName = CommonUtil.savePic(request, session, file, i);
 						if(uploadFileName.equals("pic1")){
-							//如果文件存在，则删除
-							if(place.getPic1()!=null && !place.getPic1().equals("")){
-								File deletedPic = new File(dir,place.getPic1());
-								if(deletedPic.isFile()){
-									deletedPic.delete();
-								}
-							}
-							//保存新的文件
-							File targetFile = new File(dir,newName);
-							//文件输出流
-							FileOutputStream fosRef = new FileOutputStream(targetFile);
-							//保存文件到文件夹
-							IOUtils.copy(isRef, fosRef);
+							CommonUtil.deletePic(request, place.getPic1());//删除旧的文件 
 							schoolPlaceO.setPic1(newName);
 						}else if(uploadFileName.equals("pic2")){
-							//如果文件存在，则删除
-							if(place.getPic2()!=null && !place.getPic2().equals("")){
-								File deletedPic = new File(dir,place.getPic2());
-								if(deletedPic.isFile()){
-									deletedPic.delete();
-								}
-							}
-							//保存新的文件
-							File targetFile = new File(dir,newName);
-							//文件输出流
-							FileOutputStream fosRef = new FileOutputStream(targetFile);
-							//保存文件到文件夹
-							IOUtils.copy(isRef, fosRef);
+							CommonUtil.deletePic(request, place.getPic2());//删除旧的文件 
 							schoolPlaceO.setPic2(newName);
 						}else if(uploadFileName.equals("pic3")){
-							//如果文件存在，则删除
-							if(place.getPic3()!=null && !place.getPic3().equals("")){
-								File deletedPic = new File(dir,place.getPic3());
-								if(deletedPic.isFile()){
-									deletedPic.delete();
-								}
-							}
-							//保存新的文件
-							File targetFile = new File(dir,newName);
-							//文件输出流
-							FileOutputStream fosRef = new FileOutputStream(targetFile);
-							//保存文件到文件夹
-							IOUtils.copy(isRef, fosRef);
+							CommonUtil.deletePic(request, place.getPic3());//删除旧的文件 
 							schoolPlaceO.setPic3(newName);
 						}else if(uploadFileName.equals("pic4")){
-							//如果文件存在，则删除
-							if(place.getPic4()!=null && !place.getPic4().equals("")){
-								File deletedPic = new File(dir,place.getPic4());
-								if(deletedPic.isFile()){
-									deletedPic.delete();
-								}
-							}
-							//保存新的文件
-							File targetFile = new File(dir,newName);
-							//文件输出流
-							FileOutputStream fosRef = new FileOutputStream(targetFile);
-							//保存文件到文件夹
-							IOUtils.copy(isRef, fosRef);
+							CommonUtil.deletePic(request, place.getPic4());
 							schoolPlaceO.setPic4(newName);
 						}else if(uploadFileName.equals("pic5")){
-							//如果文件存在，则删除
-							if(place.getPic5()!=null && !place.getPic5().equals("")){
-								File deletedPic = new File(dir,place.getPic5());
-								if(deletedPic.isFile()){
-									deletedPic.delete();
-								}
-							}
-							//保存新的文件
-							File targetFile = new File(dir,newName);
-							//文件输出流
-							FileOutputStream fosRef = new FileOutputStream(targetFile);
-							//保存文件到文件夹
-							IOUtils.copy(isRef, fosRef);
+							CommonUtil.deletePic(request, place.getPic5());
 							schoolPlaceO.setPic5(newName);
 						}
 					}
+					i++;
 				}
-				//保存入数据库
-				driverSchoolPlaceService.saveUpdatedPlace(schoolPlaceO);
+				schoolPlaceO.trim();
+				driverSchoolPlaceService.saveUpdatedPlace(schoolPlaceO);   //保存入数据库
 			}catch(Exception e){
 				iscucess=false;
 			}
@@ -444,66 +276,21 @@ public class DriverSchoolPlaceAction {
 	consumes="application/json")
 	public Map<String,String> deleteSchoolPlace(@PathVariable int id,HttpSession session,HttpServletRequest request){
 		Map<String,String> map= new HashMap<>();
-		//得到驾校编号
-		UserO user =(UserO)session.getAttribute("userInfo");
-		String account="";
-		if(user.getType()==4){//如果是驾校的职员
-			account = user.getLeader();
-		}else if(user.getType()==3){//如果是驾校的管理员
-			account = user.getAccount();
-		}
 		
-		// 保存文件的根路径
-		String dir = request.getSession().getServletContext().getRealPath("/");
-		if(!dir.endsWith(File.separator)){
-				dir = dir+File.separator;
-		}
-		dir = dir + "file/pic";
-		File docu = new File(dir);
-		if(!docu.exists()){
-			docu.mkdirs();
-		}
-		dir = request.getSession().getServletContext().getRealPath("/file/pic");
-		
+		String account = CommonUtil.getSchoolAccount(session);
 		try{
 			//通过 id 查询历史数据
 			SchoolPlaceO place = driverSchoolPlaceService.findPlaceDataById(String.valueOf(id), account);
-			
 			//删除原有的图片pic1
-			if(place.getPic1()!=null && !place.getPic1().equals("")){
-				File deletedPic = new File(dir,place.getPic1());
-				if(deletedPic.isFile()){
-					deletedPic.delete();
-				}
-			}
+			CommonUtil.deletePic(request, place.getPic1());
 			//删除原有的图片pic2
-			if(place.getPic2()!=null && !place.getPic2().equals("")){
-				File deletedPic = new File(dir,place.getPic2());
-				if(deletedPic.isFile()){
-					deletedPic.delete();
-				}
-			}
+			CommonUtil.deletePic(request, place.getPic2());
 			//删除原有的图片pic3
-			if(place.getPic3()!=null && !place.getPic3().equals("")){
-				File deletedPic = new File(dir,place.getPic3());
-				if(deletedPic.isFile()){
-					deletedPic.delete();
-				}
-			}
+			CommonUtil.deletePic(request, place.getPic3());
 			//删除原有的图片pic4
-			if(place.getPic4()!=null && !place.getPic4().equals("")){
-				File deletedPic = new File(dir,place.getPic4());
-				if(deletedPic.isFile()){
-					deletedPic.delete();
-				}
-			}
+			CommonUtil.deletePic(request, place.getPic4());
 			//删除原有的图片pic5
-			if(place.getPic5()!=null && !place.getPic5().equals("")){
-				File deletedPic = new File(dir,place.getPic5());
-				if(deletedPic.isFile()){
-					deletedPic.delete();
-				}
-			}
+			CommonUtil.deletePic(request, place.getPic5());
 			//删除数据库中 的记录
 			driverSchoolPlaceService.deleteSchoolPlace(id,account);
 		}catch(Exception e){
@@ -513,13 +300,5 @@ public class DriverSchoolPlaceAction {
 		}
 		map.put("state", SUCCESS);
 		return map;
-	}
-	
-	
-	private String getValue(String s){
-		if(s==null||s.equals("")){
-			return "";
-		}
-		return s.trim();
 	}
 }

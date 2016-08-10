@@ -65,5 +65,18 @@ public class SchoolPicO extends BaseEntity{
 	public void setExtra2(String extra2) {
 		this.extra2 = extra2;
 	}
-	
+	public void trim(){
+		setSchoolAccount(getValue(getSchoolAccount()));
+		setPic(getValue(getPic()));
+		setPicContent(getValue(getPicContent()));
+		setExtra1(getValue(getExtra1()));
+		setExtra2(getValue(getExtra2()));
+	}
+	//需要修改，适合任何类型
+	private String getValue(String s){
+		if(s!=null){
+			return s.trim();
+		}
+		return null;
+	}
 }

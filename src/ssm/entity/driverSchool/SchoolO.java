@@ -232,5 +232,23 @@ public class SchoolO extends BaseEntity{
 	public void setRegisteredTime(Date registeredTime) {
 		this.registeredTime = registeredTime;
 	}
-	
+	public void trim(){//去空格
+		setAccount(getValue(getAccount()));
+		setSchoolName(getValue(getSchoolName()));
+		setTel(getValue(getTel()));
+		setEmail(getValue(getEmail()));
+		setWechat(getValue(getWechat()));
+		setQq(getValue(getQq()));
+		setPolicy(getValue(getPolicy()));
+		setPosition(getValue(getPosition()));
+		setIntruduce(getValue(getIntruduce()));
+		setRemark(getValue(getRemark()));
+	}
+	//需要修改，适合任何类型
+	private String getValue(String s){
+		if(s!=null){
+			return s.trim();
+		}
+		return null;
+	}
 }

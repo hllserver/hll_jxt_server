@@ -106,5 +106,22 @@ public class SchoolPlaceO extends BaseEntity{
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	
+	public void trim(){
+		setSchoolAccount(getValue(getSchoolAccount()));
+		setPlaceName(getValue(getPlaceName()));
+		setPic1(getValue(getPic1()));
+		setPic2(getValue(getPic2()));
+		setPic3(getValue(getPic3()));
+		setPic4(getValue(getPic4()));
+		setPic5(getValue(getPic5()));
+		setRemark(getValue(getRemark()));
+		setPosition(getValue(getPosition()));
+	}
+	//需要修改，适合任何类型
+	private String getValue(String s){
+		if(s!=null){
+			return s.trim();
+		}
+		return null;
+	}
 }
