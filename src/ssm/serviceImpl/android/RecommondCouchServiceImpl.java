@@ -20,7 +20,7 @@ public class RecommondCouchServiceImpl implements RecommondCouchService{
 		startIndex=(startIndex-1)*loadSize;
 		couchSelectBy.setStartPage(startIndex);
 		List<RecommendCouchO> list=recommondCouchDao.getCouchList(couchSelectBy);
-		System.out.println("dao执行了");
+		//System.out.println("dao执行了");
 		return list;
 	}
 

@@ -27,11 +27,11 @@ public class CouchListAction {
             consumes="application/json")
 	public List<RecommendCouchO> getCouchList(@RequestBody CouchSelectBy couchSelectBy){
 		if(couchSelectBy==null){
-			System.out.println("jjjjkk-----------------------------------");
+			//System.out.println("jjjjkk-----------------------------------");
 			return null;
 		}
 		List<RecommendCouchO> list=couchService.getCouchList(couchSelectBy);
-		System.out.println(".............................................");
+		///System.out.println(".............................................");
 		return list;
 	}
 	
