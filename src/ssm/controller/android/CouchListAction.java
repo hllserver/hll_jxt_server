@@ -1,5 +1,9 @@
 package ssm.controller.android;
-
+/**
+ * 获取教练列表
+ * @author heyi
+ * 2016/8/12
+ */
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +31,9 @@ public class CouchListAction {
             consumes="application/json")
 	public List<RecommendCouchO> getCouchList(@RequestBody CouchSelectBy couchSelectBy){
 		if(couchSelectBy==null){
-			//System.out.println("jjjjkk-----------------------------------");
 			return null;
 		}
 		List<RecommendCouchO> list=couchService.getCouchList(couchSelectBy);
-		///System.out.println(".............................................");
 		return list;
 	}
 	

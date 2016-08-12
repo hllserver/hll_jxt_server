@@ -1,4 +1,9 @@
 package ssm.serviceImpl.android;
+/**
+ * 推荐教练列表
+ * @author heyi
+ * 2016/8/12
+ */
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +17,9 @@ public class RecommondCouchServiceImpl implements RecommondCouchService{
 
 	@Autowired
 	private RecommondCouchDao recommondCouchDao;
+	/**
+	 * 获取教练列表
+	 */
 	@Override
 	public List<RecommendCouchO> getCouchList(CouchSelectBy couchSelectBy) {
 
@@ -20,7 +28,6 @@ public class RecommondCouchServiceImpl implements RecommondCouchService{
 		startIndex=(startIndex-1)*loadSize;
 		couchSelectBy.setStartPage(startIndex);
 		List<RecommendCouchO> list=recommondCouchDao.getCouchList(couchSelectBy);
-		//System.out.println("dao执行了");
 		return list;
 	}
 

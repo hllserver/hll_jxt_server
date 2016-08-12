@@ -3,7 +3,6 @@
 <mapper namespace="ssm.orm.android.recommond.RecommondCouchDao">
 
 
-    <!-- 获取教练列表 (listView)-->
 	<select id="getCouchList" resultType="ssm.entity.android.recommend.RecommendCouchO">
 		select 
 			t1.order_couch_price   as coachPrice,
