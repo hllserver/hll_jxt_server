@@ -15,13 +15,13 @@ public class SchoolInstructorO extends BaseEntity{
 	private long id;
 	private String schoolAccount;
 	private String userAccount;     //教练的账号
-	private String jobNumber;//
+	private String jobNumber;       //
 	private String name;
 	private int age;
 	private String tel;
-	private int gender;      //0---女  1---男
-	private String email;
-	private int online;      //是否在线 0---不在线，1---在线
+	private int gender;            //0---女  1---男
+	private String email;  
+	private int online;            //是否在线 0---不在线，1---在线
 	private String remark;
 	public SchoolInstructorO() {
 		super();
@@ -93,5 +93,20 @@ public class SchoolInstructorO extends BaseEntity{
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	
+	public void trim(){//去空格
+		setSchoolAccount(getValue(getSchoolAccount()));
+		setUserAccount(getValue(getUserAccount()));
+		setJobNumber(getValue(getJobNumber()));
+		setName(getValue(getName()));
+		setRemark(getValue(getRemark()));
+		setTel(getValue(getTel()));
+		setEmail(getValue(getEmail()));
+	}
+	//需要修改，适合任何类型
+	private String getValue(String s){
+		if(s!=null){
+			return s.trim();
+		}
+		return null;
+	}
 }
