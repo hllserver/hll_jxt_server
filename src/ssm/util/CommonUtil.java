@@ -148,4 +148,46 @@ public class CommonUtil {
 			return false; 
 		}
 	}
+	/**
+	 * 获取当前服务器时间
+	 * liaoyun 2016-8-11
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public static String getServerTime(){
+		Date now  = new Date();
+		int year  = now.getYear() + 1900;
+		int month = now.getMonth() + 1;
+		int day   = now.getDate();
+		int hour  = now.getHours();
+		int min   = now.getMinutes();
+		int sec   = now.getSeconds();
+		String time = year+","+month+","+day+","+hour+","+min+","+sec;
+		return time;
+	}
+	/**
+	 * 获取用户登陆信息
+	 * liaoyun 2016-8-11
+	 * @param session
+	 * @return
+	 */
+	public UserO getSessionInfo(HttpSession session){
+		UserO user = (UserO) session.getAttribute("userInfo");
+		return user;
+	}
+	
+	/**
+	 * 判断用户是否登陆了 0---没有登陆；1---已经登陆
+	 * liaoyun 2016-8-11
+	 * @param session
+	 * @return
+	 */
+	public static int isLogin(HttpSession session){
+		UserO user = CommonUtil.getUserInfo(session);
+		if(user == null){
+			return 0;
+		}else{
+			return 1;
+		}
+	}
 }

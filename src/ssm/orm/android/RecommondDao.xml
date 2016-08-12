@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="ssm.orm.android.recommond.RecommondDao">
+<mapper namespace="ssm.orm.android.RecommondDao">
 
 	<!-- 
 	* 分页查询 liaoyun 2016-6-2 

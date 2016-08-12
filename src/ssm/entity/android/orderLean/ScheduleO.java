@@ -18,9 +18,10 @@ public class ScheduleO implements Serializable{
 	private int am;               //上午是否预约：0--没有预约;1--已经预约
 	private int pm;				  //下午是否预约：0--没有预约;1--已经预约
 	private int ev;	              //晚上是否预约：0--没有预约;1--已经预约
-	private String subJect;       //训练科目
+	private String subj;          //训练科目
 	private String placeId;       //场地id
 	private String placeName;     //场地名称
+	private Date   orderDate;     //预约时间
 	private String createdBy;     //创建时间，即创建记录时的服务器时间
 	private Date createdDate;
 	private String lastUpdatedBy;
@@ -64,11 +65,11 @@ public class ScheduleO implements Serializable{
 	public void setEv(int ev) {
 		this.ev = ev;
 	}
-	public String getSubJect() {
-		return subJect;
+	public String getSubj() {
+		return subj;
 	}
-	public void setSubJect(String subJect) {
-		this.subJect = subJect;
+	public void setSubj(String subj) {
+		this.subj = subj;
 	}
 	public String getPlaceId() {
 		return placeId;
@@ -111,5 +112,11 @@ public class ScheduleO implements Serializable{
 	}
 	public void setPlaceName(String placeName) {
 		this.placeName = placeName;
+	}
+	public Date getOrderDate() {
+		return orderDate;
+	}
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
 	}
 }

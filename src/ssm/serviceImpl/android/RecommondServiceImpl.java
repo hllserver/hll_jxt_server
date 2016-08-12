@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ssm.entity.android.recommend.RecommendSchoolInfoO;
 import ssm.entity.android.recommend.SchoolSelectBy;
-import ssm.orm.android.recommond.RecommondDao;
-import ssm.service.android.recommond.RecommondService;
+import ssm.orm.android.RecommondDao;
+import ssm.service.android.RecommondService;
 
 /**
  * android recommond page
