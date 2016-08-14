@@ -29,4 +29,9 @@ public class QueueServiceImpl implements QueueService{
 		return list;
 	}
 
+	@Override
+	public void saveSchedule(String account,List<ScheduleO> schedule) {
+		queueDao.saveSchedule(account,schedule);
+	}
+
 }
