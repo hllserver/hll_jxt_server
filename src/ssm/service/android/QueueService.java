@@ -23,5 +23,12 @@ public interface QueueService {
 	 * @return
 	 */
 	public List<ScheduleO> findMyOrderLean(String account);
+	/**
+	 * 保存三天的预约计划
+	 * liaoyun 2016-8-13
+	 * @param account 
+	 * @param schedule
+	 */
+	public void saveSchedule(String account, List<ScheduleO> schedule);
 	
 }
