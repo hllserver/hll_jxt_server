@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import ssm.entity.common.ResultO;
 import ssm.entity.privilege.PrivilegeO;
 import ssm.entity.user.UserO;
 import ssm.service.user.UserService;
+import ssm.util.CommonUtil;
 import ssm.util.Email;
 import ssm.util.MD5Util;
 /**
@@ -47,9 +49,11 @@ public class LoginAction {
 	@ResponseBody
 	@RequestMapping(value="/login/{username}/{password}/{type}",method=RequestMethod.POST,produces="application/json",
 			consumes="application/json")
-	public Map<String,String> login(@PathVariable String username, @PathVariable String password, HttpSession  session,@PathVariable String type){
+	public Map<String,String> login(HttpServletRequest request, @PathVariable String username, @PathVariable String password, HttpSession  session,@PathVariable String type){
+		String clientIp = request.getRemoteAddr();
+		int clientPort = request.getRemotePort();
 		Map<String,String> map = new HashMap<>();
-		System.out.println("username=="+username +" kkkk  "+"password=="+password);
+		System.out.println("username "+username +"   "+"password "+password);
 		if(username !=null){
 			username = username.trim();
 		}
@@ -73,6 +77,9 @@ public class LoginAction {
 			map.put("nickName", user.getNickName());
 			map.put("email", user.getEmail());
 			map.put("tel", user.getTel());
+			map.put("lastLoadTime", CommonUtil.getServerTime());
+			map.put("lastLoadIp", clientIp);
+			map.put("lastLoadPort", ""+clientPort);
 			return map;
 		}else if(user!=null && user.getType()==5){//普通用户
 			session.setAttribute("userInfo", user);
@@ -80,6 +87,9 @@ public class LoginAction {
 			map.put("nickName", user.getNickName());
 			map.put("email", user.getEmail());
 			map.put("tel", user.getTel());
+			map.put("lastLoadTime", CommonUtil.getServerTime());
+			map.put("lastLoadIp", clientIp);
+			map.put("lastLoadPort", ""+clientPort);
 			return map;
 		}else{
 			//登陆验证失败
@@ -298,6 +308,7 @@ public class LoginAction {
 		map.put("result", "1");
 		return map;
 	}
+	
 	private String getValue(String s){
 		if(s==null){
 			return null;

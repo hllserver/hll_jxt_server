@@ -1,4 +1,4 @@
-package ssm.orm.android.recommond;
+package ssm.service.android;
 
 import java.util.List;
 
@@ -7,11 +7,11 @@ import ssm.entity.android.recommend.SchoolSelectBy;
 
 
 /**
+ * android recommond page
  * @author liaoyun
  * 2016-6-2
  */
-public interface RecommondDao {
-
+public interface RecommondService {
 	/**
 	 * 分页查询  liaoyun 2016-6-2
 	 * @return
@@ -25,12 +25,4 @@ public interface RecommondDao {
 	 * @return
 	 */
 	public List<RecommendSchoolInfoO> getRecommondAdInfo(int index);
-
-	/**
-	 * 查询广告的总条数
-	 * liaoyun 2016-7-31
-	 * @return
-	 */
-	public int getAdTotalNum();
-
 }

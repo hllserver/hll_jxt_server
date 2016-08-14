@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import ssm.entity.android.recommend.RecommendSchoolInfoO;
 import ssm.entity.android.recommend.SchoolSelectBy;
-import ssm.service.android.recommond.RecommondService;
+import ssm.service.android.RecommondService;
 
 @Controller
 @Transactional
