@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.orm.android.QueueDao">
+
+	<!-- 
+	* 查询三天的计划 liaoyun 2016-8-12
+	* @param account
+ 	-->
+	<select id="findMyOrderLean" resultType="ssm.entity.android.orderLean.ScheduleO">
+		select
+			t.user_account   as userAccount,
+			t.school_account as schoolAccount,
+			t.am             as am,
+			t.pm             as pm,
+			t.ev             as ev,
+			t.subj           as subj,
+			t.place_id       as placeId,
+			t.order_date     as orderDate
+		from 
+			schedule_t t
+		where
+			t.user_account=#{0} order by t.order_date
+	</select>
+	
+	<!-- 
+	* 查询的场地 liaoyun 2016-8-12
+	* @param account
+	 -->
+	<select id="findSchoolPlace" resultType="ssm.entity.driverSchool.SchoolPlaceO">
+		select 
+			t2.school_account  as schoolAccount,
+			t2.id              as id,
+			t2.place_name      as placeName,
+			t2.position        as position,
+			t2.area            as area,
+			t2.car_no          as carNo,
+			t2.remark          as remark,
+			t3.school_name     as schoolName
+		from
+			student_t t1
+		left join 
+			school_place_t t2 on t1.school_account = t2.school_account
+		left join
+			driver_school_t t3 on t1.school_account = t3.account
+		where 
+			t1.account = #{0}
+	</select>
+	
+	<!-- 
+	* 保存三天的预约计划 liaoyun 2016-8-13
+	* @param account 
+	* @param schedule
+	 -->
+	<insert id="saveSchedule">
+			delete from schedule_t where user_account = #{param1};
+			<foreach collection="param2" item="item">
+				insert into schedule_t (
+					user_account,
+					school_account,
+					am,
+					pm,
+					ev,
+					subj,
+					place_id,
+					order_date,
+					createdBy,
+					createdDate,
+					lastUpdatedBy,
+					lastUpdatedDate
+				)values(
+					#{item.userAccount},
+					#{item.schoolAccount},
+					#{item.am},
+					#{item.pm},
+					#{item.ev},
+					#{item.subj},
+					#{item.placeId},
+					#{item.orderDate},
+					#{item.createdBy},
+					now(),
+					#{item.lastUpdatedBy},
+					now()
+				);
+			</foreach>
+	</insert> 
+</mapper>
