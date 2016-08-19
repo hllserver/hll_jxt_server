@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.orm.android.MessageChatDao">
+
+	<insert id="addMessageChat">
+		insert into
+		message_chat_t (
+		school_account,place_name,user_account,msg_content,send_time
+		)
+		values(#{0.schollAccount},0.placeName,0.userAccount,0.msg,now())
+	</insert>
+</mapper>
