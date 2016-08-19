@@ -6,10 +6,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ssm.entity.android.Queue;
 import ssm.entity.android.orderLean.OrderLeanO;
 import ssm.entity.android.orderLean.ScheduleO;
 import ssm.entity.driverSchool.SchoolPlaceO;
@@ -34,7 +36,7 @@ public class QueueAction {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/getOrderLeanInfo")
-	public OrderLeanO getOrderLeanInfo(HttpSession session){
+	public OrderLeanO getOrderLeanInfo(HttpSession session) throws Exception{
 		OrderLeanO ol = new OrderLeanO();
 		ol.setLoginState(CommonUtil.isLogin(session));                                    //是否登陆账号
 		ol.setServerTime(CommonUtil.getServerTime());                                     //获取服务器时间
@@ -58,7 +60,7 @@ public class QueueAction {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/saveOrderLeanInfo")
-	public OrderLeanO saveOrderLeanInfo(@RequestBody OrderLeanO orderLeanO, HttpSession session){
+	public OrderLeanO saveOrderLeanInfo(@RequestBody OrderLeanO orderLeanO, HttpSession session) throws Exception{
 		try{
 			UserO user = CommonUtil.getUserInfo(session);
 			List<ScheduleO> list = orderLeanO.getSchedule();
@@ -75,4 +77,110 @@ public class QueueAction {
 			return null;
 		}
 	}
+	
+	/**
+	 * 加入队列，返回排队的最新情况 liaoyun 2016-8-14
+	 * @param placeId
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/insertQueue/{placeId}")
+	public List<Queue> enQueue(@PathVariable String placeId,HttpSession session) throws Exception{
+		//如果没有报名该驾校，则不能查看相关的信息
+		UserO user = CommonUtil.getUserInfo(session);
+		if(user==null || !hasPlaceId(user.getAccount(), placeId)){
+			return null;
+		}
+		//加入排队 并 返回 队列的最新情况
+		List<Queue> list = queueService.insertAndGetLastQueueState(user.getAccount(),placeId);
+		return list;
+	}
+	
+	/**
+	 * 查询用户可选择的场地 liaoyun 2016-8-14
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value="/findTrainingPlace")
+	public List<SchoolPlaceO> findTrainingPlace(HttpSession session) throws Exception{
+		UserO user = CommonUtil.getUserInfo(session);
+		List<SchoolPlaceO> list = queueService.findSchoolPlace(user.getAccount().trim());//查询的场地
+		return list;
+	}
+	
+	/**
+	 * 查询场地最新排队情况 liaoyun 2016-8-14
+	 * @param placeId
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/findLastQueueState/{placeId}")
+	public List<Queue> findLatestQueueState(@PathVariable String placeId,HttpSession session){
+		List<Queue> list = findLastQueueStateByPlace(placeId, session);
+		return list;
+	}
+	
+	/**
+	 * 查询场地最新排队情况 liaoyun 2016-8-14
+	 * @param placeId
+	 * @param session
+	 * @return
+	 */
+	private List<Queue> findLastQueueStateByPlace(String placeId,HttpSession session){
+		//如果没有报名该驾校，则不能查看相关的信息
+		UserO user = CommonUtil.getUserInfo(session);
+		if(user==null || !hasPlaceId(user.getAccount(), placeId)){
+			return null;
+		}
+		List<Queue> list = queueService.findLastQueueStateByPlace(placeId);
+		return list;
+	}
+	
+	/**
+	 * 查询用户是否报名了该驾校，是否可以查看该场地的排队信息 liaoyun 2016-8-15
+	 * @param account
+	 * @param placeId
+	 * @return
+	 */
+	private boolean hasPlaceId(String account ,String placeId){
+		List<SchoolPlaceO> place = queueService.hasPlaceIdByAccountAndPlaceId(account,placeId);
+		if(place != null && place.size()>0){
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 放弃当前的排队 liaoyun 2016-8-15
+	 * @param placeId
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/giveUpMyQueue/{placeId}")
+	public List<Queue> giveUpQueue(@PathVariable String placeId, HttpSession session){
+		//如果没有报名该驾校，则不能查看相关的信息
+		UserO user = CommonUtil.getUserInfo(session);
+		if(user==null){
+			return null;
+		}
+		List<Queue> list = queueService.giveUpQueue(user.getAccount(),placeId);
+		return list;
+	}
+	
+	/**
+	 * 设置为正在训练状态 liaoyun 2016-8-16
+	 * @param placeId
+	 * @param session
+	 * @return
+	 */
+	private List<Queue> setTraining(@PathVariable String placeId, HttpSession session){
+		return null;
+	}
+	
+	//private 
 }

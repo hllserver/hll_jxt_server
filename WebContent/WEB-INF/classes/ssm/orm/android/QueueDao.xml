@@ -83,4 +83,83 @@
 				);
 			</foreach>
 	</insert> 
+	
+	<!-- 
+	 * 加入排队 并 返回 队列的最新情况 liaoyun 2016-8-14
+	 * @param account
+	 * @param placeId
+	 -->
+	<select id="insertAndGetLastQueueState" resultType="ssm.entity.android.Queue">
+		 {call insert_into_queue(
+		 	 #{param1,jdbcType=VARCHAR,mode=IN},
+		 	 #{param2,jdbcType=NUMERIC,mode=IN}
+		 )};
+		<include refid="queueState"></include>  where t1.placeId = #{param2} order by t1.my_set;
+	</select>
+	<!-- 
+		查询当前排队状态 liaoyun 2016-8-14 
+	 -->
+	<sql id="queueState">
+		select 
+			t3.account       as schoolAccount,
+			t3.school_name   as schoolName,
+			t1.placeId       as placeId,
+			t2.place_name    as placeName,
+			t1.user_account  as userAccount,
+			t4.nickName      as userNickName,
+			t4.pic           as userPic,
+			t4.tel           as userTel,
+			t1.my_set        as mySet,
+			t1.is_training   as isTraining,
+			t1.sure_time     as sureTime
+		from 
+			queue_t t1
+		left join
+			school_place_t t2 on t1.placeId = t2.id
+		left join
+			driver_school_t t3 on t3.account = t2.school_account
+		left join 
+			user_t t4 on t4.account = t1.user_account  
+	</sql>
+	
+	<!-- 
+	 * 查询场地最新排队情况 liaoyun 2016-8-14
+	 * @param placeId
+	 -->
+	<select id="findLastQueueStateByPlace" resultType="ssm.entity.android.Queue">
+		<include refid="queueState"></include> where t1.placeId = #{param1} order by t1.my_set;
+	</select>
+	
+	<!-- 
+	 * 查询用户是否报名了该驾校，是否可以查看该场地的排队信息 liaoyun 2016-8-15
+	 * @param account
+	 * @param placeId
+	 -->
+	<select id="hasPlaceIdByAccountAndPlaceId" resultType="ssm.entity.driverSchool.SchoolPlaceO">
+		select 
+			t1.id as id
+		from 
+			student_t t1 
+		left join
+			school_place_t t2 on t1.school_account = t2.school_account
+		where
+			t1.account = #{param1} and t2.id = #{param2}
+	</select>
+	
+	<!-- 
+	 * 放弃当前的排队 liaoyun 2016-8-15
+	 * @param account
+	 * @param placeId 
+	 -->
+	<select id="giveUpQueue" resultType="ssm.entity.android.Queue">
+		{call give_up_queue(
+			 #{param1,jdbcType=VARCHAR,mode=IN}
+		)};
+		<include refid="queueState"></include>  where t1.placeId = #{param2} order by t1.my_set;
+	</select>
+	
+	<update id="setTraining">
+		update queue_t
+		set is_training = 1,lastUpdatedBy = #{param1} 
+	</update>
 </mapper>

@@ -22,8 +22,11 @@ public class Queue extends BaseEntity{
 	private String userAge;         //用户年龄
 	private String userNickName;    //用户昵称
 	private String userPic;         //用户头像
+	private String userTel;         //用户电话
+	private String serverTime;      //服务器时间  yyyy-MM-dd HH:mm:ss
 	private int mySet;              //用户排队序号
 	private int isTraining;         //是否正在训练
+	private int sureTime;           //确认的次数
 	public Queue() {
 		super();
 	}
@@ -105,6 +108,25 @@ public class Queue extends BaseEntity{
 	public void setIsTraining(int isTraining) {
 		this.isTraining = isTraining;
 	}
+	
+	public String getServerTime() {
+		return serverTime;
+	}
+	public void setServerTime(String serverTime) {
+		this.serverTime = serverTime;
+	}
+	public int getSureTime() {
+		return sureTime;
+	}
+	public void setSureTime(int sureTime) {
+		this.sureTime = sureTime;
+	}
+	public String getUserTel() {
+		return userTel;
+	}
+	public void setUserTel(String userTel) {
+		this.userTel = userTel;
+	}
 	public void trim(){
 		setSchoolAccount(getValue(getSchoolAccount()));
 		setSchoolName(getValue(getSchoolName()));
@@ -116,6 +138,7 @@ public class Queue extends BaseEntity{
 		setUserAge(getValue(getUserAge()));
 		setUserNickName(getValue(getUserNickName()));
 		setUserPic(getValue(getUserPic()));
+		setServerTime(getValue(getServerTime()));
 	}
 	private String getValue(String s){
 		if(s==null){

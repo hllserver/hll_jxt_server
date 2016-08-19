@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ssm.entity.android.Queue;
 import ssm.entity.android.orderLean.ScheduleO;
 import ssm.entity.driverSchool.SchoolPlaceO;
 import ssm.orm.android.QueueDao;
@@ -34,4 +35,25 @@ public class QueueServiceImpl implements QueueService{
 		queueDao.saveSchedule(account,schedule);
 	}
 
+	@Override
+	public List<Queue> insertAndGetLastQueueState(String account, String placeId) {
+		return queueDao.insertAndGetLastQueueState(account, placeId);
+	}
+
+	@Override
+	public List<Queue> findLastQueueStateByPlace(String placeId) {
+		return queueDao.findLastQueueStateByPlace(placeId);
+	}
+
+	@Override
+	public List<SchoolPlaceO> hasPlaceIdByAccountAndPlaceId(String account, String placeId) {
+		List<SchoolPlaceO> a = queueDao.hasPlaceIdByAccountAndPlaceId(account,placeId);
+		return a;
+	}
+
+	@Override
+	public List<Queue> giveUpQueue(String account,String placeId) {
+		List<Queue> list = queueDao.giveUpQueue(account,placeId);
+		return list;
+	}
 }

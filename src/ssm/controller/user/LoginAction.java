@@ -69,9 +69,10 @@ public class LoginAction {
 		}else if(type != null && type.equals("account")){//账号登陆
 			user = userService.findUser(username,password);
 		}
-		if(user!=null && user.getType()<5){//管理人员
-			//登陆验证成功
+		if(user!=null && user.getType()<5){//管理人员  //登陆验证成功
 			session.setAttribute("userInfo", user);
+			map.put("account", user.getAccount());
+			System.out.println("user.getAccount()  "+ user.getAccount());
 			map.put("type", ""+user.getType());
 			map.put("url","index.html");
 			map.put("nickName", user.getNickName());
@@ -80,9 +81,12 @@ public class LoginAction {
 			map.put("lastLoadTime", CommonUtil.getServerTime());
 			map.put("lastLoadIp", clientIp);
 			map.put("lastLoadPort", ""+clientPort);
+			prepareWebsocket(map, user);
 			return map;
-		}else if(user!=null && user.getType()==5){//普通用户
+		}else if(user!=null && user.getType()==5){//普通用户  //登陆验证成功
 			session.setAttribute("userInfo", user);
+			map.put("account", user.getAccount());
+			System.out.println("user.getAccount()  "+ user.getAccount());
 			map.put("type", ""+user.getType());
 			map.put("nickName", user.getNickName());
 			map.put("email", user.getEmail());
@@ -90,6 +94,7 @@ public class LoginAction {
 			map.put("lastLoadTime", CommonUtil.getServerTime());
 			map.put("lastLoadIp", clientIp);
 			map.put("lastLoadPort", ""+clientPort);
+			prepareWebsocket(map, user);
 			return map;
 		}else{
 			//登陆验证失败
@@ -97,6 +102,19 @@ public class LoginAction {
 			return map;
 		}
 	}
+	
+	/**
+	 * 为websocket登陆做准备 liaoyun 2016-8-19
+	 * @param map
+	 * @param user
+	 */
+	private void prepareWebsocket(Map<String,String> map, UserO user){
+		Integer socketKey = CommonUtil.rundom8();
+		CommonUtil.webSocketMap.put(user.getAccount().trim(), socketKey);     //保存websocket登陆认证
+		CommonUtil.webSocketUserInfoMap.put(user.getAccount().trim(), user);  //保存websocket用户信息
+		map.put("sessionKey", socketKey+"");                                  //将 webSocketKey 发送到客户端
+	}
+	
 	/**
 	 * 分页查询所有的用户 liaoyun 2016-3-26
 	 * @return
@@ -205,6 +223,11 @@ public class LoginAction {
 	 */
 	@RequestMapping(value="/logout")
 	public String logout(HttpSession  session)throws Exception{
+//		UserO user = CommonUtil.getUserInfo(session);
+//		String account = user.getAccount().trim();
+		//销毁 websocket 信息
+//		CommonUtil.webSocketMap.remove(account);
+//		CommonUtil.webSocketUserInfoMap.remove(account);
 		session.invalidate();
 		return "redirect:/welcome.html";
 	}

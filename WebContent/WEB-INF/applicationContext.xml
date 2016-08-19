@@ -35,6 +35,7 @@
 
 	<context:component-scan base-package="ssm.serviceImpl"></context:component-scan>
 	<context:component-scan base-package="ssm.orm"></context:component-scan>
+	<context:component-scan base-package="ssm.util"/>
 	<!-- 数据源 -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
@@ -63,4 +64,14 @@
 	<!-- 开户事物 -->
 	<tx:annotation-driven />
 	<!-- <tx:annotation-driven transaction-manager="transactionManager"/>   -->
+	
+	<!--  websocket 处理类 和 握手协议 的spring 配置  	 
+	<bean id="websocket" class="ssm.util.WebSocketEndPoint"></bean>
+	<websocket:handlers>
+		<websocket:mapping handler="websocket" path="/websocket"/>
+		<websocket:handshake-interceptors>
+			<bean class="ssm.util.HandshakeInterceptor"></bean>
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
+	 -->
 </beans>
