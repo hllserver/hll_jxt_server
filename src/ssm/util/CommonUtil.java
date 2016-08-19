@@ -7,7 +7,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,6 +28,20 @@ public class CommonUtil {
 	
 	private static Logger logger = Logger.getLogger(CommonUtil.class);
 	
+	/**
+	 * liaoyun 2016-8-19
+	 * 保存 account ---- websocket key
+	 */
+	public static Map<String,Integer> webSocketMap = new HashMap<>();
+	public static Map<String,UserO>   webSocketUserInfoMap = new HashMap<>();
+	/**
+	 * 生成8位随机数 liaoyun 2016-8-19
+	 * @return
+	 */
+	public static int rundom8(){           
+		int x=(int)(Math.random()*100000000);
+		return x;
+	}
 	/**
 	 * 获取保存图片的路径
 	 * @author liaoyun 2016-8-10
