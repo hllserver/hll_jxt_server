@@ -2,6 +2,9 @@ package ssm.util;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +25,9 @@ import ssm.entity.common.SocketMsg;
  */
 public class WebSocketEndPoint extends TextWebSocketHandler{
 	
-	private static Map<String,WebSocketSession> sessionMap = new HashMap<String,WebSocketSession>(); //保存所有用户的  WebSocketSession
-	private Gson gson = new Gson();
+	public static Map<String,WebSocketSession> sessionMap = new HashMap<String,WebSocketSession>(); //保存所有用户的  WebSocketSession
+	private static Gson gson = new Gson();
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private Logger logger = Logger.getLogger(WebSocketEndPoint.class);
 	
 	@Override
@@ -40,22 +44,35 @@ public class WebSocketEndPoint extends TextWebSocketHandler{
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception { //收到消息后
 		SocketMsg skm = createSocketMsg(message);
+		System.out.println("信息来自 ：  " + skm.getAccount() + "  信息内容： " + skm.getMessage());
 		boolean islog = isLogin(skm);
 		if(!islog){                                          //没有登陆，断开连接
 			logger.warn("=====websocket :  user is not login=====");
 			session.close();
+		}
+		if(skm==null){
+			logger.warn("----------session closed---------------------");
+			session.close();
+			return;
 		}
 		if(skm.getScene()==3){                               //登陆 websocket
 			sessionMap.put(skm.getAccount(), session);
 			logger.info("user " + skm.getAccount() + "  login.   ip: " + session.getRemoteAddress()); 
 		}
 		skm.setKey(null);                                    //去掉 key,防止数据泄露
+		skm.setTime(getServiceTime());                       //添加服务器时间
 		if(skm.getScene()==SocketMsg.SCENE_CHAT &&
 				skm.getType()==SocketMsg.TYPE_TRANSMIT){     //场景为chat,普通转发
 			sendToUsers(skm);
 		}else if(skm.getScene()==SocketMsg.SCENE_CHAT &&
 				skm.getType()==SocketMsg.TYPE_BROADCAST){    //场景为chat,全部转发
 			sendToAll(skm);
+		}else if(skm.getScene()==SocketMsg.SCENE_LOGIN){     //是否登陆
+			List<String> list = new ArrayList<>();
+			list.add(skm.getAccount());
+			skm.setUsers(list);
+			skm.setAccount("server");
+			sendToUsers(skm);
 		}
 	}
 	
@@ -92,7 +109,7 @@ public class WebSocketEndPoint extends TextWebSocketHandler{
 	 * 发送信息给某些用户 liaoyun 2016-8-18
 	 * @param smg
 	 */
-	private void sendToUsers(SocketMsg smg){
+	public static void sendToUsers(SocketMsg smg){
 		List<String> accounts = smg.getUsers();
 		TextMessage msg = socketMsgToTextMsg(smg);
 		for (String account : accounts) {
@@ -109,7 +126,7 @@ public class WebSocketEndPoint extends TextWebSocketHandler{
 	 * @param smg
 	 * @return
 	 */
-	private TextMessage socketMsgToTextMsg(SocketMsg smg) {
+	private static TextMessage socketMsgToTextMsg(SocketMsg smg) {
 		TextMessage tmg = new TextMessage(objectToByte(smg));
 		return tmg;
 	}
@@ -119,7 +136,7 @@ public class WebSocketEndPoint extends TextWebSocketHandler{
 	 * @param smg
 	 * @return
 	 */
-	private byte[] objectToByte(SocketMsg smg) {
+	private static byte[] objectToByte(SocketMsg smg) {
 		String jsonStr = objectToJson(smg);
 		byte[] b = null;
 		try {
@@ -135,7 +152,7 @@ public class WebSocketEndPoint extends TextWebSocketHandler{
 	 * @param session
 	 * @param msg
 	 */
-	private void sendMessage(final WebSocketSession session, final TextMessage msg) {
+	private static void sendMessage(final WebSocketSession session, final TextMessage msg) {
 		new Thread(){
 			public void run() {
 				try {
@@ -152,7 +169,7 @@ public class WebSocketEndPoint extends TextWebSocketHandler{
 	 * @param object
 	 * @return
 	 */
-	private String objectToJson(Object object){
+	public static String objectToJson(Object object){
 		try{
 			String str = gson.toJson(object);
 			return str;
@@ -189,5 +206,15 @@ public class WebSocketEndPoint extends TextWebSocketHandler{
 			return true;
 		}
 		return false;
+	}
+	/**
+	 * LiaoYun 2016-8-23
+	 * 获取服务器时间   yyyy-MM-dd HH:mm:ss
+	 * @return
+	 */
+	public static String getServiceTime(){
+		Date date = new Date();
+		String s = sdf.format(date);
+		return s;
 	}
 }

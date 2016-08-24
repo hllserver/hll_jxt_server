@@ -56,4 +56,10 @@ public class QueueServiceImpl implements QueueService{
 		List<Queue> list = queueDao.giveUpQueue(account,placeId);
 		return list;
 	}
+
+	@Override
+	public List<Queue> goToEnd(String account, String placeId) {
+		List<Queue> list = queueDao.goToEnd(account,placeId);
+		return list;
+	}
 }

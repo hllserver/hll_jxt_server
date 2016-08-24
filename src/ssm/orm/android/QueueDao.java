@@ -60,4 +60,12 @@ public interface QueueDao {
 	 */
 	public List<Queue> giveUpQueue(String account, String placeId);
 
+	/**
+	 * 训练完毕，排到最后面，LiaoYun 2016-8-24
+	 * @param account
+	 * @param placeId
+	 * @return
+	 */
+	public List<Queue> goToEnd(String account, String placeId);
+
 }

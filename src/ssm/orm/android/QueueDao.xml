@@ -96,6 +96,7 @@
 		 )};
 		<include refid="queueState"></include>  where t1.placeId = #{param2} order by t1.my_set;
 	</select>
+	
 	<!-- 
 		查询当前排队状态 liaoyun 2016-8-14 
 	 -->
@@ -162,4 +163,16 @@
 		update queue_t
 		set is_training = 1,lastUpdatedBy = #{param1} 
 	</update>
+	
+	<!-- 
+	 * 训练完毕，排到最后面，LiaoYun 2016-8-24
+	 * @param account
+	 * @param placeId
+	 -->
+	<select id="goToEnd" resultType="ssm.entity.android.Queue">
+		{call give_up_queue(
+			 #{param1,jdbcType=VARCHAR,mode=IN}
+		)};
+		<include refid="queueState"></include>  where t1.placeId = #{param2} order by t1.my_set;
+	</select>
 </mapper>

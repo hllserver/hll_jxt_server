@@ -74,6 +74,7 @@ public class LoginAction {
 			map.put("account", user.getAccount());
 			System.out.println("user.getAccount()  "+ user.getAccount());
 			map.put("type", ""+user.getType());
+			map.put("name", user.getName());
 			map.put("url","index.html");
 			map.put("nickName", user.getNickName());
 			map.put("email", user.getEmail());

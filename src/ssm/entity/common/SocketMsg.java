@@ -19,7 +19,11 @@ public class SocketMsg implements Serializable{
 	/**
 	 * 场景 排队信息
 	 */
-	public static final int  SCENE_QUEUE = 2;    
+	public static final int  SCENE_QUEUE = 2;   
+	/**
+	 * 场景登陆  websocket
+	 */
+	public static final int SCENE_LOGIN = 3;
 	/**
 	 * 类型 普通转发
 	 */
@@ -30,6 +34,8 @@ public class SocketMsg implements Serializable{
 	public static final int  TYPE_BROADCAST = 2; 
 	
 	private String       account; //user account
+	private String       name;    //发信人name
+	private String       nickName;//发信人昵称
 	private Integer      key;     //websocket key
 	private Integer      scene;   //场景：         1--普通对话；2--排队信息
 	private Integer      type;    //转发类型： 1--普通转发(发送对象的用户account放在users中)；2--广播，发给所有的人(list中不需要放信息)
@@ -38,6 +44,17 @@ public class SocketMsg implements Serializable{
 	private String       time;    //转发时间，yyyy-MM-dd HH:mm:ss
 	public SocketMsg() {
 		super();
+	}
+	public SocketMsg(String account, String name, String nickName, Integer key, Integer scene, Integer type, List<String> users, String message, String time) {
+		this.account = account;
+		this.name = name;
+		this.nickName = nickName;
+		this.key = key;
+		this.scene = scene;
+		this.type = type;
+		this.users = users;
+		this.message = message;
+		this.time = time;
 	}
 	public String getAccount() {
 		return account;
@@ -80,5 +97,17 @@ public class SocketMsg implements Serializable{
 	}
 	public void setTime(String time) {
 		this.time = time;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 }

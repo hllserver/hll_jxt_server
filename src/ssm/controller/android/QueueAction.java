@@ -1,5 +1,6 @@
 package ssm.controller.android;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
@@ -10,14 +11,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.socket.WebSocketSession;
 
 import ssm.entity.android.Queue;
 import ssm.entity.android.orderLean.OrderLeanO;
 import ssm.entity.android.orderLean.ScheduleO;
+import ssm.entity.common.SocketMsg;
 import ssm.entity.driverSchool.SchoolPlaceO;
 import ssm.entity.user.UserO;
 import ssm.service.android.QueueService;
 import ssm.util.CommonUtil;
+import ssm.util.WebSocketEndPoint;
 /**
  * 预约排队相关
  * @author liaoyun 2016-8-11
@@ -94,9 +98,29 @@ public class QueueAction {
 		}
 		//加入排队 并 返回 队列的最新情况
 		List<Queue> list = queueService.insertAndGetLastQueueState(user.getAccount(),placeId);
+		//发送通知所有排队的人
+		sendQueueStateChangedMsg(list, user);
 		return list;
 	}
-	
+	/**
+	 * 排队信息发生变化，通知所有人， 
+	 * @param list
+	 * @param user
+	 */
+	private void sendQueueStateChangedMsg(List<Queue> list,UserO user){
+		WebSocketSession wss = WebSocketEndPoint.sessionMap.get(user.getAccount());
+		if(wss != null){
+			List<String> users = new ArrayList<>();
+			for (Queue queue : list) {
+				users.add(queue.getUserAccount());
+			}
+			String str = WebSocketEndPoint.objectToJson(list);
+			String severTime = WebSocketEndPoint.getServiceTime();
+			SocketMsg stmg = new SocketMsg(user.getAccount(), user.getName(), user.getNickName(), null, 
+					SocketMsg.SCENE_QUEUE, null, users, str, severTime);
+			WebSocketEndPoint.sendToUsers(stmg);
+		}
+	}
 	/**
 	 * 查询用户可选择的场地 liaoyun 2016-8-14
 	 * @param session
@@ -171,7 +195,23 @@ public class QueueAction {
 		List<Queue> list = queueService.giveUpQueue(user.getAccount(),placeId);
 		return list;
 	}
-	
+	/**
+	 * 训练完毕，排到最后面，LiaoYun 2016-8-24
+	 * @param placeId
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/goToEndQueue/{placeId}")
+	public List<Queue> goToEnd(@PathVariable String placeId, HttpSession session){
+		//如果没有报名该驾校，则不能查看相关的信息
+		UserO user = CommonUtil.getUserInfo(session);
+		if(user==null || !hasPlaceId(user.getAccount(), placeId)){
+			return null;
+		}
+		List<Queue> list = queueService.goToEnd(user.getAccount(),placeId);
+		return list;
+	}
 	/**
 	 * 设置为正在训练状态 liaoyun 2016-8-16
 	 * @param placeId
