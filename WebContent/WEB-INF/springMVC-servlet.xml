@@ -34,11 +34,11 @@
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/"></bean>
 	
 	<!-- 
-	配置 intercepter 用于权限
+	配置 intercepter 用于权限   
+	-->
 	<mvc:interceptors>
 		<bean id="authorityAnnotationIntercepter" class="privilege.AuthorityAnnotationIntercepter"></bean>
 	</mvc:interceptors>    
-	-->
 	 
 	<!-- 开启 springMVC 上传文件功能 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

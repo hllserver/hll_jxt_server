@@ -6,6 +6,14 @@ $(document).ready(function(){
 			for(key in da){
 				$("input[name="+key+"]").val(da[key]);
 				$("textarea[name="+key+"]").val(da[key]);
+				var select = $("select[name="+key+"]").children();
+				for(var i=0; i<select.length; i++){
+					debugger;
+					var kk = select[i];
+					if(da[key] == select[i].value){
+						select[i].selected = true;
+					}
+				}
 			}
 		}
 	});

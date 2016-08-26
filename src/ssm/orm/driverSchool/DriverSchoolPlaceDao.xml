@@ -56,24 +56,29 @@
 	  -->
 	<select id="getSchoolPlaceList" resultType="ssm.entity.driverSchool.SchoolPlaceO">
 	select
-	t.id,
-	t.place_name as placeName,
-	t.school_account as schoolAccount,
-	t.position as position,
-	t.area as area,
-	t.car_no as carNo,
-	t.pic1 as pic1,
-	t.pic2 as pic2,
-	t.pic3 as pic3,
-	t.pic4 as pic4,
-	t.pic5 as pic5,
-	t.remark as remark,
-	t.createdBy as createdBy,
-	t.createdDate as createdDate,
-	t.lastUpdatedBy as lastUpdatedBy,
-	t.lastUpdatedDate as lastUpdatedDate
+		t.id              as id,
+		t.place_name      as placeName,
+		t.school_account  as schoolAccount,
+		t.longitude       as longitude,
+		t.latitude        as latitude,
+		t.province        as province,
+		t.city            as city,
+		t.street          as street,
+		t.position        as position,
+		t.area            as area,
+		t.car_no          as carNo,
+		t.pic1            as pic1,
+		t.pic2            as pic2,
+		t.pic3            as pic3,
+		t.pic4            as pic4,
+		t.pic5            as pic5,
+		t.remark          as remark,
+		t.createdBy       as createdBy,
+		t.createdDate     as createdDate,
+		t.lastUpdatedBy   as lastUpdatedBy,
+		t.lastUpdatedDate as lastUpdatedDate
 	from
-	school_place_t t
+		school_place_t t
 	where t.school_account=#{schoolAccount}
 	</select>
 	 
@@ -197,6 +202,11 @@
 		insert into school_place_t(
 			school_account,
 			place_name,
+			longitude,
+			latitude,
+			province,
+			city,
+			street,
 			position,
 			area,
 			car_no,
@@ -213,6 +223,11 @@
 		)values(
 			#{schoolAccount},
 			#{placeName},
+			#{longitude},
+			#{latitude},
+			#{province},
+			#{city},
+			#{street},
 			#{position},
 			#{area},
 			#{carNo},
@@ -264,6 +279,11 @@
 		set
 			t.place_name      = #{placeName},
 			t.position        = #{position},
+			t.longitude       = #{longitude},
+			t.latitude        = #{latitude},
+			t.province        = #{province},
+			t.city            = #{city},
+			t.street          = #{street},
 			t.area            = #{area},
 			t.car_no          = #{carNo},
 			t.pic1            = #{pic1},

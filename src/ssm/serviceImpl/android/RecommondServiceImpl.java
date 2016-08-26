@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ssm.entity.android.recommend.RecommendSchoolInfoO;
+import ssm.entity.android.recommend.SchoolDetailInfo;
 import ssm.entity.android.recommend.SchoolSelectBy;
 import ssm.orm.android.RecommondDao;
 import ssm.service.android.RecommondService;
@@ -25,10 +26,6 @@ public class RecommondServiceImpl implements RecommondService{
 	 */
 	@Override
 	public List<RecommendSchoolInfoO> getSchoolList(SchoolSelectBy schoolSelect) {
-		int startIndex = schoolSelect.getStartPage();
-		int loadSize = schoolSelect.getPageSize();
-		startIndex = (startIndex-1)*loadSize;
-		schoolSelect.setStartPage(startIndex);
 		List<RecommendSchoolInfoO> list = recommondDao.getSchoolList(schoolSelect);
 		return list;
 	}
@@ -46,6 +43,11 @@ public class RecommondServiceImpl implements RecommondService{
 		index = Math.abs(index % adTotalNum);
 		List<RecommendSchoolInfoO> list = recommondDao.getRecommondAdInfo(index);
 		return list;
+	}
+
+	@Override
+	public SchoolDetailInfo getSchoolDetailByPlaceId(String placeId) {
+		return recommondDao.getSchoolDetailByPlaceId(placeId);
 	}
 
 }

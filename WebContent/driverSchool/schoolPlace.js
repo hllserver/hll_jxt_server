@@ -40,6 +40,11 @@ function findData(){
 function showPlace(data){
 	$("#placeMsg").show();
 	$("#pname").val(data.placeName);
+	$("#province").val(data.province);
+	$("#city").val(data.city);
+	$("#street").val(data.street);
+	$("#longitude").val(data.longitude);
+	$("#latitude").val(data.latitude);
 	$("#pposition").val(data.position);
 	$("#parea").val(data.area);
 	$("#pid").val(data.id);

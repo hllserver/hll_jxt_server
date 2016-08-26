@@ -2,6 +2,8 @@ package ssm.controller.android;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ssm.entity.android.recommend.RecommendSchoolInfoO;
+import ssm.entity.android.recommend.SchoolDetailInfo;
 import ssm.entity.android.recommend.SchoolSelectBy;
 import ssm.service.android.RecommondService;
 
@@ -49,5 +52,17 @@ public class RecommondAction {
 	public List<RecommendSchoolInfoO> getRecommondAdInfo(@PathVariable int index) throws Exception{
 		List<RecommendSchoolInfoO> list = recommondService.getRecommondAdInfo(index);
 		return list;
+	}
+	
+	/**
+	 * 通过 placeId 获取驾校详细信息 LiaoYun 2016-8-26
+	 * @param placeId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getSchoolInfo/{placeId}")
+	public SchoolDetailInfo getSchoolDetailInfo(@PathVariable String placeId){
+		SchoolDetailInfo sdi = recommondService.getSchoolDetailByPlaceId(placeId);
+		return sdi;
 	}
 }

@@ -5,41 +5,33 @@ package ssm.entity.android.recommend;
  * 2016-6-11
  */
 public class SchoolSelectBy {
-	private String tranAreaSp;//练车区域
-	private String tranTypeSp;//练车类型
-	private double tranDistance;//距离(km)
-	private int startPage;     //第几列
+	private String tranAreaSp; //练车区域
+	private String orderType;  //排序方式
+	private int startIndex;    //第几列
 	private int pageSize;      //每页的记录条数
-	public SchoolSelectBy() {
-	}
+	public SchoolSelectBy(){}
 	public String getTranAreaSp() {
 		return tranAreaSp;
 	}
 	public void setTranAreaSp(String tranAreaSp) {
 		this.tranAreaSp = tranAreaSp;
 	}
-	public String getTranTypeSp() {
-		return tranTypeSp;
+	public String getOrderType() {
+		return orderType;
 	}
-	public void setTranTypeSp(String tranTypeSp) {
-		this.tranTypeSp = tranTypeSp;
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
 	}
-	public int getStartPage() {
-		return startPage;
+	public int getStartIndex() {
+		return startIndex;
 	}
-	public void setStartPage(int startPage) {
-		this.startPage = startPage;
+	public void setStartIndex(int startIndex) {
+		this.startIndex = startIndex;
 	}
 	public int getPageSize() {
 		return pageSize;
 	}
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
-	}
-	public double getTranDistance() {
-		return tranDistance;
-	}
-	public void setTranDistance(double tranDistance) {
-		this.tranDistance = tranDistance;
-	}
+	};
 }

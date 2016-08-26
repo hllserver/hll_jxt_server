@@ -3,6 +3,7 @@ package ssm.service.android;
 import java.util.List;
 
 import ssm.entity.android.recommend.RecommendSchoolInfoO;
+import ssm.entity.android.recommend.SchoolDetailInfo;
 import ssm.entity.android.recommend.SchoolSelectBy;
 
 
@@ -25,4 +26,11 @@ public interface RecommondService {
 	 * @return
 	 */
 	public List<RecommendSchoolInfoO> getRecommondAdInfo(int index);
+
+	/**
+	 * 通过 placeId 获取驾校详细信息 LiaoYun 2016-8-26
+	 * @param placeId
+	 * @return
+	 */
+	public SchoolDetailInfo getSchoolDetailByPlaceId(String placeId);
 }

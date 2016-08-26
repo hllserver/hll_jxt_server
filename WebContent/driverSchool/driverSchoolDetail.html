@@ -92,12 +92,31 @@ td input {
 			<tr>
 				<td class='_title'>P级别价格(元)</td>
 				<td colspan='2'><input type="text" id='pPrice' name='p' /></td>
-				<td class='_title'>区域<font color='red'>*</font></td></td>
-				<td colspan='2'>
-					<select name='cityArea'>
+			</tr>
+			<tr>
+				<td class='_title'>地理经度(度)<font color='red'>*</font></td>
+				<td colspan='2'><input type="text" id='longitude' name='longitude' /></td>
+				<td class='_title'>地理纬度(度)<font color='red'>*</font></td>
+				<td colspan='2'><input type="text" id='latitude' name='latitude' /></td>
+			</tr>
+			<tr>
+				<td class='_title'>省份<font color='red'>*</font></td>
+				<td>
+					<select id="provence" name="province">
+						<option>湖北省</option>
+					</select>
+				</td>
+				<td class='_title'>市/县<font color='red'>*</font></td>
+				<td>
+					<select id="provence" name="city">
+						<option>武汉市</option>
+					</select>
+				</td>
+				<td class='_title'>区域<font color='red'>*</font></td>
+				<td>
+					<select id="provence" name="street">
 						<option>洪山区</option>
 						<option>江夏区</option>
-						<option>武昌区</option>
 					</select>
 				</td>
 			</tr>
@@ -105,12 +124,6 @@ td input {
 				<td width='15%' class='_title'>驾校详细地址(xx省xx市xx县...)<fontcolor='red'>*</font></td>
 				<td colspan='5'><textarea id='possion' name='position' rows="3" cols="120"
 						></textarea></td>
-			</tr>
-			<tr>
-				<td class='_title'>地理经度(度)<font color='red'>*</font></td></td>
-				<td colspan='2'><input type="text" id='longitude' name='longitude' /></td>
-				<td class='_title'>地理纬度(度)<font color='red'>*</font></td></td>
-				<td colspan='2'><input type="text" id='latitude' name='latitude' /></td>
 			</tr>
 			<tr>
 				<td class='_title'>优惠政策</td>

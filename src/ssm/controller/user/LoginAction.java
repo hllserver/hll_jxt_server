@@ -50,9 +50,14 @@ public class LoginAction {
 	@RequestMapping(value="/login/{username}/{password}/{type}",method=RequestMethod.POST,produces="application/json",
 			consumes="application/json")
 	public Map<String,String> login(HttpServletRequest request, @PathVariable String username, @PathVariable String password, HttpSession  session,@PathVariable String type){
+		Map<String,String> map = new HashMap<>();
+		UserO userInfo = CommonUtil.getUserInfo(session);
+		if(userInfo != null){
+			map.put("loginType", "已经登陆了");
+			return map;
+		}
 		String clientIp = request.getRemoteAddr();
 		int clientPort = request.getRemotePort();
-		Map<String,String> map = new HashMap<>();
 		System.out.println("username "+username +"   "+"password "+password);
 		if(username !=null){
 			username = username.trim();

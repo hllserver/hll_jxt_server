@@ -40,7 +40,12 @@ public class SchoolO extends BaseEntity{
 	private double n;
 	private double p;
 	private String policy;    //优惠政策
-	private String position;  //地理位置
+	private double longitude; //经度
+	private double latitude;  //纬度
+	private String province;  //省
+	private String city;      //市/县
+	private String street;    //区
+	private String position;  //具体地理位置
 	private String intruduce; //驾校简介
 	private Date registeredTime; // 注册时间
 	private String remark;
@@ -232,6 +237,46 @@ public class SchoolO extends BaseEntity{
 	public void setRegisteredTime(Date registeredTime) {
 		this.registeredTime = registeredTime;
 	}
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
 	public void trim(){//去空格
 		setAccount(getValue(getAccount()));
 		setSchoolName(getValue(getSchoolName()));
@@ -240,6 +285,9 @@ public class SchoolO extends BaseEntity{
 		setWechat(getValue(getWechat()));
 		setQq(getValue(getQq()));
 		setPolicy(getValue(getPolicy()));
+		setProvince(getValue(getProvince()));
+		setCity(getValue(getCity()));
+		setStreet(getValue(getStreet()));
 		setPosition(getValue(getPosition()));
 		setIntruduce(getValue(getIntruduce()));
 		setRemark(getValue(getRemark()));

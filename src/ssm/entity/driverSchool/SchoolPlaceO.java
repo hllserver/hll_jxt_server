@@ -24,7 +24,12 @@ public class SchoolPlaceO extends BaseEntity{
 	private String pic4;
 	private String pic5;
 	private String remark;
-	private String position;
+	private double longitude; //经度
+	private double latitude;  //纬度
+	private String province;  //省
+	private String city;      //市/县
+	private String street;    //区
+	private String position;  //详细地址
 	public SchoolPlaceO() {
 		super();
 	}
@@ -114,6 +119,46 @@ public class SchoolPlaceO extends BaseEntity{
 	public void setSchoolName(String schoolName) {
 		this.schoolName = schoolName;
 	}
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
 	public void trim(){
 		setSchoolAccount(getValue(getSchoolAccount()));
 		setPlaceName(getValue(getPlaceName()));
@@ -123,6 +168,9 @@ public class SchoolPlaceO extends BaseEntity{
 		setPic4(getValue(getPic4()));
 		setPic5(getValue(getPic5()));
 		setRemark(getValue(getRemark()));
+		setProvince(getValue(getProvince()));
+		setCity(getValue(getCity()));
+		setStreet(getValue(getStreet()));
 		setPosition(getValue(getPosition()));
 	}
 	//需要修改，适合任何类型

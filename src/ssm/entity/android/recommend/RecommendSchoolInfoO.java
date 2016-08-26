@@ -7,6 +7,7 @@ package ssm.entity.android.recommend;
 public class RecommendSchoolInfoO {
 	private String schoolAccount;
 	private String schoolname;
+	private String placeId;
 	private String itemImg;
 	private double itemPrice;
 	private String itemAddress;
@@ -49,5 +50,11 @@ public class RecommendSchoolInfoO {
 	}
 	public void setSchoolAccount(String schoolAccount) {
 		this.schoolAccount = schoolAccount;
+	}
+	public String getPlaceId() {
+		return placeId;
+	}
+	public void setPlaceId(String placeId) {
+		this.placeId = placeId;
 	}
 }

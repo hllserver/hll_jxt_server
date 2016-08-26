@@ -12,16 +12,26 @@
 	-->
 	<select id="getSchoolList" resultType="ssm.entity.android.recommend.RecommendSchoolInfoO">
 		select 
-			t1.school_name as schoolname,
+			t2.place_name  as schoolname,
 			t2.pic1        as itemImg,
+			t2.id          as placeId,
 			t1.c1_price    as itemPrice,
 			t1.position    as itemAddress
 		from
 			driver_school_t t1
 		left join 
-			school_ad_t t2 on t1.account=t2.school_account
-		order by t1.lastUpdatedDate desc
-		limit #{startPage}, #{pageSize}
+			school_place_t t2 on t1.account=t2.school_account
+		where 1=1
+		<if test="tranAreaSp != '所有区域'">
+			and t2.street = #{tranAreaSp}
+		</if>
+		<if test="orderType == '价格从低到高'">
+			order by t1.c1_price 
+		</if>
+		<if test="orderType == '价格从高到低'">
+			order by t1.c1_price desc
+		</if>
+			limit #{startIndex}, #{pageSize}
 	</select>
 	
 	<!-- 
@@ -42,5 +52,33 @@
 	
 	<select id="getAdTotalNum" resultType="int">
 		select count(*) from school_ad_t;
+	</select>
+	
+	<!-- 
+	 * 通过 placeId 获取驾校详细信息 LiaoYun 2016-8-26
+	 * @param placeId
+	 -->
+	<select id="getSchoolDetailByPlaceId" resultType="ssm.entity.android.recommend.SchoolDetailInfo">
+		select 
+			t1.pic1             as topPIc,
+			t1.school_account   as schoolAccount,
+			t2.school_name      as schoolName,
+			t1.id               as placeId,
+			t1.place_name       as placeName,
+			t2.tel              as tel,
+			t2.qq               as qq,
+			t2.wechat           as wechat,
+			t2.c1_price         as price,
+			t2.position         as schoolAddress,
+			t1.position         as placeAddress,
+			t2.buget            as bugget,
+			t2.school_info      as schoolInfo,
+			t1.remark           as placeRemark
+		from
+			school_place_t t1
+		left join 
+			driver_school_t t2 on t1.school_account = t2.account
+		where
+			t1.id = #{0}
 	</select>
 </mapper>

@@ -171,6 +171,11 @@ public class DriverSchoolPlaceAction {
 		String area = request.getParameter("area");
 		String carNo = request.getParameter("carNo");
 		String remark = request.getParameter("remark");
+		String longitude = request.getParameter("longitude");
+		String latitude = request.getParameter("latitude");
+		String province = request.getParameter("province");
+		String city = request.getParameter("city");
+		String street = request.getParameter("street");
 		String position = request.getParameter("position");
 		
 		//得到驾校编号
@@ -182,6 +187,11 @@ public class DriverSchoolPlaceAction {
 		schoolPlaceO.setArea(Double.parseDouble(area));
 		schoolPlaceO.setCarNo(Integer.parseInt(carNo));
 		schoolPlaceO.setRemark(remark);
+		schoolPlaceO.setLongitude(Double.valueOf(longitude));
+		schoolPlaceO.setLatitude(Double.valueOf(latitude));
+		schoolPlaceO.setProvince(province);
+		schoolPlaceO.setCity(city);
+		schoolPlaceO.setStreet(street);
 		schoolPlaceO.setPosition(position);
 		schoolPlaceO.setSchoolAccount(account);
 		schoolPlaceO.setCreatedBy(user.getAccount());
